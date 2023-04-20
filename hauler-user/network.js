@@ -1,7 +1,8 @@
 import axios from "axios";
-import { NETWORK_URL } from "@env";
+//import { NETWORK_URL } from "@env";
 
-const url = NETWORK_URL;
+//const url = NETWORK_URL;
+const url = "http://localhost:3000"
 console.log("Connectimg to server");
 console.log(url);
 

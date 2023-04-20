@@ -6,7 +6,7 @@ import MyPostList from '../MyPostListScreen/MyPostList';
 import Signup from '../SignupScreen/Signup';
 import JobOffers from '../JobOffers/JobOffers';
 import AddJunkNavigator from '../NavigationScreen/AddJunkNavigator';
-import paymentSheet from '../SignupScreen/paymentSheet';
+import PaymentSheet from '../SignupScreen/paymentSheet';
 import OfferDetails from '../OfferDetailsScreen/OfferDetails';
 import PostDetails from '../PostDetailsScreen/PostDetails';
 import ErrandScreenNavigator from './ErrandNavigator';
@@ -40,7 +40,7 @@ const HomeNavigator = () => {
                     />
                     <HomeStack.Screen
                         name='SignUpScreen2'
-                        component={paymentSheet}
+                        component={PaymentSheet}
                         options={{ headerShown: false }}
                     />
                     </> 

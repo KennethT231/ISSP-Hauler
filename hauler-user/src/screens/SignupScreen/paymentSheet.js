@@ -17,7 +17,7 @@ const getServiceProvider = async (uid) => {
   return serviceProvider //make this set the state and call it in use effect instead?
 }
 
-export default function paymentSheet({ navigation, route }) {
+export default function PaymentSheet({ navigation, route }) {
   const post = route.params.post;
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);

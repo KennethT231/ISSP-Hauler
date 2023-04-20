@@ -2,7 +2,7 @@ import React from 'react';
 import MenuIcon from './MenuIcon';
 import { createStackNavigator } from '@react-navigation/stack';
 import Profile1 from '../ProfileScreen/Profile1'
-import paymentSheet from '../SignupScreen/paymentSheet';
+import PaymentSheet from '../SignupScreen/paymentSheet';
 
 const PaymentStack = createStackNavigator();
 
@@ -16,7 +16,7 @@ const PaymentNavigator = () => {
             }}>
             <PaymentStack.Screen
                 name='Payment1'
-                component={paymentSheet}
+                component={PaymentSheet}
             />
             
         </PaymentStack.Navigator>

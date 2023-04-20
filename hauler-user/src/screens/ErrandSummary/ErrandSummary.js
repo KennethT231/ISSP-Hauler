@@ -6,7 +6,7 @@ import { postItem, updateOnePost } from '../../../network';
 import PostInfo from '../../components/PostInfo/PostInfo'
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-import { GOOGLE_MAP_API } from '@env';
+//import { GOOGLE_MAP_API } from '@env';
 
 export default function ErrandSummary({ navigation, route }) {
     const { width, height } = Dimensions.get('window');
