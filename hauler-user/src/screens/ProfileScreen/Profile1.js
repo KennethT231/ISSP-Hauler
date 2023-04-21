@@ -209,13 +209,13 @@ export default function Profile1({ navigation }) {
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
                             style={[styles.buttons, styles.editButton]}
-                            disabled={loading}
+                            disabled={!!loading} // added !!
                             onPress={() => onEditClicked()}>
                             <Text style={styles.buttonTitle}>Edit</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.buttons, styles.logOutButton]}
-                            disabled={loading}
+                            disabled={!!loading} // added !!
                             onPress={() => onSignOutClicked()}>
                             <Text style={styles.buttonTitle}>Log Out</Text>
                         </TouchableOpacity>

@@ -49,7 +49,7 @@ export default function Signin({ navigation }) {
                             />
                         <TouchableOpacity
                             style={styles.button}
-                            disabled={loading}
+                            disabled={!!loading} // added !!
                             onPress={() => onSigninClicked()}>
                             <Text style={styles.buttonTitle}>Sign In</Text>
                         </TouchableOpacity>
