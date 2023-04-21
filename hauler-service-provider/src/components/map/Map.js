@@ -127,25 +127,25 @@ export default function Map({ navigation,route }) {
   // })
 
 
-//   const completeJob = () => {
-//     try {
-//       markDriverArrival(post._id)
-//         Alert.alert(
-//             "Alert",
-//             "Confirm load has been picked up",
-//             [
-//               {
-//                 text: "Cancel",
-//                 style: "cancel"
-//               },
-//               { text: "Continue", onPress: () => navigation.navigate('MyJobListNavigator', { screen: 'MyJobList' }) }
-//             ]
-//           );
+  const completeJob = () => {
+    try {
+      markDriverArrival(post._id)
+        Alert.alert(
+            "Alert",
+            "Confirm load has been picked up",
+            [
+              {
+                text: "Cancel",
+                style: "cancel"
+              },
+              { text: "Continue", onPress: () => navigation.navigate('MyJobListNavigator', { screen: 'MyJobList' }) }
+            ]
+          );
     
-//     } catch (err) {
-//         console.log(err)
-//     }
-// }
+    } catch (err) {
+        console.log(err)
+    }
+}
 
   return (
     <View style={styles.mapContainer}>
