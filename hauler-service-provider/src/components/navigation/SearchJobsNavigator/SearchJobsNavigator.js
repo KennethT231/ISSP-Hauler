@@ -3,8 +3,8 @@ import MenuIcon from '../MenuIcon/MenuIcon'
 import { createStackNavigator } from '@react-navigation/stack';
 import { Platform } from 'react-native';
 import SearchJobs from '../../../screens/SearchJobsScreen/SearchJobs';
-import PostDetails from '../../../screens/PostDetailScreen/PostDetails';
-import JobConfirmation from '../../../screens/JobConfirmationScreen/JobConfirmation';
+import PostDetails from '../../../screens/PostDetailScreen/PostDetail';
+import JobConfirmation from '../../../screens/JobConfirmationScreen/JobConfirmationScreen';
 import OfferConfirmation from '../../../screens/OfferConfirmationScreen/OfferConfirmation';
 import OfferDetails from '../../../screens/OfferDetailsScreen/OfferDetails';
 

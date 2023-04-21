@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import SearchByService from '../../components/searchByService/SearchByService';
 import SearchByLocation from '../../components/searchByLocation/SearchByLocation';
-import PostsList from '../../components/postList/PostsList';
+import PostsList from '../../components/postList/PostList';
 import { Context } from '../../context/ContextProvider';
 import { getPostsByServiceProviderId, getPostsByServiceProviderAndService, getPostsByServiceProviderIdAndLocation, getResponseByServiseProviderId } from '../../../network';
 import { useIsFocused } from "@react-navigation/native";

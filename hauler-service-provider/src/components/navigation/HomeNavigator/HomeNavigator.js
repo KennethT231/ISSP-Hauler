@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import MenuIcon from '../MenuIcon/MenuIcon'
 import { createStackNavigator } from '@react-navigation/stack';
 import { Platform } from 'react-native';
-import Signin from '../../../screens/SignInScreen/Signin';
+import Signin from '../../../screens/SigninScreen/Signin';
 import SignUp from '../../../screens/SignUpScreen/SignUp';
 import Home from '../../../screens/HomeScreen/Home';
 import { Context } from '../../../context/ContextProvider';

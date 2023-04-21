@@ -1,9 +1,9 @@
 //not complate yet. I need contextProvider to check it works, change the path
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView, Picker, Linking} from 'react-native';
-import UserInfo from './src/components/userInfo/UserInfo';
-import { Context } from './src/components/context/ContextProvider';
-import { signUp, createStripeAccount } from './network';
+import UserInfo from '../../../src/components/userInfo/UserInfo';
+import { Context } from '../../../src/components/context/ContextProvider';
+import { signUp, createStripeAccount } from '../../../network';
 import RNPickerSelect from 'react-native-picker-select';
 
 
@@ -212,7 +212,7 @@ export default function Signup({ navigation }) {
                     />
                     <TouchableOpacity
                         style={styles.button}
-                        disabled={loading}
+                        disabled={!!loading}
                         onPress={() => onSignUpClicked()}>
                         <Text style={styles.buttonTitle1}>Create account</Text>
                     </TouchableOpacity>

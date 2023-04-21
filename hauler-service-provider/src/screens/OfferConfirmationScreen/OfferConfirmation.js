@@ -31,7 +31,7 @@ export default function OfferConfirmation({navigation, route}) {
 
     return (
         <View style={styles.container}>
-            <Image source={require('../../../assets/pic1.png')} style={styles.logo} />
+            <Image source={require('../../../assets/icon.png')} style={styles.logo} />
             {message()}
             <Text style={styles.heading2}>Thank you!</Text>
             <TouchableOpacity

@@ -5,8 +5,8 @@ import { Platform } from 'react-native';
 import MyJobList from '../../../screens/MyJobListScreen/MyJobList';
 import StatusDetails from '../../../screens/StatusDetailsScreen/StatusDetails';
 import OfferConfirmation from '../../../screens/OfferConfirmationScreen/OfferConfirmation';
-import JobConfirmation from '../../../screens/JobConfirmationScreen/JobConfirmation';
-import PostDetails from '../../../screens/PostDetailScreen/PostDetails';
+import JobConfirmation from '../../../screens/JobConfirmationScreen/JobConfirmationScreen';
+import PostDetails from '../../../screens/PostDetailScreen/PostDetail';
 import OfferDetails from '../../../screens/OfferDetailsScreen/OfferDetails';
 import Map from '../../map/Map';
 
