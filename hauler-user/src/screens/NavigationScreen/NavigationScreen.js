@@ -12,20 +12,20 @@ import { Context } from '../../context/ContextProvider';
 
 const Drawer = createDrawerNavigator();
 
-
+// this is for android
 export default function NavigationScreen(navigation) {
- 
+
     return (
-        <Drawer.Navigator 
-        initialRouteName='Home'
-        drawerContent={props => {
-            return (
-            <DrawerContentScrollView {...props}>
-            <DrawerItemList {...props}/>
-            <SignOutButton />
-            </DrawerContentScrollView>
-            )
-        }}
+        <Drawer.Navigator
+            initialRouteName='Home'
+            drawerContent={props => {
+                return (
+                    <DrawerContentScrollView {...props}>
+                        <DrawerItemList {...props} />
+                        <SignOutButton />
+                    </DrawerContentScrollView>
+                )
+            }}
         >
             <Drawer.Screen
                 name="Home"
@@ -39,7 +39,7 @@ export default function NavigationScreen(navigation) {
                 name="Profile"
                 component={ProfileNavigator}
             />
-            
+
         </Drawer.Navigator>
     )
 }
