@@ -4,7 +4,6 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import HomeNavigator from './HomeNavigator';
 import ServiceScreenNavigator from './ServiceScreenNavigator';
 import ProfileNavigator from './ProfileNavigator';
-import MenuIcon from './MenuIcon';
 
 const BottomTab = createBottomTabNavigator();
 
@@ -43,7 +42,7 @@ const BottomTabNavigation = () => {
                             color="black"
                         />
                     ),
-                    headerRight: () => <MenuIcon />,
+                    // headerRight: () => <MenuIcon />,
                 }}
             />
             <BottomTab.Screen
@@ -53,7 +52,7 @@ const BottomTabNavigation = () => {
                     tabBarIcon: () => (
                         <FontAwesome name="user" size={25} color="black" />
                     ),
-                    headerRight: () => <MenuIcon />,
+                    // headerRight: () => <MenuIcon />,
                 }}
             />
         </BottomTab.Navigator>
