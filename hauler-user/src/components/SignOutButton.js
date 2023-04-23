@@ -1,12 +1,12 @@
 import React from "react";
 import { useContext, useState } from "react";
 import { Text } from "react-native-elements";
-import { StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Context } from "../context/ContextProvider";
 
 
-export default SignOutButton = ()=> {
+export default SignOutButton = () => {
     const { signout, currentUser } = useContext(Context)
     const [error, setError] = useState('')
 
@@ -20,7 +20,7 @@ export default SignOutButton = ()=> {
         }
     }
 
-    return(
+    return (
         <TouchableOpacity
             style={[styles.buttons, styles.logOutButton]}
             onPress={() => onSignOutClicked()}>
@@ -30,21 +30,21 @@ export default SignOutButton = ()=> {
 }
 
 const styles = StyleSheet.create({
-
     buttons: {
-
-        width: '48%',
+        width: '90%',
         height: 48,
         borderRadius: 5,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignSelf: 'center',
     },
     logOutButton: {
         backgroundColor: '#E0E0E0',
+        marginTop: 12,
     },
     buttonTitle: {
         color: 'white',
         fontSize: 16,
-        fontWeight: "bold"
+        fontWeight: "bold",
     }
 })

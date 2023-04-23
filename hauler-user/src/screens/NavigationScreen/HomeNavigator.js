@@ -19,6 +19,7 @@ const HomeStack = createStackNavigator();
 
 const HomeNavigator = () => {
     const { currentUser } = useContext(Context)
+    console.log('currentUser: ', currentUser)
     return (
         <HomeStack.Navigator
             initialRouteName='Signin'
@@ -43,28 +44,40 @@ const HomeNavigator = () => {
                         component={PaymentSheet}
                         options={{ headerShown: false }}
                     />
-                    </> 
-                    : 
-                    <>
+                </>
+                :
+                <>
                     <HomeStack.Screen
                         name='MyPostList'
                         component={MyPostList}
-                        options={{headerTitle: 'My Posts', headerRight: () => <MenuIcon /> }}
+                        options={{
+                            headerTitle: 'My Posts',
+                            // headerRight: () => <MenuIcon />
+                        }}
                     />
                     <HomeStack.Screen
                         name='PostDetails'
                         component={PostDetails}
-                        options={{headerTitle: 'Details', headerRight: () => <MenuIcon /> }}
+                        options={{
+                            headerTitle: 'Details',
+                            // headerRight: () => <MenuIcon />
+                        }}
                     />
                     <HomeStack.Screen
                         name='JobOffers'
                         component={JobOffers}
-                        options={{headerTitle: 'Offers', headerRight: () => <MenuIcon /> }}
+                        options={{
+                            headerTitle: 'Offers',
+                            // headerRight: () => <MenuIcon />
+                        }}
                     />
                     <HomeStack.Screen
                         name='OfferDetails'
                         component={OfferDetails}
-                        options={{headerTitle: 'Offers Details', headerRight: () => <MenuIcon /> }}
+                        options={{
+                            headerTitle: 'Offers Details',
+                            // headerRight: () => <MenuIcon />
+                        }}
                     />
                     <HomeStack.Screen
                         name='AddJunkNavigator'
@@ -79,18 +92,18 @@ const HomeNavigator = () => {
                     <HomeStack.Screen
                         name='PaymentNavigator'
                         component={PaymentNavigator}
-                        options={{ headerRight: () => <MenuIcon /> }}
+                    // options={{ headerRight: () => <MenuIcon /> }}
                     />
                     <HomeStack.Screen
                         name='Confirmation'
                         component={Confirmation}
-                        options={{ headerRight: () => <MenuIcon /> }}
+                    // options={{ headerRight: () => <MenuIcon /> }}
                     />
                     <HomeStack.Screen
                         name='TrackingMap'
-                        component={Map}/>
-                    </>
-                    }
+                        component={Map} />
+                </>
+            }
         </HomeStack.Navigator>
     );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Text, TextInput, TouchableOpacity, View, Image, ScrollView } from 'react-native'
 import { Context } from '../../context/ContextProvider';
 import { StyleSheet } from 'react-native';
@@ -15,7 +15,8 @@ export default function Signin({ navigation }) {
         try {
             setError("")
             setLoading(true)
-            await signin(email, password)
+            const userSignIn = await signin(email, password)
+            // console.log('userSignIn: ', userSignIn)
             navigation.navigate('MyPostList')
         } catch {
             setError("Failed to Login")
@@ -23,30 +24,37 @@ export default function Signin({ navigation }) {
         setLoading(false)
     }
 
+    useEffect(() => {
+        // console.log('currentUser from sign in: ', currentUser)
+        if (currentUser) {
+            navigation.navigate('MyPostList')
+        }
+    }, [currentUser])
+
     return (
         <ScrollView>
             <View style={styles.container}>
-                    <View
-                        style={{ flex: 1, width: '100%' }}>
-                        <Image source={require('../../../assets/haulerLogo.png')} style={styles.logo} />
-                        <Text > {error && alert(error)}</Text>
+                <View
+                    style={{ flex: 1, width: '100%' }}>
+                    <Image source={require('../../../assets/haulerLogo.png')} style={styles.logo} />
+                    <Text > {error && alert(error)}</Text>
                     <View style={styles.display}>
                         <Text style={styles.text1}> Email : </Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholderTextColor="#C0C0C0"
-                                onChangeText={(email) => { setError(""); setEmail(email) }}
-                                value={email}
-                            />
+                        <TextInput
+                            style={styles.input}
+                            placeholderTextColor="#C0C0C0"
+                            onChangeText={(email) => { setError(""); setEmail(email) }}
+                            value={email}
+                        />
 
                         <Text style={styles.text2}> Password : </Text>
-                            <TextInput
-                                style={styles.input}
-                                placeholderTextColor="#C0C0C0"
-                                secureTextEntry
-                                onChangeText={(password) => { setError(""); setPassword(password) }}
-                                value={password}
-                            />
+                        <TextInput
+                            style={styles.input}
+                            placeholderTextColor="#C0C0C0"
+                            secureTextEntry
+                            onChangeText={(password) => { setError(""); setPassword(password) }}
+                            value={password}
+                        />
                         <TouchableOpacity
                             style={styles.button}
                             disabled={!!loading} // added !!
@@ -57,17 +65,17 @@ export default function Signin({ navigation }) {
                             <Text style={styles.optionText}>
                                 Don't have an account?
                                 <Text style={styles.optionLink}
-                                onPress={() => navigation.navigate('Signup')}>
+                                    onPress={() => navigation.navigate('Signup')}>
                                     Register</Text>
                             </Text>
                             <Text style={styles.email}>
                                 Current user : {currentUser && currentUser.email}
                             </Text>
                         </View>
-                        </View>
                     </View>
                 </View>
-            </ScrollView>
+            </View>
+        </ScrollView>
     )
 }
 
@@ -107,12 +115,12 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         alignItems: "center",
         justifyContent: 'center'
-      },
-      buttonTitle: {
+    },
+    buttonTitle: {
         color: 'white',
         fontSize: 16,
         fontWeight: "bold"
-      },
+    },
     option: {
         flex: 1,
         alignItems: "center",

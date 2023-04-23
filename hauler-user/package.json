@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/webpack-config": "^18.0.1",
     "@react-native-community/slider": "^4.4.2",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/drawer": "^6.6.2",
@@ -37,8 +38,7 @@
     "react-native-picker-select-updated": "^9.0.3",
     "react-native-reanimated": "~2.14.4",
     "react-native-safe-area-context": "4.5.0",
-    "react-native-web": "~0.18.10",
-    "@expo/webpack-config": "^18.0.1"
+    "react-native-web": "~0.18.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
