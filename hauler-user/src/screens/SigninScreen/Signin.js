@@ -68,9 +68,9 @@ export default function Signin({ navigation }) {
                                     onPress={() => navigation.navigate('Signup')}>
                                     Register</Text>
                             </Text>
-                            <Text style={styles.email}>
+                            {/* <Text style={styles.email}>
                                 Current user : {currentUser && currentUser.email}
-                            </Text>
+                            </Text> */}
                         </View>
                     </View>
                 </View>
@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     },
     option: {
         flex: 1,
+        width: '100%',
         alignItems: "center",
         marginTop: 20
     },

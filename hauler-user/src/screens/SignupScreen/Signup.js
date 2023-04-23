@@ -43,7 +43,6 @@ export default function Signup({ navigation }) {
             aspect: [1, 1],
             quality: 1,
         });
-        console.log(result);
         if (!result.canceled) {
             setImage(result.uri)
         }
@@ -168,6 +167,7 @@ export default function Signup({ navigation }) {
                     <TextInput
                         style={styles.input}
                         placeholderTextColor="#C0C0C0"
+                        placeholder='YYYY-MM-DD'
                         onChangeText={(date) => {
                             setError('');
                             setDob(date);
@@ -178,6 +178,7 @@ export default function Signup({ navigation }) {
                     <Text style={styles.text}> Unit Number : </Text>
                     <TextInput
                         style={styles.input}
+                        placeholder='(e.g. 1234)'
                         placeholderTextColor="#C0C0C0"
                         onChangeText={(unitNumber) => { setError(""); setUnitNumber(unitNumber) }}
                         value={unitNumber}
@@ -186,6 +187,7 @@ export default function Signup({ navigation }) {
                     <Text style={styles.text}> Street Address : </Text>
                     <TextInput
                         style={styles.input}
+                        placeholder='(e.g. 1234 Main Street)'
                         placeholderTextColor="#C0C0C0"
                         onChangeText={(streetAddress) => { setError(""); setStreetAddress(streetAddress) }}
                         value={streetAddress}
@@ -194,6 +196,7 @@ export default function Signup({ navigation }) {
                     <Text style={styles.text}> City : </Text>
                     <TextInput
                         style={styles.input}
+                        placeholder='(e.g. Vancouver)'
                         placeholderTextColor="#C0C0C0"
                         onChangeText={(city) => { setError(""); setCity(city) }}
                         value={city}
@@ -202,6 +205,7 @@ export default function Signup({ navigation }) {
                     <Text style={styles.text}> Province : </Text>
                     <TextInput
                         style={styles.input}
+                        placeholder='(e.g. British Columbia)'
                         placeholderTextColor="#C0C0C0"
                         onChangeText={(province) => { setError(""); setProvince(province) }}
                         value={province}
@@ -210,6 +214,7 @@ export default function Signup({ navigation }) {
                     <Text style={styles.text}> Phone Number : </Text>
                     <TextInput
                         style={styles.input}
+                        placeholder='(XXX) XXX-XXXX'
                         placeholderTextColor="#C0C0C0"
                         onChangeText={(contactNumber) => { setError(""); setContactNumber(contactNumber) }}
                         value={contactNumber}
