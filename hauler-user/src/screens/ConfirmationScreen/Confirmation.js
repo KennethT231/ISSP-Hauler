@@ -27,7 +27,7 @@ export default function Confirmation({ navigation, route }) {
                 <Text style={styles.text}>Post Deleted Successfully!!!</Text>
             )
         }
-        else if(confirm ==='complete'){
+        else if (confirm === 'complete') {
             return (
                 <Text style={styles.text}>Job Completed Successfully!!!</Text>
             )
@@ -38,7 +38,7 @@ export default function Confirmation({ navigation, route }) {
             )
         }
     }
-    
+
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -50,9 +50,9 @@ export default function Confirmation({ navigation, route }) {
 
             </View>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Home', { screen: 'MyPostList'})} style={styles.button}><Text style={styles.btnText}>Return To My Job List </Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Home', { screen: 'MyPostList' })} style={styles.button}><Text style={styles.btnText}>Return To My Job List </Text></TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Post A Job', { screen: 'Post A Job'})} style={styles.button}><Text style={styles.btnText}>Return To Posting a Job </Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Post A Job', { screen: 'Post A Job' })} style={styles.button}><Text style={styles.btnText}>Return To Posting a Job </Text></TouchableOpacity>
 
         </View>
     )

@@ -15,12 +15,30 @@ export default function ErrandScreenNavigator() {
             headerShown: true,
             title: 'Errand Service',
         }}>
-            <ErrandScreenStack.Screen name='ErrandPost1' component={ErrandPost1} options={{ headerTitle: 'Page 1', headerRight: () => <MenuIcon /> }} />
-            <ErrandScreenStack.Screen name='ErrandPost2' component={ErrandPost2} options={{ headerTitle: 'Page 2', headerRight: () => <MenuIcon /> }} />
-            <ErrandScreenStack.Screen name='ErrandPost3' component={ErrandPost3} options={{ headerTitle: 'Page 3', headerRight: () => <MenuIcon /> }} />
-            <ErrandScreenStack.Screen name='ErrandPost4' component={ErrandPost4} options={{ headerTitle: 'Page 4', headerRight: () => <MenuIcon /> }} />
-            <ErrandScreenStack.Screen name='ErrandSummary' component={ErrandSummary} options={{  headerTitle: 'Review', headerRight: () => <MenuIcon /> }} />
-            <ErrandScreenStack.Screen name='Confirmation' component={Confirmation} options={{ headerTitle: 'Confirmation', headerRight: () => <MenuIcon /> }} />
+            <ErrandScreenStack.Screen name='ErrandPost1' component={ErrandPost1} options={{
+                headerTitle: 'Page 1',
+                // headerRight: () => <MenuIcon />
+            }} />
+            <ErrandScreenStack.Screen name='ErrandPost2' component={ErrandPost2} options={{
+                headerTitle: 'Page 2',
+                // headerRight: () => <MenuIcon />
+            }} />
+            <ErrandScreenStack.Screen name='ErrandPost3' component={ErrandPost3} options={{
+                headerTitle: 'Page 3',
+                // headerRight: () => <MenuIcon />
+            }} />
+            <ErrandScreenStack.Screen name='ErrandPost4' component={ErrandPost4} options={{
+                headerTitle: 'Page 4',
+                // headerRight: () => <MenuIcon />
+            }} />
+            <ErrandScreenStack.Screen name='ErrandSummary' component={ErrandSummary} options={{
+                headerTitle: 'Review',
+                // headerRight: () => <MenuIcon />
+            }} />
+            <ErrandScreenStack.Screen name='Confirmation' component={Confirmation} options={{
+                headerTitle: 'Confirmation',
+                // headerRight: () => <MenuIcon />
+            }} />
         </ErrandScreenStack.Navigator>
     )
 }

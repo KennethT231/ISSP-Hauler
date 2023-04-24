@@ -7,13 +7,13 @@ import ServiceScreenNavigator from './ServiceScreenNavigator'
 const ServiceProviderStack = createStackNavigator();
 
 const ServiceProviderNavigator = () => {
-    return(
+    return (
         <ServiceProviderStack.Navigator initialRouteName='ServiceProviderScreen' screenOptions={{
             headerShown: true,
             title: '',
         }}>
             <ServiceProviderStack.Screen name='ServiceProviderScreen' component={ServiceProviderScreen} options={{ headerRight: () => <MenuIcon /> }} />
-            <ServiceProviderStack.Screen name='Post A Job' component={ServiceScreenNavigator} options={{ headerRight: () => <MenuIcon /> }} />
+            <ServiceProviderStack.Screen name='' component={ServiceScreenNavigator} options={{ headerRight: () => <MenuIcon /> }} />
         </ServiceProviderStack.Navigator>
     );
 };

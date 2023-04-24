@@ -1,4 +1,4 @@
-import React, { useState }from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import SearchByLocation from '../../components/SearchByLocation/SearchByLocation';
 import SearchByService from '../../components/SearchByService/SearchByService';
@@ -9,26 +9,26 @@ export default function ServiceProviderScreen({ navigation }) {
     const [location, setLocation] = useState('')
     const [service, setService] = useState('')
 
-    return(
+    return (
         <ScrollView>
             <View style={styles.container}>
                 <Text>Service Providers List </Text>
                 <View style={styles.serviceContainer}>
-                    <SearchByService 
+                    <SearchByService
                         service={service}
                         setService={setService}
                     />
-                    <SearchByLocation 
+                    <SearchByLocation
                         location={location}
                         setLocation={setLocation}
                     />
                     <View style={styles.cardContainer}>
                         <Card>
-                            <ListItem> 
-                                <Avatar 
+                            <ListItem>
+                                <Avatar
                                     size='large'
                                     rounded
-                                    source={{uri: 'https://siddharthagarwalclasses.com/wp-content/uploads/2020/05/Human-Face-6.png'}}
+                                    source={{ uri: 'https://siddharthagarwalclasses.com/wp-content/uploads/2020/05/Human-Face-6.png' }}
                                 />
                                 <ListItem.Content>
                                     <ListItem.Title>John Doe </ListItem.Title>
@@ -39,11 +39,11 @@ export default function ServiceProviderScreen({ navigation }) {
                         </Card>
 
                         <Card>
-                            <ListItem> 
-                                <Avatar 
+                            <ListItem>
+                                <Avatar
                                     size='large'
                                     rounded
-                                    source={{uri: 'https://cdn5.vectorstock.com/i/thumb-large/91/29/friendly-smile-on-face-a-guy-vector-27339129.jpg'}}
+                                    source={{ uri: 'https://cdn5.vectorstock.com/i/thumb-large/91/29/friendly-smile-on-face-a-guy-vector-27339129.jpg' }}
                                 />
                                 <ListItem.Content>
                                     <ListItem.Title>Nick Fury </ListItem.Title>
@@ -54,7 +54,7 @@ export default function ServiceProviderScreen({ navigation }) {
                         </Card>
                     </View>
                     <View style={styles.btnContainer}>
-                    <TouchableOpacity onPress={() => navigation.navigate('Post A Job')} style={styles.button}><Text style={styles.btnText}> Post A Job </Text></TouchableOpacity></View>
+                        <TouchableOpacity onPress={() => navigation.navigate('Post A Job')} style={styles.button}><Text style={styles.btnText}> Post A Job </Text></TouchableOpacity></View>
                 </View>
 
             </View>
