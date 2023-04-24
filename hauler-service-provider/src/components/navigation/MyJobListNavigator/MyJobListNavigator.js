@@ -16,9 +16,9 @@ const MyJobListNavigator = () => {
     return (
         <MyJobListStack.Navigator
             initialRouteName='MyJobList'
-            // screenOptions={{
-            //     headerShown: true,
-            // }}
+            screenOptions={{
+                headerShown: false,
+            }}
         >
             <MyJobListStack.Screen
                 name='MyJobList'

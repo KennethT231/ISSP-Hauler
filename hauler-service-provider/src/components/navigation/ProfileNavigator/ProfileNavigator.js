@@ -10,7 +10,7 @@ const ProfileNavigator = () => {
         <ProfileStack.Navigator
             initialRouteName='ProfileS'
             screenOptions={{
-                headerShown: true,
+                headerShown: false,
                 title: '',
             }}>
             <ProfileStack.Screen

@@ -197,13 +197,13 @@ export default function Profile({ navigation }) {
                     </View>
                         <TouchableOpacity
                             style={[styles.buttons, styles.editButton]}
-                            disabled={loading}
+                            disabled={!!loading}
                             onPress={() => onEditClicked()}>
                             <Text style={[styles.buttonTitle, styles.editTitle]}>Edit</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.buttons, styles.logOutButton]}
-                            disabled={loading}
+                            disabled={!!loading}
                             onPress={() => onSignOutClicked()}>
                             <Text style={styles.buttonTitle}>Log Out</Text>
                         </TouchableOpacity>
