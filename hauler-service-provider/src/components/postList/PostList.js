@@ -15,8 +15,8 @@ export default function PostsList({ posts, onViewDetailsPress, response, onStatu
                         item &&
                         <View style={styles.cardContainer}>
                             <Card containerStyle={{ borderRadius: 10, padding: 10 }}>
-                                {/* <Card.Title style={styles.cardTitle}>
-                                {item.service}</Card.Title> */}
+                                <Card.Title style={styles.cardTitle}>
+                                {item.service}</Card.Title>
                                 {(response.length > 0) ?
                                     <Badge
                                         badgeStyle={{ display: response[index] && response[index].length>0 && response[index][0].notificationOnServiceProvider }}

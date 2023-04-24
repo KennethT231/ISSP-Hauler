@@ -45,37 +45,37 @@ export default function PostInfo({ posts, contact }) {
             </Modal>
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Post Heading</Text>
-                {/* <Text style={styles.infoValue}>{posts.postHeading}</Text> */}
+                <Text style={styles.infoValue}>{posts.postHeading}</Text>
             </View>
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Post Description</Text>
-                {/* <Text style={styles.infoValue}>{posts.postDescription}</Text> */}
+                <Text style={styles.infoValue}>{posts.postDescription}</Text>
             </View>
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Total Weight</Text>
-                {/* <Text style={styles.infoValue}>{posts.loadWeight}</Text> */}
+                <Text style={styles.infoValue}>{posts.loadWeight}</Text>
             </View>
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Number of items </Text>
-                {/* <Text style={styles.infoValue}>{posts.numberOfItems}</Text> */}
+                <Text style={styles.infoValue}>{posts.numberOfItems}</Text>
             </View>
-            {/* {posts.status !== 'Available' && posts.status !== 'Negotiating' && <View style={styles.infoContainer}> */}
-                {/* <Text style={styles.infoKey}>Pick Up Address</Text> */}
-                {/* <Text style={styles.infoValue}>
+            {posts.status !== 'Available' && posts.status !== 'Negotiating' && <View style={styles.infoContainer}>
+                <Text style={styles.infoKey}>Pick Up Address</Text>
+                <Text style={styles.infoValue}>
                     {posts.pickUpAddress}
-                </Text> */}
-            {/* </View>} */}
+                </Text>
+            </View>}
             <Text>
                 {contact &&
                     <View>
                         <View style={styles.infoContainer}>
                             <Text style={styles.infoKey}>Pick Up Contact Name</Text>
-                            {/* <Text style={styles.infoValue}>{posts.pickUpContactPerson}</Text> */}
+                            <Text style={styles.infoValue}>{posts.pickUpContactPerson}</Text>
                         </View>
 
                         <View style={styles.infoContainer}>
                             <Text style={styles.infoKey}>Pick Up Contact Number</Text>
-                            {/* <Text style={styles.infoValue1}>{posts.pickUpContactNumber}  </Text> */}
+                            <Text style={styles.infoValue1}>{posts.pickUpContactNumber}  </Text>
                             <Text style={styles.iconStyle}><Feather name='phone' size={24} color='white' /></Text>
                         </View>
                     </View>
@@ -83,27 +83,27 @@ export default function PostInfo({ posts, contact }) {
             </Text>
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Pick Up Instructions</Text>
-                {/* <Text style={styles.infoValue}>{posts.pickUpSpecialInstruction}</Text> */}
+                <Text style={styles.infoValue}>{posts.pickUpSpecialInstruction}</Text>
             </View>
-            {/* {posts.dropOffAddress && */}
+            {posts.dropOffAddress &&
                 <View>
                     <View style={styles.infoContainer}>
                         <Text style={styles.infoKey}>Drop Off Address</Text>
-                        {/* <Text style={styles.infoValue}>
+                        <Text style={styles.infoValue}>
                             {posts.dropOffAddress}
-                        </Text> */}
+                        </Text>
                     </View>
                     <Text>
                         {contact && (posts.status !== 'Available' && posts.status !== 'Negotiating') &&
                             <View>
                                 <View style={styles.infoContainer}>
                                     <Text style={styles.infoKey}>Drop Off Contact Name</Text>
-                                    {/* <Text style={styles.infoValue}>{posts.dropOffContactPerson}</Text> */}
+                                    <Text style={styles.infoValue}>{posts.dropOffContactPerson}</Text>
                                 </View>
 
                                 <View style={styles.infoContainer}>
                                     <Text style={styles.infoKey}>Drop Off Contact Number</Text>
-                                    {/* <Text style={styles.infoValue1}>{posts.dropOffContactNumber}  </Text> */}
+                                    <Text style={styles.infoValue1}>{posts.dropOffContactNumber}  </Text>
                                     <Text style={styles.iconStyle}><Feather name='phone' size={24} color='white' /></Text>
                                 </View>
                             </View>
@@ -111,24 +111,24 @@ export default function PostInfo({ posts, contact }) {
                     </Text>
                     <View style={styles.infoContainer}>
                         <Text style={styles.infoKey}>Drop Off Instructions</Text>
-                        {/* <Text style={styles.infoValue}>{posts.dropOffSpecialInstruction}</Text> */}
+                        <Text style={styles.infoValue}>{posts.dropOffSpecialInstruction}</Text>
                     </View>
                     <View style={styles.infoContainer}>
                         <Text style={styles.infoKey}>Distance </Text>
-                        {/* <Text style={styles.infoValue1}>{posts.distance} km </Text> */}
+                        <Text style={styles.infoValue1}>{posts.distance} km </Text>
                         <TouchableOpacity onPress={() => onMapsPress()}><Text style={styles.iconStyle}><MaterialCommunityIcons name='map-marker-multiple-outline' size={24} color='white' /></Text></TouchableOpacity>
                     </View>
                 </View>
-            {/* } */}
+             }
             <View style={styles.imageContainer}>
                 <Text style={styles.infoKey}>Images</Text>
-                {/* <Text>
+                <Text>
                     {posts &&
                         <ImageList
                             loadImages={posts.loadImages}
                         />
                     }
-                </Text> */}
+                </Text>
             </View>
         </View>
     )

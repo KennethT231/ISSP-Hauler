@@ -10,13 +10,13 @@ const ProfileNavigator = () => {
         <ProfileStack.Navigator
             initialRouteName='ProfileS'
             screenOptions={{
-                headerShown: true,
+                headerShown: false,
                 title: '',
             }}>
             <ProfileStack.Screen
                 name='Profile'
                 component={Profile}
-                options={{headerTitle: 'Profile', headerRight: () => <MenuIcon /> }}
+                // options={{headerTitle: 'Profile', headerRight: () => <MenuIcon /> }}
             />
         </ProfileStack.Navigator>
     );
