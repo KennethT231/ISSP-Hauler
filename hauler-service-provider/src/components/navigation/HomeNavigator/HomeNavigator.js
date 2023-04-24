@@ -36,15 +36,15 @@ const HomeNavigator = () => {
                     <HomeStack.Screen
                         name='Home'
                         component={Home}
-                        options={
-                            Platform.OS === 'android'
-                                ? {
-                                    headerRight: () => <MenuIcon />,
-                                }
-                                : {
-                                    headerTitle: 'Home',
-                                }
-                        }
+                        // options={
+                        //     Platform.OS === 'android'
+                        //         ? {
+                        //             headerRight: () => <MenuIcon />,
+                        //         }
+                        //         : {
+                        //             headerTitle: 'Home',
+                        //         }
+                        // }
                     />
                 </>
             }
