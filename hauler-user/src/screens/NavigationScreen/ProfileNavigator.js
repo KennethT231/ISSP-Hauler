@@ -10,15 +10,15 @@ const ProfileNavigator = () => {
         <ProfileStack.Navigator
             initialRouteName='Profile1'
             screenOptions={{
-                headerShown: true,
+                headerShown: false,
                 title: '',
             }}>
             <ProfileStack.Screen
                 name='Profile1'
                 component={Profile1}
-                options={{headerTitle: 'Profile', headerRight: () => <MenuIcon /> }}
+            // options={{ headerTitle: 'Profilesadfasdf', headerRight: () => <MenuIcon /> }}
             />
-            
+
         </ProfileStack.Navigator>
     );
 };
