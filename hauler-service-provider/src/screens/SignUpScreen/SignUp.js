@@ -4,7 +4,7 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView,
 import UserInfo from '../../../src/components/userInfo/UserInfo';
 import { Context } from '../../../src/components/context/ContextProvider';
 import { signUp, createStripeAccount } from '../../../network';
-import RNPickerSelect from 'react-native-picker-select';
+import RNPickerSelect from 'react-native-picker-select-updated';
 
 
 export default function Signup({ navigation }) {

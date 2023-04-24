@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select-updated';
+import RNPickerSelect from 'react-native-picker-select-updated-updated';
 
 export default function SearchByService({ service, setService, searchService }) {
 
