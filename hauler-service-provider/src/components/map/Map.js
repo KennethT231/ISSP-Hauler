@@ -6,7 +6,7 @@ import { Dimensions, ActivityIndicator,
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 // import { GOOGLE_MAP_API } from '@env';
-import Geolocation from 'react-native-geolocation-service';
+// import Geolocation from 'react-native-geolocation-service';
 import { sendGpsCordinates } from '../../../network';
 // import { getDistance, getPreciseDistance } from "geo-lib";
 import { markDriverArrival } from '../../../network';
