@@ -15,7 +15,7 @@ const HomeNavigator = () => {
         <HomeStack.Navigator
             initialRouteName='Signin'
             screenOptions={{
-                headerShown: true,
+                headerShown: false,
             }}
         >
             {!currentUser ?
@@ -23,12 +23,12 @@ const HomeNavigator = () => {
                     <HomeStack.Screen
                         name='Signin'
                         component={Signin}
-                        options={{ headerShown: false }}
+                        // options={{ headerShown: false }}
                     />
                     <HomeStack.Screen
                         name='SignUp'
                         component={SignUp}
-                        options={{ headerShown: false }}
+                        // options={{ headerShown: false }}
                     />
                 </>
                 :

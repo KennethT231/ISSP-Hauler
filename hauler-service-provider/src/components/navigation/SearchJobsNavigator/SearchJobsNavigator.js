@@ -15,7 +15,7 @@ const SearchJobsNavigator = () => {
         <SearchStack.Navigator
             initialRouteName='SearchJobs'
             screenOptions={{
-                headerShown: true,
+                headerShown: false,
             }}
         >
             <SearchStack.Screen
