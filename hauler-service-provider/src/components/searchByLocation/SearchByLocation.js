@@ -1,6 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+<<<<<<< HEAD
 // import RNPickerSelect from 'react-native-picker-select-updated';
+=======
+import RNPickerSelect from 'react-native-picker-select-updated';
+>>>>>>> 5266d9a8a2b09a255a55de1443d026beeb76c257
 // Error: Invalid hook call. Hooks can only be called inside of the body of a function component. This could happen for one of the following reasons:
 // 1. You might have mismatching versions of React and the renderer (such as React DOM)
 // 2. You might be breaking the Rules of Hooks
@@ -11,7 +15,7 @@ export default function SearchByLocation({ location, setLocation, searchLocation
 
     return (
         <View style={styles.search}>
-            {/* <RNPickerSelect
+            <RNPickerSelect
                 value={location}
                 useNativeAndroidPickerStyle={true}
                 style={{
@@ -39,7 +43,7 @@ export default function SearchByLocation({ location, setLocation, searchLocation
                     { label: 'Richmond', value: 'Richmond' },
                     { label: 'Burnaby', value: 'Burnaby' }
                 ]}
-            /> */}
+            />
         </View>
     )
 }

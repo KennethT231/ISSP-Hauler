@@ -6,7 +6,7 @@ export default function SearchByService({ service, setService, searchService }) 
 
     return (
         <View style={styles.search}>
-            {/* <RNPickerSelect
+            <RNPickerSelect
                 value={service}
                 useNativeAndroidPickerStyle={true}
                 style={{
@@ -33,7 +33,7 @@ export default function SearchByService({ service, setService, searchService }) 
                     { label: 'Moving', value: 'Moving' },
                     { label: 'Errand', value: 'Errand' },
                 ]}
-            /> */}
+            />
         </View>
     )
 }
