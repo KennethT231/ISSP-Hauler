@@ -1,15 +1,14 @@
-//not complate yet. I need contextProvider to check it works, change the path
 import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView, Picker, Linking} from 'react-native';
 import UserInfo from '../../../src/components/userInfo/UserInfo';
-import { Context } from '../../../src/components/context/ContextProvider';
+import { Context } from '../../../src/context/ContextProvider';
 import { signUp, createStripeAccount } from '../../../network';
-import RNPickerSelect from 'react-native-picker-select';
+import RNPickerSelect from 'react-native-picker-select-updated';
 
 
 export default function Signup({ navigation }) {
   
-    // const { signup, currentUser } = useContext(Context)
+    const { signup, currentUser } = useContext(Context)
 
     const [uid, setUid] = useState('')
     const [email, setEmail] = useState('')
@@ -35,44 +34,44 @@ export default function Signup({ navigation }) {
     }
 
     printUrl()
-    // const onSignUpClicked = async () => {
-    //     if (password !== confirmPassword) {
-    //         setError("Password does not match")
-    //         return
-    //     }
-    //     try {
-    //         setError("")
-    //         setLoading(true)
-    //         const response = await signup(email, password)
-    //         const currentUid = response.user.uid
-    //         setUid(currentUid)
-    //         await signUp(currentUid,
-    //             firstName,
-    //             lastName,
-    //             // profilePicUrl,
-    //             // dateOfBirth,
-    //             province,
-    //             city,
-    //             streetAddress,
-    //             unitNumber,
-    //             email,
-    //             contactNumber,
-    //             vehicleType,
-    //             // driverLicenseExpiry,
-    //             serviceLocation,
-    //         )
+    const onSignUpClicked = async () => {
+        if (password !== confirmPassword) {
+            setError("Password does not match")
+            return
+        }
+        try {
+            setError("")
+            setLoading(true)
+            const response = await signup(email, password)
+            const currentUid = response.user.uid
+            setUid(currentUid)
+            await signUp(currentUid,
+                firstName,
+                lastName,
+                // profilePicUrl,
+                // dateOfBirth,
+                province,
+                city,
+                streetAddress,
+                unitNumber,
+                email,
+                contactNumber,
+                vehicleType,
+                // driverLicenseExpiry,
+                serviceLocation,
+            )
 
-    //         const appUrl = await Linking.getInitialURL()
-    //         const stripeUrl = await createStripeAccount(email, appUrl,currentUid)
-    //         console.log('stripe url', stripeUrl)
-    //         await Linking.openURL(stripeUrl)
-    //         navigation.navigate('Home')
-    //     } catch (err) {
-    //         console.log(err)
-    //         setError(err.message)
-    //     }
-    //     setLoading(false)
-    // }
+            const appUrl = await Linking.getInitialURL()
+            const stripeUrl = await createStripeAccount(email, appUrl,currentUid)
+            console.log('stripe url', stripeUrl)
+            await Linking.openURL(stripeUrl)
+            navigation.navigate('Home')
+        } catch (err) {
+            console.log(err)
+            setError(err.message)
+        }
+        setLoading(false)
+    }
 
     return (
         <ScrollView>
@@ -101,7 +100,7 @@ export default function Signup({ navigation }) {
                         onChangeText={(password) => { setError(""); setConfirmPassword(password) }}
                         value={confirmPassword}
                     />
-                    {/* <UserInfo
+                    <UserInfo
                         dateOfBirth={dateOfBirth}
                         province={province}
                         city={city}
@@ -121,10 +120,10 @@ export default function Signup({ navigation }) {
                         setContactNumber={setContactNumber}
                         setFirstName={setFirstName}
                         setError={setError}
-                    /> */}
+                    />
 
                   <View style={styles.picker}>
-                  {/* <RNPickerSelect
+                  <RNPickerSelect
                       value={vehicleType}
                       useNativeAndroidPickerStyle={true}
                       style={{
@@ -151,10 +150,10 @@ export default function Signup({ navigation }) {
                           { label: 'VAN', value: 'VAN' },
                           { label: 'PICKUP', value: 'PICKUP' },
                       ]}
-                  /> */}
+                  />
                   </View>
                   <View style={styles.picker}>
-                    {/* <RNPickerSelect
+                    <RNPickerSelect
                         value={serviceLocation}
                         useNativeAndroidPickerStyle={true}
                         style={{
@@ -188,7 +187,7 @@ export default function Signup({ navigation }) {
                             { label: 'New Westminster', value: 'New Westminster' },
                             { label: 'Surrey', value: 'Surrey' },
                         ]}
-                    /> */}
+                    />
                   </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity

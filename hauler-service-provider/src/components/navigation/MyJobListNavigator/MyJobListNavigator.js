@@ -17,99 +17,99 @@ const MyJobListNavigator = () => {
         <MyJobListStack.Navigator
             initialRouteName='MyJobList'
             screenOptions={{
-                headerShown: true,
+                headerShown: false,
             }}
         >
             <MyJobListStack.Screen
                 name='MyJobList'
                 component={MyJobList}
-                options={
-                    Platform.OS === 'android'
-                        ? {
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: 'Job List',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? {
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: 'Job List',
+                //         }
+                // }
             />
             <MyJobListStack.Screen
                 name='StatusDetails'
                 component={StatusDetails}
-                options={
-                    Platform.OS === 'android'
-                        ? {
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: '',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? {
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: '',
+                //         }
+                // }
             />
             <MyJobListStack.Screen
                 name='OfferConfirmation'
                 component={OfferConfirmation}
-                options={
-                    Platform.OS === 'android'
-                        ? {
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: 'Confirmation',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? {
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: 'Confirmation',
+                //         }
+                // }
             />
             <MyJobListStack.Screen
                 name='PostDetails'
                 component={PostDetails}
-                options={
-                    Platform.OS === 'android'
-                        ? {
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: '',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? {
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: '',
+                //         }
+                // }
             />
             <MyJobListStack.Screen
                 name='OfferDetails'
                 component={OfferDetails}
-                options={
-                    Platform.OS === 'android'
-                        ? {
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: '',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? {
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: '',
+                //         }
+                // }
             />
             <MyJobListStack.Screen
                 name='JobConfirmation'
                 component={JobConfirmation}
-                options={
-                    Platform.OS === 'android'
-                        ? {
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: 'Confirmation',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? {
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: 'Confirmation',
+                //         }
+                // }
             />
             <MyJobListStack.Screen
                 name='LiveTrackingMap'
                 component={Map}
-                options={
-                    Platform.OS === 'android'
-                        ? { 
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: 'Live Tracking',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? { 
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: 'Live Tracking',
+                //         }
+                // }
             />
         </MyJobListStack.Navigator>
     );

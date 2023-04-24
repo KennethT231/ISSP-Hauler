@@ -15,73 +15,73 @@ const SearchJobsNavigator = () => {
         <SearchStack.Navigator
             initialRouteName='SearchJobs'
             screenOptions={{
-                headerShown: true,
+                headerShown: false,
             }}
         >
             <SearchStack.Screen
                 name='SearchJobs'
                 component={SearchJobs}
-                options={
-                    Platform.OS === 'android'
-                        ? {
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: 'Search',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? {
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: 'Search',
+                //         }
+                // }
             />
             <SearchStack.Screen
                 name='PostDetails'
                 component={PostDetails}
-                options={
-                    Platform.OS === 'android'
-                        ? {
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: '',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? {
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: '',
+                //         }
+                // }
             />
             <SearchStack.Screen
                 name='JobConfirmation'
                 component={JobConfirmation}
-                options={
-                    Platform.OS === 'android'
-                        ? {
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: '',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? {
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: '',
+                //         }
+                // }
             />
             <SearchStack.Screen
                 name='OfferDetails'
                 component={OfferDetails}
-                options={
-                    Platform.OS === 'android'
-                        ? {
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: '',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? {
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: '',
+                //         }
+                // }
             />
             <SearchStack.Screen
                 name='OfferConfirmation'
                 component={OfferConfirmation}
-                options={
-                    Platform.OS === 'android'
-                        ? {
-                            headerRight: () => <MenuIcon />,
-                        }
-                        : {
-                            headerTitle: '',
-                        }
-                }
+                // options={
+                //     Platform.OS === 'android'
+                //         ? {
+                //             headerRight: () => <MenuIcon />,
+                //         }
+                //         : {
+                //             headerTitle: '',
+                //         }
+                // }
             />
         </SearchStack.Navigator>
     );

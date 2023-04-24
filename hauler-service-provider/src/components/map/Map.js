@@ -6,7 +6,7 @@ import { Dimensions, ActivityIndicator,
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 // import { GOOGLE_MAP_API } from '@env';
-import Geolocation from 'react-native-geolocation-service';
+// import Geolocation from 'react-native-geolocation-service';
 import { sendGpsCordinates } from '../../../network';
 // import { getDistance, getPreciseDistance } from "geo-lib";
 import { markDriverArrival } from '../../../network';
@@ -127,25 +127,25 @@ export default function Map({ navigation,route }) {
   // })
 
 
-//   const completeJob = () => {
-//     try {
-//       markDriverArrival(post._id)
-//         Alert.alert(
-//             "Alert",
-//             "Confirm load has been picked up",
-//             [
-//               {
-//                 text: "Cancel",
-//                 style: "cancel"
-//               },
-//               { text: "Continue", onPress: () => navigation.navigate('MyJobListNavigator', { screen: 'MyJobList' }) }
-//             ]
-//           );
+  const completeJob = () => {
+    try {
+      markDriverArrival(post._id)
+        Alert.alert(
+            "Alert",
+            "Confirm load has been picked up",
+            [
+              {
+                text: "Cancel",
+                style: "cancel"
+              },
+              { text: "Continue", onPress: () => navigation.navigate('MyJobListNavigator', { screen: 'MyJobList' }) }
+            ]
+          );
     
-//     } catch (err) {
-//         console.log(err)
-//     }
-// }
+    } catch (err) {
+        console.log(err)
+    }
+}
 
   return (
     <View style={styles.mapContainer}>

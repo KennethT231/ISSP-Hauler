@@ -11,15 +11,15 @@ export const AuthProvider = ({ children }) => {
     const [currentUser, setCurrentUser] = useState('');
     const [loading, setLoading] = useState(true)
     const signup = (email, password) => {
-        return auth.createUserWithEmailAndPassword(email, password)
+        return firebase.auth().createUserWithEmailAndPassword(email, password)
     }
 
     const signin = (email, password) => {
-        return auth.signInWithEmailAndPassword(email, password)
+        return firebase.auth().signInWithEmailAndPassword(email, password)
     }
 
     const signout = () => {
-        return auth.signOut()
+        return firebase.auth().signOut()
     }
 
     useEffect(() => {

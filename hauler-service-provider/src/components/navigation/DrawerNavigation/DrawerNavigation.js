@@ -15,22 +15,22 @@ export default function DrawerNavigation() {
       <Drawer.Screen
         name="Home"
         component={HomeNavigator}
-        options={{ headerTitle: 'Home', headerRight: () => <MenuIcon /> }}
+        // options={{ headerTitle: 'Home', headerRight: () => <MenuIcon /> }}
       />
       <Drawer.Screen
-        name="SearchJobsNavigator"
+        name="Search Jobs"
         component={SearchJobsNavigator}
-        options={{ headerTitle: 'Home', headerRight: () => <MenuIcon /> }}
+        // options={{ headerTitle: 'Home', headerRight: () => <MenuIcon /> }}
       />
       <Drawer.Screen
-        name="MyJobListNavigator"
+        name="My JobList"
         component={MyJobListNavigator}
-        options={{ headerTitle: 'My Job List', headerRight: () => <MenuIcon /> }}
+        // options={{ headerTitle: 'My Job List', headerRight: () => <MenuIcon /> }}
       />
       <Drawer.Screen
         name="Profile"
         component={ProfileNavigator}
-        options={{ headerTitle: 'Profile', headerRight: () => <MenuIcon /> }}
+        // options={{ headerTitle: 'Profile', headerRight: () => <MenuIcon /> }}
       />
     </Drawer.Navigator>
   );

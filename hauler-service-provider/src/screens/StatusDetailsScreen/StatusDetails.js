@@ -4,7 +4,7 @@ import { addServiceProviserResponse, getOnePost, getResponseByServiseProviderId,
 import OfferInfo from '../../components/offerInfo/OfferInfo';
 
 export default function StatusDetails({ navigation, route }) {
-    // const { uid, postId, jobStatus } = route.params;
+     const { uid, postId, jobStatus } = route.params;
 
     const [response, setResponse] = useState('')
     const [offer, setOffer] = useState('')
@@ -107,7 +107,7 @@ export default function StatusDetails({ navigation, route }) {
                 onDecline={onDecline}
                 onAccept={onAccept}
                 setActionPrice={setActionPrice}
-                // jobStatus={jobStatus}
+                jobStatus={jobStatus}
             />
         </>
     )
