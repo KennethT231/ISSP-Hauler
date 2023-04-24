@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import SelectWeight from '../../components/SelectWeight/SelectWeight';
 import { Ionicons } from '@expo/vector-icons';
-import {getOnePost} from '../../../network'
+import { getOnePost } from '../../../network'
 
 export default function AddItemScreen({ navigation, route }) {
 
@@ -34,7 +34,7 @@ export default function AddItemScreen({ navigation, route }) {
 
   useEffect(() => {
     (async () => {
-      if (operation === "edit"){
+      if (operation === "edit") {
         const post = await getOnePost(postId)
         setSelectedWeight(post.loadWeight)
         setSelectedQuantity(post.numberOfItems)
@@ -61,7 +61,7 @@ export default function AddItemScreen({ navigation, route }) {
 
     console.log(result);
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImage(result.uri);
     }
   };
@@ -100,7 +100,7 @@ export default function AddItemScreen({ navigation, route }) {
 
         <TouchableOpacity style={styles.button} onPress={() => pickImageAlbum()}><Text style={styles.buttonTitle}>Upload Image</Text></TouchableOpacity>
 
-        <View style= {styles.imageContainer}>
+        <View style={styles.imageContainer}>
           {image && <Image source={{ uri: image }} style={styles.imageDisplay} />}
         </View>
         <View style={styles.footerContainer}>

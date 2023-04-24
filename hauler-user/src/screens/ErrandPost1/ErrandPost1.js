@@ -61,7 +61,7 @@ export default function ErrandPost1({ navigation, route }) {
 
     console.log(result);
 
-    if (!result.cancelled) {
+    if (!result.canceled) {
       setImage(result.uri);
     }
   };
@@ -78,7 +78,7 @@ export default function ErrandPost1({ navigation, route }) {
 
         <Text style={styles.text}> Post Description : </Text>
         <TextInput style={styles.inputLine1}
-        multiline
+          multiline
           onChangeText={(description) => { setDescription(description) }}
           value={description}
         />
@@ -105,10 +105,10 @@ export default function ErrandPost1({ navigation, route }) {
           </TouchableOpacity>
         </View>
 
-        <View style= {styles.imageContainer}>
-            {image && <Image source={{ uri: image }} style={styles.imageDisplay} />}
+        <View style={styles.imageContainer}>
+          {image && <Image source={{ uri: image }} style={styles.imageDisplay} />}
         </View>
-        
+
 
         <View style={styles.footerContainer}>
           <TouchableOpacity onPress={() => navigation.navigate('ErrandPost2', {

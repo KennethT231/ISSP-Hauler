@@ -10,8 +10,8 @@ import { getOneUser, updateOneUser } from '../../../network';
 export default function Profile1({ navigation }) {
     const { signout, currentUser } = useContext(Context)
 
-     const [userInformation, setUserInformation] = useState('')
-     const [modalVisible, setModalVisible] = useState(false)
+    const [userInformation, setUserInformation] = useState({})
+    const [modalVisible, setModalVisible] = useState(false)
     const [profilePicUrl, setProfilePicUrl] = useState('')
     const [dateOfBirth, setDob] = useState()
     const [province, setProvince] = useState('')
@@ -19,15 +19,19 @@ export default function Profile1({ navigation }) {
     const [streetAddress, setStreetAddress] = useState('')
     const [unitNumber, setUnitNumber] = useState('')
     const [contactNumber, setContactNumber] = useState('')
-     const [firstName, setFirstName] = useState('')
+    const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [creditCardNumber, setCreditCardNumber] = useState('')
     const [expiryDate, setExpiryDate] = useState('')
     const [cvv, setCvv] = useState('')
-     const [error, setError] = useState('')
-     const [loading, setLoading] = useState('')
-     const [reload, setReload] = useState(true)
+    const [error, setError] = useState('')
+    const [loading, setLoading] = useState('')
+    const [reload, setReload] = useState(true)
 
+    // console.log('currentUser from profile: ', currentUser)
+    useEffect(() => {
+        console.log('userInformation: ', userInformation)
+    }, [userInformation])
 
     const onSignOutClicked = async () => {
         try {
@@ -41,9 +45,9 @@ export default function Profile1({ navigation }) {
         setLoading(false)
     }
 
-     const onEditClicked = async () => {
-         setModalVisible(true)
-     }
+    const onEditClicked = async () => {
+        setModalVisible(true)
+    }
     const onEditSubmitted = async () => {
         await updateOneUser(
             currentUser.uid,
@@ -58,7 +62,7 @@ export default function Profile1({ navigation }) {
             contactNumber,
             creditCardNumber,
             expiryDate,
-            cvv   
+            cvv
         )
         setReload(!reload)
         setModalVisible(!modalVisible)
@@ -68,6 +72,8 @@ export default function Profile1({ navigation }) {
         currentUser &&
             (async () => {
                 const profile = await getOneUser(currentUser.uid)
+                console.log(currentUser.uid)
+                console.log('profile from profile1: ', profile)
                 setUserInformation(profile)
                 setCity(profile.city)
                 setStreetAddress(profile.streetAddress)
@@ -75,7 +81,7 @@ export default function Profile1({ navigation }) {
                 setDob(profile.dateOfBirth)
                 setContactNumber(profile.contactNumber)
                 setProvince(profile.province)
-                 setFirstName(profile.firstName)
+                setFirstName(profile.firstName)
                 setLastName(profile.lastName)
                 setProfilePicUrl(profile.profilePicUrl)
                 setCreditCardNumber(profile.creditCardNumber)
@@ -181,7 +187,7 @@ export default function Profile1({ navigation }) {
                                     setProfilePicUrl={setProfilePicUrl}
                                     setError={setError}
                                 />
-                                <UserInfo2 
+                                <UserInfo2
                                     creditCardNumber={creditCardNumber}
                                     expiryDate={expiryDate}
                                     cvv={cvv}
@@ -249,7 +255,7 @@ const styles = StyleSheet.create({
     },
     avatar: {
         alignItems: 'center'
-        
+
     },
     user: {
         textAlign: 'center',
