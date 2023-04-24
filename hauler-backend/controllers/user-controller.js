@@ -30,6 +30,7 @@ const createUser = async (req, res) => {
             email,
             contactNumber
         });
+        console.log('newUser', newUser);
 
         await newUser.save();
         res.status(201).json({ userProfile: newUser });
@@ -52,6 +53,7 @@ const getUser = async (req, res) => {
 const getOneUser = async (req, res) => {
     try {
         const id = req.params.uid;
+        console.log('id', id);
         let user = await UserData.findOne({ uid: id });
         res.status(200).json(user)
     } catch (error) {
@@ -84,13 +86,27 @@ const updateOneUser = async (req, res) => {
             unitNumber,
             contactNumber
         } = req.body;
-        await UserData.findOneAndUpdate({uid: id }, { $set: { firstName: firstName, lastName: lastName, dateOfBirth: dateOfBirth, province: province, city: city, streetAddress: streetAddress, unitNumber: unitNumber, contactNumber: contactNumber } });
+        await UserData.findOneAndUpdate(
+            { uid: id },
+            {
+                $set: {
+                    firstName,
+                    lastName,
+                    dateOfBirth,
+                    province,
+                    city,
+                    streetAddress,
+                    unitNumber,
+                    contactNumber
+                }
+            },
+            { useFindAndModify: false } // Add this option to prevent deprecation warning
+        );
         res.status(200).json("User Info updated")
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
 };
-
 
 exports.getOneUser = getOneUser;
 exports.getUser = getUser;
