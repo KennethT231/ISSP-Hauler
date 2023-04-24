@@ -39,7 +39,6 @@ export default function NavigationScreen(navigation) {
                 name="Profile"
                 component={ProfileNavigator}
             />
-
         </Drawer.Navigator>
     )
 }

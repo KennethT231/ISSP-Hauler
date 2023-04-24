@@ -17,9 +17,11 @@ const userRoutes = require('./routes/user-router.js');
 const stripeRoutes = require('./routes/stripe-routes.js')
 
 //importing middleware
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
-app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+// app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
 //defining restApi's
 app.use('/api/posts', postRoutes);

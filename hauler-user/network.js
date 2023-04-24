@@ -2,7 +2,7 @@ import axios from "axios";
 //import { NETWORK_URL } from "@env";
 
 //const url = NETWORK_URL;
-const url = "http://localhost:3000"
+const url = "http://192.168.1.66:3000"
 console.log("Connectimg to server");
 console.log(url);
 
@@ -210,11 +210,14 @@ export async function updatePostVisibility(
 export async function getOneUser(uid) {
   try {
     const res = await axios.get(`${url}/api/users/${uid}`);
+    console.log('res.data', res.data);
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.log('There has been a problem with your fetch operation: ' + err.message);
+    throw new Error(`Error fetching user data: ${err.message}`);
   }
 }
+
 
 //================================= To Update User Information ======================================//
 export async function updateOneUser(
@@ -275,7 +278,7 @@ export async function markPostPaid(postId) {
 }
 
 //==================================To create stripe payment intent ===========================//
-export async function createPaymentIntent(postId,amount, serviceProviderAccount){
+export async function createPaymentIntent(postId, amount, serviceProviderAccount) {
   console.log(postId)
   try {
     const res = await axios.post(`${url}/api/stripe/createPaymentIntent`, {
@@ -346,13 +349,13 @@ export async function updateOnePost(
 }
 
 
-  //----------------------------------To mark the job complete'-----------------------------
-  export async function markJobComplete(postId) {
-    console.log(postId)
-    try {
-      const res = await axios.post(`${url}/api/posts/complete/${postId}`);
-      return res.data
-    } catch (err) {
-      console.log(err);
-    }}  
-  
+//----------------------------------To mark the job complete'-----------------------------
+export async function markJobComplete(postId) {
+  console.log(postId)
+  try {
+    const res = await axios.post(`${url}/api/posts/complete/${postId}`);
+    return res.data
+  } catch (err) {
+    console.log(err);
+  }
+}
