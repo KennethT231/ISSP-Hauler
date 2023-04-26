@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, View, Picker, TouchableOpacity, Text } from 'react-native';
+import { TextInput, View, Picker, TouchableOpacity, Text, Button } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome } from '@expo/vector-icons';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function UserInfo1({ firstName, lastName, province, city, streetAddress,
     unitNumber, setCity, setStreetAddress, setUnitNumber, dateOfBirth, setDob, contactNumber, setContactNumber, setProvince, setFirstName, setLastName, setError }) {
 
     const [image, setImage] = useState(null)
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -32,6 +36,13 @@ export default function UserInfo1({ firstName, lastName, province, city, streetA
         if (!result.canceled) {
             setImage(result.uri)
         }
+    };
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setShow(false);
+        setDate(currentDate);
+        setDob(currentDate.toLocaleDateString())
     };
 
     return (
@@ -76,11 +87,27 @@ export default function UserInfo1({ firstName, lastName, province, city, streetA
 
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Date Of Birth</Text>
-                <TextInput
+                {/*<TextInput
                     style={styles.input}
                     placeholderTextColor='#C0C0C0'
                     onChangeText={(date) => { setError(""); setDob(date) }}
                     value={dateOfBirth}
+                />*/}
+                <Button onPress={() => setShow(true)} title="Select a Date"/>
+                {show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode='date'
+                        is24Hour={true}
+                        onChange={onChange}
+                    />
+                )}
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#C0C0C0"
+                    value={dateOfBirth}
+                    //style={styles.datePicker}
                 />
             </View>
 
