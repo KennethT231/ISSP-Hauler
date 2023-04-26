@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, View, Picker, TouchableOpacity, Text } from 'react-native';
+import { TextInput, View, Picker, TouchableOpacity, Text, Alert } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function UserInfo1({ firstName, lastName, province, city, streetAddress,
-    unitNumber, setCity, setStreetAddress, setUnitNumber, dateOfBirth, setDob, contactNumber, setContactNumber, setProvince, setFirstName, setLastName, setError }) {
+    unitNumber, image, setImage, setCity, setStreetAddress, setUnitNumber, dateOfBirth, setDob, contactNumber, setContactNumber, setProvince, setFirstName, setLastName, setError }) {
 
-    const [image, setImage] = useState(null)
+    // const [image, setImage] = useState(null)
 
     useEffect(() => {
         (async () => {
@@ -21,29 +21,27 @@ export default function UserInfo1({ firstName, lastName, province, city, streetA
         })();
     }, []);
     //==================================== Gallery Image Display functionality ====================================//
-    const pickImageAlbum = async () => {
+    const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
+            aspect: [4, 3],
+            quality: 1
         });
-        console.log(result);
-        if (!result.canceled) {
-            setImage(result.uri)
-        }
+        const source = { uri: result.assets[0].uri }
+        console.log(source)
+        setImage(source)
     };
 
     return (
         <View style={styles.container}>
             <View style={styles.avatarView}>
-                <TouchableOpacity onPress={() => pickImageAlbum()}>
+                <TouchableOpacity onPress={pickImage}>
                     <Avatar
                         size={125}
                         rounded
-                        source={{ uri: image }}
+                        source={{ uri: image?.uri }}
                         backgroundColor='lightgrey'
-
                     />
                     <View style={styles.evilIcon}>
                         <FontAwesome name="user-circle-o" size={38} color="white" />

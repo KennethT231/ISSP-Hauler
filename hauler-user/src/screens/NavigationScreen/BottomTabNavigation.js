@@ -8,6 +8,7 @@ import ProfileNavigator from './ProfileNavigator';
 const BottomTab = createBottomTabNavigator();
 
 const BottomTabNavigation = () => {
+
     return (
         <BottomTab.Navigator
             initialRouteName='Home'

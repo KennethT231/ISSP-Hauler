@@ -1,18 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Modal, FlatList, TextInput } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Modal, Alert } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons';
 import UserInfo1 from '../../components/UserInfo/UserInfo1';
 import UserInfo2 from '../../components/UserInfo/UserInfo2';
 import { Context } from '../../context/ContextProvider';
 import { getOneUser, updateOneUser } from '../../../network';
+import firebase from "../../api/firebase"
 
 export default function Profile1({ navigation }) {
     const { signout, currentUser } = useContext(Context)
 
     const [userInformation, setUserInformation] = useState({})
     const [modalVisible, setModalVisible] = useState(false)
-    const [profilePicUrl, setProfilePicUrl] = useState('')
+    const [profilePicUrl, setProfilePicUrl] = useState(null)
     const [dateOfBirth, setDob] = useState()
     const [province, setProvince] = useState('')
     const [city, setCity] = useState('')
@@ -27,6 +28,8 @@ export default function Profile1({ navigation }) {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState('')
     const [reload, setReload] = useState(true)
+
+    const [image, setImage] = useState(null)
 
     // console.log('currentUser from profile: ', currentUser)
     useEffect(() => {
@@ -48,24 +51,44 @@ export default function Profile1({ navigation }) {
     const onEditClicked = async () => {
         setModalVisible(true)
     }
+
+    const uploadImage = async () => {
+        try {
+            const response = await fetch(image.uri)
+            const blob = await response.blob();
+            var ref = firebase.storage().ref().child("profile-image/" + currentUser.uid
+                + image.uri.substring(image.uri.lastIndexOf('/') + 1));
+            return ref.put(blob)
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
+
     const onEditSubmitted = async () => {
-        await updateOneUser(
-            currentUser.uid,
-            firstName,
-            lastName,
-            profilePicUrl,
-            dateOfBirth,
-            province,
-            city,
-            streetAddress,
-            unitNumber,
-            contactNumber,
-            creditCardNumber,
-            expiryDate,
-            cvv
-        )
-        setReload(!reload)
-        setModalVisible(!modalVisible)
+        try {
+            await updateOneUser(
+                currentUser.uid,
+                firstName,
+                lastName,
+                profilePicUrl,
+                dateOfBirth,
+                province,
+                city,
+                streetAddress,
+                unitNumber,
+                contactNumber,
+                creditCardNumber,
+                expiryDate,
+                cvv,
+                profilePicUrl
+            )
+            uploadImage()
+            setReload(!reload)
+            setModalVisible(!modalVisible)
+            Alert.alert('Profile Updated Successfully!')
+        } catch (err) {
+            console.log(err.message)
+        }
     }
 
     useEffect(() => {
@@ -176,6 +199,7 @@ export default function Profile1({ navigation }) {
                                     profilePicUrl={profilePicUrl}
                                     dateOfBirth={dateOfBirth}
                                     contactNumber={contactNumber}
+                                    uid={currentUser.uid}
                                     setCity={setCity}
                                     setStreetAddress={setStreetAddress}
                                     setUnitNumber={setUnitNumber}
@@ -186,6 +210,8 @@ export default function Profile1({ navigation }) {
                                     setLastName={setLastName}
                                     setProfilePicUrl={setProfilePicUrl}
                                     setError={setError}
+                                    image={image}
+                                    setImage={setImage}
                                 />
                                 <UserInfo2
                                     creditCardNumber={creditCardNumber}
