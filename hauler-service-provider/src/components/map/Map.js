@@ -6,7 +6,7 @@ import { Dimensions, ActivityIndicator,
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 // import { GOOGLE_MAP_API } from '@env';
-// import Geolocation from 'react-native-geolocation-service';
+import Location from 'expo-location';
 import { sendGpsCordinates } from '../../../network';
 // import { getDistance, getPreciseDistance } from "geo-lib";
 import { markDriverArrival } from '../../../network';
@@ -14,117 +14,117 @@ import { markDriverArrival } from '../../../network';
 export default function Map({ navigation,route }) {
   const { width, height } = Dimensions.get("window");
   const mapView = useRef();
-  // let post = route.params.targetPost;
+  let post = route.params.targetPost;
   
   const [userPos, setUserPos] = useState({ latitude: null, longitude: null });
 
   const [distance,setDistance] = useState(50000);
 
-  // const [coordinates, setCoordinates] = useState([
-  //   {
-  //     latitude: post.driverLat,
-  //     longitude:post.driverLong,
-  //   },
-  //   {
-  //     latitude: post.pickUpAddressLat,
-  //     longitude: post.pickUpAddressLng,
-  //   },
-  // ]);
+  const [coordinates, setCoordinates] = useState([
+    {
+      latitude: post.driverLat,
+      longitude:post.driverLong,
+    },
+    {
+      latitude: post.pickUpAddressLat,
+      longitude: post.pickUpAddressLng,
+    },
+  ]);
 
-  // const scheme = Platform.select({ ios: "maps:0,0?q=", android: "geo:0,0?q=" });
-  // const latLng = `${lat},${lng}`;
-  // const label = "Custom Label";
-  // const url = Platform.select({
-  //   ios: `${scheme}${label}@${latLng}`,
-  //   android: `${scheme}${latLng}(${label})`,
-  // });
-  // Linking.openURL(url);
+  const scheme = Platform.select({ ios: "maps:0,0?q=", android: "geo:0,0?q=" });
+  const latLng = `${lat},${lng}`;
+  const label = "Custom Label";
+  const url = Platform.select({
+    ios: `${scheme}${label}@${latLng}`,
+    android: `${scheme}${latLng}(${label})`,
+  });
+  Linking.openURL(url);
 
-  // useEffect(() => {
-  //   const fetchCurrentCoords = async () => {
-  //     const options = {
-  //       enableHighAccuracy: true,
-  //       timeout: 5000,
-  //       maximumAge: 0,
-  //     };
+  useEffect(() => {
+    const fetchCurrentCoords = async () => {
+      const options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      };
 
-  //     function success(pos) {
-  //       const { latitude, longitude } = pos.coords;
+      function success(pos) {
+        const { latitude, longitude } = pos.coords;
 
-  //       const newCoordinate = {
-  //         latitude,
-  //         longitude,
-  //       };
+        const newCoordinate = {
+          latitude,
+          longitude,
+        };
 
-  //       let newdata = [...coordinates];
-  //       newdata[0] = newCoordinate;
+        let newdata = [...coordinates];
+        newdata[0] = newCoordinate;
 
-  //       setCoordinates(newdata);
+        setCoordinates(newdata);
 
-  //       // console.log("Your current position is:");
-  //       // console.log(`Latitude : ${latitude}`);
-  //       // console.log(`Longitude: ${longitude}`);
-  //     }
+        // console.log("Your current position is:");
+        // console.log(`Latitude : ${latitude}`);
+        // console.log(`Longitude: ${longitude}`);
+      }
 
-  //     function error(err) {
-  //       console.warn(`ERROR(${err.code}): ${err.message}`);
-  //     }
+      function error(err) {
+        console.warn(`ERROR(${err.code}): ${err.message}`);
+      }
 
-  //     await Geolocation.getCurrentPosition(success, error, options);
-  //   };
+      await Location.getCurrentPositionAsync(options).then(success, error); 
+    };
 
-  //   fetchCurrentCoords();
+    fetchCurrentCoords();
 
-  //   async function getlocation() {
-  //     try {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-  //       );
+    async function getlocation() {
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+        );
 
-  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //         // console.log("You can use the ACCESS_FINE_LOCATION");
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          // console.log("You can use the ACCESS_FINE_LOCATION");
 
-  //         Geolocation.watchPosition(
-  //           (position) => {
-  //             const { latitude, longitude } = position.coords;
+          Location.watchPositionAsync(
+            (position) => {
+              const { latitude, longitude } = position.coords;
 
-  //             const newCoordinate = {
-  //               latitude,
-  //               longitude,
-  //             };
-  //             sendGpsCordinates(post._id, latitude, longitude);
-  //             let newdata = [...coordinates];
-  //             newdata[0] = newCoordinate;
+              const newCoordinate = {
+                latitude,
+                longitude,
+              };
+              sendGpsCordinates(post._id, latitude, longitude);
+              let newdata = [...coordinates];
+              newdata[0] = newCoordinate;
               
-  //             setCoordinates(newdata);
+              setCoordinates(newdata);
 
 
 
-  //           },
-  //           (error) => console.log(error),
-  //           {
-  //             enableHighAccuracy: true,
-  //             timeout: 20000,
-  //             maximumAge: 1000,
-  //             distanceFilter: 10,
-  //           }
-  //         );
-  //       } else {
-  //         // console.log("ACCESS_FINE_LOCATION permission denied");
-  //       }
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
-  //   getlocation();
-  // }, []);
+            },
+            (error) => console.log(error),
+            {
+              enableHighAccuracy: true,
+              timeout: 20000,
+              maximumAge: 1000,
+              distanceFilter: 10,
+            }
+          );
+        } else {
+          // console.log("ACCESS_FINE_LOCATION permission denied");
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    getlocation();
+  }, []);
 
-  // useEffect(()=>{
-  //   const curdistance = getDistance(coordinates[0], coordinates[1]);
-  //   console.log("current distance" + curdistance)
-  //   setDistance(curdistance);
-  //   console.log(distance)
-  // })
+  useEffect(()=>{
+    const curdistance = getDistance(coordinates[0], coordinates[1]);
+    console.log("current distance" + curdistance)
+    setDistance(curdistance);
+    console.log(distance)
+  })
 
 
   const completeJob = () => {
