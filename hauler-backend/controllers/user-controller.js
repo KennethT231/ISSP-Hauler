@@ -79,6 +79,7 @@ const updateOneUser = async (req, res) => {
         const {
             firstName,
             lastName,
+            profilePicUrl,
             dateOfBirth,
             province,
             city,
@@ -92,6 +93,7 @@ const updateOneUser = async (req, res) => {
                 $set: {
                     firstName,
                     lastName,
+                    profilePicUrl,
                     dateOfBirth,
                     province,
                     city,

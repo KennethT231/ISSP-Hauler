@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, View, Picker, TouchableOpacity, Text, Alert } from 'react-native';
+import { TextInput, View, Picker, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome } from '@expo/vector-icons';
 
 export default function UserInfo1({ firstName, lastName, province, city, streetAddress,
-    unitNumber, image, setImage, setCity, setStreetAddress, setUnitNumber, dateOfBirth, setDob, contactNumber, setContactNumber, setProvince, setFirstName, setLastName, setError }) {
-
-    // const [image, setImage] = useState(null)
+    unitNumber, image, setImage, imageLoading, setCity, setStreetAddress, setUnitNumber, dateOfBirth, setDob, contactNumber, setContactNumber, setProvince, setFirstName, setLastName, setError }) {
 
     useEffect(() => {
         (async () => {
@@ -36,19 +34,23 @@ export default function UserInfo1({ firstName, lastName, province, city, streetA
     return (
         <View style={styles.container}>
             <View style={styles.avatarView}>
-                <TouchableOpacity onPress={pickImage}>
-                    <Avatar
-                        size={125}
-                        rounded
-                        source={{ uri: image?.uri }}
-                        backgroundColor='lightgrey'
-                    />
-                    <View style={styles.evilIcon}>
-                        <FontAwesome name="user-circle-o" size={38} color="white" />
-                        <View style={styles.icon1}>
-                            <FontAwesome name="user-circle" size={40} color="#1177FC" /></View>
-                    </View>
-                </TouchableOpacity>
+                {imageLoading ? (
+                    <ActivityIndicator size="small" color="#0000ff" />
+                ) : (
+                    <TouchableOpacity onPress={pickImage}>
+                        <Avatar
+                            size={125}
+                            rounded
+                            source={{ uri: image?.uri }}
+                            backgroundColor='lightgrey'
+                        />
+                        <View style={styles.evilIcon}>
+                            <FontAwesome name="user-circle-o" size={38} color="white" />
+                            <View style={styles.icon1}>
+                                <FontAwesome name="user-circle" size={40} color="#1177FC" /></View>
+                        </View>
+                    </TouchableOpacity>
+                )}
             </View>
 
             <View style={styles.infoContainer}>
