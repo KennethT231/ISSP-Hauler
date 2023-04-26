@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, View, Picker, TouchableOpacity, Text, Button } from 'react-native';
+import { TextInput, View, Picker, TouchableOpacity, Text, Button, ActivityIndicator } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
@@ -25,17 +25,16 @@ export default function UserInfo1({ firstName, lastName, province, city, streetA
         })();
     }, []);
     //==================================== Gallery Image Display functionality ====================================//
-    const pickImageAlbum = async () => {
+    const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
             allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
+            aspect: [4, 3],
+            quality: 1
         });
-        console.log(result);
-        if (!result.canceled) {
-            setImage(result.uri)
-        }
+        const source = { uri: result.assets[0].uri }
+        console.log(source)
+        setImage(source)
     };
 
     const onChange = (event, selectedDate) => {
@@ -48,20 +47,23 @@ export default function UserInfo1({ firstName, lastName, province, city, streetA
     return (
         <View style={styles.container}>
             <View style={styles.avatarView}>
-                <TouchableOpacity onPress={() => pickImageAlbum()}>
-                    <Avatar
-                        size={125}
-                        rounded
-                        source={{ uri: image }}
-                        backgroundColor='lightgrey'
-
-                    />
-                    <View style={styles.evilIcon}>
-                        <FontAwesome name="user-circle-o" size={38} color="white" />
-                        <View style={styles.icon1}>
-                            <FontAwesome name="user-circle" size={40} color="#1177FC" /></View>
-                    </View>
-                </TouchableOpacity>
+                {imageLoading ? (
+                    <ActivityIndicator size="small" color="#0000ff" />
+                ) : (
+                    <TouchableOpacity onPress={pickImage}>
+                        <Avatar
+                            size={125}
+                            rounded
+                            source={{ uri: image?.uri }}
+                            backgroundColor='lightgrey'
+                        />
+                        <View style={styles.evilIcon}>
+                            <FontAwesome name="user-circle-o" size={38} color="white" />
+                            <View style={styles.icon1}>
+                                <FontAwesome name="user-circle" size={40} color="#1177FC" /></View>
+                        </View>
+                    </TouchableOpacity>
+                )}
             </View>
 
             <View style={styles.infoContainer}>
@@ -93,7 +95,7 @@ export default function UserInfo1({ firstName, lastName, province, city, streetA
                     onChangeText={(date) => { setError(""); setDob(date) }}
                     value={dateOfBirth}
                 />*/}
-                <Button onPress={() => setShow(true)} title="Select a Date"/>
+                <Button onPress={() => setShow(true)} title="Select a Date" />
                 {show && (
                     <DateTimePicker
                         testID="dateTimePicker"
@@ -107,7 +109,7 @@ export default function UserInfo1({ firstName, lastName, province, city, streetA
                     style={styles.input}
                     placeholderTextColor="#C0C0C0"
                     value={dateOfBirth}
-                    //style={styles.datePicker}
+                //style={styles.datePicker}
                 />
             </View>
 
