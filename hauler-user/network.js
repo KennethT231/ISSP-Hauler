@@ -253,7 +253,7 @@ export async function updateOneUser(
       expiryDate: expiryDate,
       cvv: cvv,
     });
-    console.log('updateOneUser response:', res.data);
+    console.log('updateOneUser response:', JSON.stringify(res.data));
     return res.data;
   } catch (err) {
     console.log('updateOneUser error:', err);

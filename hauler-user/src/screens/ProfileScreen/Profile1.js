@@ -57,30 +57,34 @@ export default function Profile1({ navigation }) {
 
     const uploadImage = async () => {
         try {
+            if (!image) {
+                return null; // if no image is selected, return null
+            }
             setImageLoading(true);
-            const response = await fetch(image.uri)
+            const response = await fetch(image.uri);
             const blob = await response.blob();
-            var ref = firebase.storage().ref().child("profile-image/" + currentUser.uid
-                + image.uri.substring(image.uri.lastIndexOf('/') + 1));
+            const ref = firebase.storage().ref().child(`profile-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
             const snapshot = await ref.put(blob);
             setImageLoading(false);
             return snapshot;
         } catch (e) {
-            console.log(e.message)
+            console.log(e.message);
             setImageLoading(false);
         }
-    }
+    };
 
     const onEditSubmitted = async () => {
         try {
             const response = await uploadImage(); // upload image first and get the response
-            const profilePicUrl = await response.ref.getDownloadURL(); // get the download URL of the uploaded image
-            console.log('downloadUrl: ', profilePicUrl)
+            let profilePicUrl = userInformation.profilePicUrl; // default to previous profile image
+            if (response) { // if a new image was selected, get the download URL of the uploaded image
+                profilePicUrl = await response.ref.getDownloadURL();
+            }
             await updateOneUser(
                 currentUser.uid,
                 firstName,
                 lastName,
-                profilePicUrl, // pass the download URL as profilePicUrl parameter
+                profilePicUrl,
                 dateOfBirth,
                 province,
                 city,
@@ -89,7 +93,7 @@ export default function Profile1({ navigation }) {
                 contactNumber,
                 creditCardNumber,
                 expiryDate,
-                cvv,
+                cvv
             );
             setReload(!reload);
             setModalVisible(!modalVisible);
