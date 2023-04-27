@@ -11,7 +11,6 @@ export default function AddJunkSummary({ navigation, route }) {
     const { image, selectedweight, selectedquantity, postHeading, description, pickUpAddress, pickContactPerson, pickUpPhoneNumber, pickUpSpecialInstructions, pickUpCity,
         pickUpAddressLat, pickUpAddressLng, sliderValue, operation, postId } = route.params;
 
-    console.log({ route })
     const service = "Junk"
     const { currentUser } = useContext(Context)
 
@@ -28,7 +27,7 @@ export default function AddJunkSummary({ navigation, route }) {
             setImageLoading(true);
             const response = await fetch(image.uri);
             const blob = await response.blob();
-            const ref = firebase.storage().ref().child(`post-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
+            const ref = firebase.storage().ref().child(`junk-post-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
             const snapshot = await ref.put(blob);
             setImageLoading(false);
             return snapshot;
@@ -62,6 +61,7 @@ export default function AddJunkSummary({ navigation, route }) {
             );
             navigation.navigate('Confirmation', { confirm: 'Post' })
         } catch (err) {
+            Alert.alert("Please include a photo of your junk.")
             console.log('onPostJobSubmitted error:', err);
         }
     };
@@ -83,7 +83,7 @@ export default function AddJunkSummary({ navigation, route }) {
                     dropOffAddress=''
                     junkSummaryRoute={route}
                 />
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AddItemScreen')}><Text style={styles.buttonTitle}> Edit </Text></TouchableOpacity>
+                {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AddItemScreen')}><Text style={styles.buttonTitle}> Edit </Text></TouchableOpacity> */}
                 {operation === "create" ?
                     <TouchableOpacity style={styles.button}
                         onPress={onPostJobSubmitted}><Text style={styles.buttonTitle}>Post a Job</Text></TouchableOpacity> :

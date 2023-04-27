@@ -10,7 +10,7 @@ import { Feather } from '@expo/vector-icons';
 // Post Detail Screen after a post is created
 export default function PostDetails({ navigation, route }) {
     const { currentUser } = useContext(Context)
-    console.log({ route })
+    console
     const [posts, setPosts] = useState('')
     const [error, setError] = useState('')
     const [serviceProvider, setServiceProvider] = useState('')
@@ -138,7 +138,6 @@ export default function PostDetails({ navigation, route }) {
                     >
                         <Text style={styles.buttonTitle}>My Post List</Text>
                     </TouchableOpacity>
-
                 }
 
                 <Text > {error && alert(error)}</Text>

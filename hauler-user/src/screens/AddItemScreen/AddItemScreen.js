@@ -8,7 +8,7 @@ import { getOnePost } from '../../../network'
 
 // Post A Job Page1 Screen - First page of the post a job process
 export default function AddItemScreen({ navigation, route }) {
-
+  console.log({ route })
   const { operation, postId } = route.params;
   const [selectedweight, setSelectedWeight] = useState('')
   const [selectedquantity, setSelectedQuantity] = useState(1)
@@ -58,9 +58,11 @@ export default function AddItemScreen({ navigation, route }) {
       aspect: [4, 3],
       quality: 1
     });
-    const source = { uri: result.assets[0].uri }
-    console.log(source)
-    setImage(source)
+    if (!result.canceled) {
+      const source = { uri: result.assets[0].uri }
+      console.log(source)
+      setImage(source)
+    }
   };
 
   return (

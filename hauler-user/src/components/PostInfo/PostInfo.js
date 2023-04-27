@@ -3,8 +3,9 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image } from 'rea
 import { Feather } from '@expo/vector-icons';
 
 // Review Post Screen - Screen that displays the post information
-export default function PostInfo({ image, selectedweight, selectedquantity, postHeading, description, pickUpAddress, pickContactPerson, pickUpPhoneNumber, pickUpSpecialInstructions, sliderValue, dropOffAddress, dropOffContactNumber, dropOffContactPerson, dropOffSpecialInstruction, distance, junkSummaryRoute }) {
+export default function PostInfo({ image, selectedweight, selectedquantity, postHeading, description, pickUpAddress, pickContactPerson, pickUpPhoneNumber, pickUpSpecialInstructions, sliderValue, dropOffAddress, dropOffContactNumber, dropOffContactPerson, dropOffSpecialInstruction, distance, junkSummaryRoute, errandSummaryRoute }) {
     console.log({ junkSummaryRoute })
+    console.log({ errandSummaryRoute })
     const destinationInfo = () => {
         if (!!dropOffAddress) {
             return (
@@ -64,7 +65,7 @@ export default function PostInfo({ image, selectedweight, selectedquantity, post
             {/* image */}
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Image</Text>
-                {(image && junkSummaryRoute?.name === "AddJunkSummary") ? (<Image source={{ uri: image?.uri }} style={styles.imageDisplay} />)
+                {(image && junkSummaryRoute?.name === "AddJunkSummary" && errandSummaryRoute?.name === "ErrandSummary") ? (<Image source={{ uri: image?.uri }} style={styles.imageDisplay} />)
                     : <Image source={{ uri: image }} style={styles.imageDisplay} />
                 }
             </View>
