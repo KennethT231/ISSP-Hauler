@@ -11,14 +11,14 @@ const PaymentNavigator = () => {
         <PaymentStack.Navigator
             initialRouteName='Payment1'
             screenOptions={{
-                headerShown: true,
+                headerShown: false,
                 title: '',
             }}>
             <PaymentStack.Screen
                 name='Payment1'
                 component={PaymentSheet}
             />
-            
+
         </PaymentStack.Navigator>
     );
 };

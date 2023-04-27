@@ -166,10 +166,10 @@ const getPostsByIdAndService = async (req, res) => {
 const deleteOnePost = async (req, res) => {
     try {
         const id = req.params.postId;
-        let activePost = await PostData.findOne({ _id: id, status: {$in:['Available','Negotiating']} })
+        let activePost = await PostData.findOne({ _id: id, status: { $in: ['Available', 'Negotiating'] } })
         if (!!activePost) {
-        await PostData.deleteOne({ _id: id });
-        res.status(200).json("Post deleted")
+            await PostData.deleteOne({ _id: id });
+            res.status(200).json("Post deleted")
         } else {
             res.status(200).json("This post is already accepted. You cannot delete it!")
         }
@@ -182,70 +182,70 @@ const deleteOnePost = async (req, res) => {
 const updateOnePost = async (req, res) => {
     try {
         const id = req.params.postId;
-        let activePost = await PostData.findOne({ _id: id, status: {$in:['Available','Negotiating']} })
+        let activePost = await PostData.findOne({ _id: id, status: { $in: ['Available', 'Negotiating'] } })
         if (!!activePost) {
-        const {
-            // service,
-            postHeading,
-            postDescription,
-            loadWeight,
-            numberOfItems,
-            // imageUrl,
-            price,
-            pickUpAddress,
-            pickUpCity,
-            pickUpAddressLat,
-            pickUpAddressLng,
-            pickUpContactPerson,
-            pickUpContactNumber,
-            pickUpSpecialInstruction,
-            dropOffAddress,
-            dropOffCity,
-            dropOffAddressLat,
-            dropOffAddressLng,
-            dropOffContactPerson,
-            dropOffContactNumber,
-            dropOffSpecialInstruction,
-            distance
-        } = req.body;
-        await PostData.findOneAndUpdate({ _id: id },
-            {
-                $set: {
-                    // service: service,
-                    postHeading: postHeading,
-                    postDescription: postDescription,
-                    loadWeight: loadWeight,
-                    numberOfItems: numberOfItems,
-                    // imageUrl: imageUrl,
-                    price: price,
-                    pickUpAddress: pickUpAddress,
-                    pickUpCity: pickUpCity,
-                    pickUpAddressLat: pickUpAddressLat,
-                    pickUpAddressLng: pickUpAddressLng,
-                    pickUpContactPerson: pickUpContactPerson,
-                    pickUpContactNumber: pickUpContactNumber,
-                    pickUpSpecialInstruction: pickUpSpecialInstruction,
-                    dropOffAddress: dropOffAddress,
-                    dropOffCity: dropOffCity,
-                    dropOffAddressLat: dropOffAddressLat,
-                    dropOffAddressLng: dropOffAddressLng,
-                    dropOffContactPerson: dropOffContactPerson,
-                    dropOffContactNumber: dropOffContactNumber,
-                    dropOffSpecialInstruction: dropOffSpecialInstruction,
-                    distance:distance
-                }
-            });
-        res.status(200).json('Post updated')
-    } else {
-        res.status(200).json("This post is already accepted. You cannot edit it!")
-    }
+            const {
+                // service,
+                postHeading,
+                postDescription,
+                loadWeight,
+                numberOfItems,
+                // imageUrl,
+                price,
+                pickUpAddress,
+                pickUpCity,
+                pickUpAddressLat,
+                pickUpAddressLng,
+                pickUpContactPerson,
+                pickUpContactNumber,
+                pickUpSpecialInstruction,
+                dropOffAddress,
+                dropOffCity,
+                dropOffAddressLat,
+                dropOffAddressLng,
+                dropOffContactPerson,
+                dropOffContactNumber,
+                dropOffSpecialInstruction,
+                distance
+            } = req.body;
+            await PostData.findOneAndUpdate({ _id: id },
+                {
+                    $set: {
+                        // service: service,
+                        postHeading: postHeading,
+                        postDescription: postDescription,
+                        loadWeight: loadWeight,
+                        numberOfItems: numberOfItems,
+                        // imageUrl: imageUrl,
+                        price: price,
+                        pickUpAddress: pickUpAddress,
+                        pickUpCity: pickUpCity,
+                        pickUpAddressLat: pickUpAddressLat,
+                        pickUpAddressLng: pickUpAddressLng,
+                        pickUpContactPerson: pickUpContactPerson,
+                        pickUpContactNumber: pickUpContactNumber,
+                        pickUpSpecialInstruction: pickUpSpecialInstruction,
+                        dropOffAddress: dropOffAddress,
+                        dropOffCity: dropOffCity,
+                        dropOffAddressLat: dropOffAddressLat,
+                        dropOffAddressLng: dropOffAddressLng,
+                        dropOffContactPerson: dropOffContactPerson,
+                        dropOffContactNumber: dropOffContactNumber,
+                        dropOffSpecialInstruction: dropOffSpecialInstruction,
+                        distance: distance
+                    }
+                });
+            res.status(200).json('Post updated')
+        } else {
+            res.status(200).json("This post is already accepted. You cannot edit it!")
+        }
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
 };
 
 //SK - to change job status to "in progress" once driver is en route
-const changeJobStatusToDriving = async(req,res) => {
+const changeJobStatusToDriving = async (req, res) => {
     try {
         const id = req.params.postId;
         await PostData.findOneAndUpdate({ _id: id },
@@ -364,7 +364,7 @@ const getPostsByServiceProviderIdAndLocation = async (req, res) => {
 //==================== To add service provider response on service provider app ======================//
 
 const addServiceProviserResponse = async (req, res) => {
-    
+
     const {
         status,
         postId,
@@ -377,9 +377,9 @@ const addServiceProviserResponse = async (req, res) => {
         serviceProviderActionPrice,
         userActionButtons
     } = req.body;
-    
-    
-    let activePost = await PostData.findOne({ _id: postId, status: {$in:['Available','Negotiating']}})
+
+
+    let activePost = await PostData.findOne({ _id: postId, status: { $in: ['Available', 'Negotiating'] } })
     if (!!activePost) {//finds offers this service provider has already made on this post
         let existedResponse = await PostData.aggregate([
             { $match: { _id: ObjectId(postId), } },
@@ -408,7 +408,7 @@ const addServiceProviserResponse = async (req, res) => {
                         'response.$.notificationOnUser': 'flex',
                         'response.$.userActionButtons': userActionButtons
                     },
-                    $inc:{
+                    $inc: {
                         totalOffers: incrementValue
                     }
                 }
@@ -438,7 +438,7 @@ const addServiceProviserResponse = async (req, res) => {
                                     }],
                                 }]
                         },
-                        $inc:{
+                        $inc: {
                             totalOffers: incrementValue
                         },
                         $set: {
@@ -471,7 +471,7 @@ const addUserResponse = async (req, res) => {
     } = req.body
     //only need to change number of offers for user if they are declining a service provider offer - users cannot initiate offers
     const incrementValue = status === 'Declined' ? -1 : 0
-    let activePost = await PostData.findOne({ _id: postId, status: {$in:['Available','Negotiating']}})
+    let activePost = await PostData.findOne({ _id: postId, status: { $in: ['Available', 'Negotiating'] } })
     if (!!activePost) {
         try {
             const updatedResponse = await PostData.updateOne(
@@ -491,7 +491,7 @@ const addUserResponse = async (req, res) => {
                     'response.$.notificationOnUser': 'none',
                     'response.$.userActionButtons': userActionButtons
                 },
-                $inc:{
+                $inc: {
                     totalOffers: incrementValue
                 }
             }
@@ -534,19 +534,19 @@ const deleteResponse = async (req, res, next) => {
 };
 
 //Neeraj  - send live gps cordinates to database
-const postGpsCordinates = async(req,res) => {
+const postGpsCordinates = async (req, res) => {
     try {
         const id = req.params.postId;
-        const {latitude,longitude} = req.body
+        const { latitude, longitude } = req.body
 
         console.log("called the server")
         console.log(req.body)
         await PostData.findOneAndUpdate({ _id: id },
-                {
-                    driverLat: latitude,
-                    driverLong: longitude
-                }
-            ),{upsert:true};
+            {
+                driverLat: latitude,
+                driverLong: longitude
+            }
+        ), { upsert: true };
         res.status(200).json('Gps Data Posted Sucessfully')
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -555,7 +555,7 @@ const postGpsCordinates = async(req,res) => {
 
 //Neeraj  - Update post status on Driver arrival
 
-const markDriverArrival = async(req,res) => {
+const markDriverArrival = async (req, res) => {
     try {
         const id = req.params.postId;
 
@@ -571,7 +571,7 @@ const markDriverArrival = async(req,res) => {
     }
 }
 //============================== To mark job as paid==============================
-const markJobPaid = async(req,res) => {
+const markJobPaid = async (req, res) => {
     try {
         const id = req.params.postId;
 
@@ -589,7 +589,7 @@ const markJobPaid = async(req,res) => {
 
 //Neeraj  - Update post status on Driver arrival
 
-const markJobComplete = async(req,res) => {
+const markJobComplete = async (req, res) => {
     try {
         const id = req.params.postId;
 
