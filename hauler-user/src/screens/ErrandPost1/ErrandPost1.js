@@ -99,8 +99,8 @@ export default function ErrandPost1({ navigation, route }) {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}><Text style={styles.buttonTitle}
-            onPress={() => pickImage()} >Upload Image</Text>
+          <TouchableOpacity style={styles.button} onPress={() => pickImage()}>
+            <Text style={styles.buttonTitle}>Upload Image</Text>
           </TouchableOpacity>
         </View>
 

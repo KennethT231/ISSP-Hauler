@@ -66,10 +66,12 @@ export default function PostInfo({ image, selectedweight, selectedquantity, post
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Image</Text>
 
+                {/* conditionally rendering image depends on route */}
                 {(image && (junkSummaryRoute?.name === "AddJunkSummary" || errandSummaryRoute?.name === "ErrandSummary")) && (
                     <Image source={{ uri: image?.uri || image }} style={styles.imageDisplay} />
                 )}
 
+                {/* detail page image rendering */}
                 {(image && (junkSummaryRoute?.name !== "AddJunkSummary" && errandSummaryRoute?.name !== "ErrandSummary")) && (
                     <Image source={{ uri: image }} style={styles.imageDisplay} />
                 )}

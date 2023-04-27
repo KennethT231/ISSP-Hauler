@@ -40,7 +40,7 @@ export default function ErrandSummary({ navigation, route }) {
             }
             const response = await fetch(image.uri);
             const blob = await response.blob();
-            const ref = firebase.storage().ref().child(`errand-post-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
+            const ref = firebase.storage().ref().child(`errand-moving-post-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
             const snapshot = await ref.put(blob);
             return snapshot;
         } catch (e) {
@@ -142,7 +142,7 @@ export default function ErrandSummary({ navigation, route }) {
                         }}
                     />
                 </MapView>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ErrandPost1')}><Text style={styles.buttonTitle}> Edit </Text></TouchableOpacity>
+                {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ErrandPost1')}><Text style={styles.buttonTitle}> Edit </Text></TouchableOpacity> */}
 
                 {operation === "create" ?
                     <TouchableOpacity style={styles.button} onPress={onPostJobSubmitted}
