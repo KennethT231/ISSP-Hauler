@@ -58,7 +58,6 @@ export async function signUp(
 export async function getAllPosts() {
   try {
     const res = await axios.get(`${url}/api/posts/all`);
-    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -69,7 +68,6 @@ export async function getAllPosts() {
 export async function getPostsByService(service) {
   try {
     const res = await axios.get(`${url}/api/posts/service/${service}`);
-    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -80,7 +78,6 @@ export async function getPostsByService(service) {
 export async function getPostsByLocation(location) {
   try {
     const res = await axios.get(`${url}/api/posts/location/${location}`);
-    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -91,7 +88,6 @@ export async function getPostsByLocation(location) {
 export async function getOnePost(postId) {
   try {
     const res = await axios.get(`${url}/api/posts/one/${postId}`);
-    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -103,7 +99,6 @@ export async function getOneServiceProvider(uid) {
   try {
     console.log(uid);
     const res = await axios.get(`${url}/api/service-providers/${uid}`);
-    console.log(res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -145,7 +140,6 @@ export async function updateOneServiceProvider(
 export async function getPostsByServiceProviderId(uid) {
   try {
     const res = await axios.get(`${url}/api/posts/serviceprovider/${uid}`);
-    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -156,7 +150,6 @@ export async function getPostsByServiceProviderId(uid) {
 export async function getPostsByServiceProviderAndService(uid, service) {
   try {
     const res = await axios.get(`${url}/api/posts/serviceprovider/service/${uid}/${service}`);
-    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -167,7 +160,6 @@ export async function getPostsByServiceProviderAndService(uid, service) {
 export async function getPostsByServiceProviderIdAndLocation(uid, location) {
   try {
     const res = await axios.get(`${url}/api/posts/serviceprovider/location/${uid}/${location}`);
-    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -178,7 +170,6 @@ export async function getPostsByServiceProviderIdAndLocation(uid, location) {
 export async function getResponseByServiseProviderId(uid, postId) {
   try {
     const res = await axios.get(`${url}/api/posts/response/service-provider/${uid}/${postId}`);
-    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
