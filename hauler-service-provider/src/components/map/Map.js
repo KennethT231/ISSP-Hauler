@@ -19,7 +19,6 @@ export default function Map({ navigation,route }) {
   const [userPos, setUserPos] = useState({ latitude: null, longitude: null });
 
   const [distance,setDistance] = useState(50000);
-
   const [coordinates, setCoordinates] = useState([
     {
       latitude: post.driverLat,
@@ -30,13 +29,12 @@ export default function Map({ navigation,route }) {
       longitude: post.pickUpAddressLng,
     },
   ]);
-
   const scheme = Platform.select({ ios: "maps:0,0?q=", android: "geo:0,0?q=" });
-  const latLng = `${lat},${lng}`;
-  const label = "Custom Label";
+  const latLng = `${post.pickUpAddress}`;
+
   const url = Platform.select({
-    ios: `${scheme}${label}@${latLng}`,
-    android: `${scheme}${latLng}(${label})`,
+    ios: `${scheme}${latLng}`,
+    android: `${scheme}${latLng}`,
   });
   Linking.openURL(url);
 
@@ -60,17 +58,18 @@ export default function Map({ navigation,route }) {
         newdata[0] = newCoordinate;
 
         setCoordinates(newdata);
+        openMap()
 
-        // console.log("Your current position is:");
-        // console.log(`Latitude : ${latitude}`);
-        // console.log(`Longitude: ${longitude}`);
+        console.log("Your current position is:");
+        console.log(`Latitude : ${latitude}`);
+        console.log(`Longitude: ${longitude}`);
       }
 
       function error(err) {
         console.warn(`ERROR(${err.code}): ${err.message}`);
       }
 
-      await Location.getCurrentPositionAsync(options).then(success, error); 
+      Geolocation.getCurrentPosition(success, error, options);
     };
 
     fetchCurrentCoords();
@@ -84,7 +83,7 @@ export default function Map({ navigation,route }) {
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
           // console.log("You can use the ACCESS_FINE_LOCATION");
 
-          Location.watchPositionAsync(
+          Geolocation.watchPosition(
             (position) => {
               const { latitude, longitude } = position.coords;
 
@@ -97,8 +96,6 @@ export default function Map({ navigation,route }) {
               newdata[0] = newCoordinate;
               
               setCoordinates(newdata);
-
-
 
             },
             (error) => console.log(error),
@@ -121,6 +118,7 @@ export default function Map({ navigation,route }) {
 
   useEffect(()=>{
     const curdistance = getDistance(coordinates[0], coordinates[1]);
+
     console.log("current distance" + curdistance)
     setDistance(curdistance);
     console.log(distance)
@@ -150,15 +148,14 @@ export default function Map({ navigation,route }) {
   return (
     <View style={styles.mapContainer}>
       <MapView style={styles.map} ref={mapView}>
-        {/* {coordinates.map((coordinate, index) => (
+        {coordinates.map((coordinate, index) => (
           <MapView.Marker
             key={`coordinate_${index}`}
             coordinate={coordinate}
-            // icon={require("../../../assets/map-marker.png")}
-            icon={require("./assets/map-marker.png")}
+            icon={require("../../../assets/map-marker.png")}
           />
-        ))} */}
-        {/* <MapViewDirections
+        ))}
+        <MapViewDirections
           apikey={"AIzaSyCMvEs9takJvuKNDt0RaIm-xfZH2uCUr-s"}
           origin={coordinates[0]}
           waypoints={coordinates}
@@ -179,7 +176,7 @@ export default function Map({ navigation,route }) {
           onError={(errorMessage) => {
             console.log(`Error: ${errorMessage}`);
           }}
-        /> */}
+        />
       </MapView>
       { (distance <= 50) &&
         <TouchableOpacity
