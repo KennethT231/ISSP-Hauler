@@ -7,9 +7,10 @@ import { Card, Avatar, Button } from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 
+// Post Detail Screen after a post is created
 export default function PostDetails({ navigation, route }) {
     const { currentUser } = useContext(Context)
-
+    console.log({ route })
     const [posts, setPosts] = useState('')
     const [error, setError] = useState('')
     const [serviceProvider, setServiceProvider] = useState('')
@@ -52,28 +53,28 @@ export default function PostDetails({ navigation, route }) {
             }
         })()
     }, [])
-
+    // console.log(posts.loadImages[0].imageUrl)
     const postComponent = () => {
-        if (!! posts ){
-        return (
-            <PostInfo
-                image=''
-                selectedweight={posts.loadWeight}
-                selectedquantity={posts.numberOfItems}
-                postHeading={posts.postHeading}
-                description={posts.postDescription}
-                pickUpAddress={posts.pickUpAddress}
-                pickContactPerson={posts.pickUpContactPerson}
-                pickUpPhoneNumber={posts.pickUpContactNumber}
-                pickUpSpecialInstructions={posts.pickUpSpecialInstruction}
-                sliderValue={posts.price}
-                dropOffAddress={posts.dropOffAddress && posts.dropOffAddress}
-                dropOffContactPerson={posts.dropOffContactPerson && posts.dropOffContactPerson}
-                dropOffContactNumber={posts.dropOffContactNumber && posts.dropOffContactNumber}
-                dropOffSpecialInstruction={posts.dropOffSpecialInstruction && posts.dropOffSpecialInstruction}
-                distance={posts.distance && posts.distance}
-            />
-        )
+        if (!!posts) {
+            return (
+                <PostInfo
+                    image={posts?.loadImages[0]?.imageUrl}
+                    selectedweight={posts.loadWeight}
+                    selectedquantity={posts.numberOfItems}
+                    postHeading={posts.postHeading}
+                    description={posts.postDescription}
+                    pickUpAddress={posts.pickUpAddress}
+                    pickContactPerson={posts.pickUpContactPerson}
+                    pickUpPhoneNumber={posts.pickUpContactNumber}
+                    pickUpSpecialInstructions={posts.pickUpSpecialInstruction}
+                    sliderValue={posts.price}
+                    dropOffAddress={posts.dropOffAddress && posts.dropOffAddress}
+                    dropOffContactPerson={posts.dropOffContactPerson && posts.dropOffContactPerson}
+                    dropOffContactNumber={posts.dropOffContactNumber && posts.dropOffContactNumber}
+                    dropOffSpecialInstruction={posts.dropOffSpecialInstruction && posts.dropOffSpecialInstruction}
+                    distance={posts.distance && posts.distance}
+                />
+            )
         }
         return
 
@@ -132,11 +133,11 @@ export default function PostDetails({ navigation, route }) {
                         </TouchableOpacity>
                     </View>
                     : <TouchableOpacity
-                    style={styles.listButton}
-                    onPress={() => navigation.navigate('MyPostList')}
+                        style={styles.listButton}
+                        onPress={() => navigation.navigate('MyPostList')}
                     >
-                    <Text style={styles.buttonTitle}>My Post List</Text>
-                </TouchableOpacity>
+                        <Text style={styles.buttonTitle}>My Post List</Text>
+                    </TouchableOpacity>
 
                 }
 
@@ -208,7 +209,7 @@ const styles = StyleSheet.create({
     phoneButton: {
         marginLeft: '6%'
     },
-    listButton:{
+    listButton: {
         backgroundColor: '#0077FC',
         marginVertical: 10,
         height: 48,

@@ -8,7 +8,7 @@ import Map from '../map/Map';
 
 export default function PostInfo({ posts, contact }) {
     const [modalVisible, setModalVisible] = useState(false)
-  
+
 
     const onMapsPress = () => {
         setModalVisible(true)
@@ -30,9 +30,9 @@ export default function PostInfo({ posts, contact }) {
 
                     <Text>
                         {posts &&
-                    <Map
-                        posts={posts}
-                    />
+                            <Map
+                                posts={posts}
+                            />
                         }
                     </Text>
                     <TouchableOpacity
@@ -119,7 +119,7 @@ export default function PostInfo({ posts, contact }) {
                         <TouchableOpacity onPress={() => onMapsPress()}><Text style={styles.iconStyle}><MaterialCommunityIcons name='map-marker-multiple-outline' size={24} color='white' /></Text></TouchableOpacity>
                     </View>
                 </View>
-             }
+            }
             <View style={styles.imageContainer}>
                 <Text style={styles.infoKey}>Images</Text>
                 <Text>
@@ -165,11 +165,11 @@ const styles = StyleSheet.create({
         padding: 5,
         overflow: 'hidden'
     },
-    modalContainer:{
+    modalContainer: {
         width: '100%',
         marginHorizontal: 16
     },
-    buttons:{
+    buttons: {
         backgroundColor: '#0077FC',
         marginVertical: 10,
         height: 48,
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '90%',
-        
+
     },
     buttonTitle: {
         color: 'white',

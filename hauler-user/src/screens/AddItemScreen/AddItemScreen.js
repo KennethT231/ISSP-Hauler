@@ -6,6 +6,7 @@ import SelectWeight from '../../components/SelectWeight/SelectWeight';
 import { Ionicons } from '@expo/vector-icons';
 import { getOnePost } from '../../../network'
 
+// Post A Job Page1 Screen - First page of the post a job process
 export default function AddItemScreen({ navigation, route }) {
 
   const { operation, postId } = route.params;
@@ -50,20 +51,16 @@ export default function AddItemScreen({ navigation, route }) {
     })();
   }, []);
 
-  const pickImageAlbum = async () => {
+  const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-      base64: true,
+      aspect: [4, 3],
+      quality: 1
     });
-
-    console.log(result);
-
-    if (!result.canceled) {
-      setImage(result.uri);
-    }
+    const source = { uri: result.assets[0].uri }
+    console.log(source)
+    setImage(source)
   };
 
   return (
@@ -98,10 +95,10 @@ export default function AddItemScreen({ navigation, route }) {
 
         </View>
 
-        <TouchableOpacity style={styles.button} onPress={() => pickImageAlbum()}><Text style={styles.buttonTitle}>Upload Image</Text></TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={() => pickImage()}><Text style={styles.buttonTitle}>Upload Image</Text></TouchableOpacity>
 
         <View style={styles.imageContainer}>
-          {image && <Image source={{ uri: image }} style={styles.imageDisplay} />}
+          {image && <Image source={{ uri: image?.uri }} style={styles.imageDisplay} />}
         </View>
         <View style={styles.footerContainer}>
           <TouchableOpacity

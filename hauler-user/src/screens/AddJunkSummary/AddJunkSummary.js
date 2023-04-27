@@ -1,18 +1,70 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { ScrollView, TouchableOpacity, Text, View, StyleSheet } from 'react-native'
+import { ScrollView, TouchableOpacity, Text, View, StyleSheet, Alert } from 'react-native'
 import { postItem, updateOnePost } from '../../../network';
 import PostInfo from '../../components/PostInfo/PostInfo';
 import { Context } from '../../context/ContextProvider';
+import firebase from "../../api/firebase";
 
+// Post A Job Summary Screen - Summary page of the post a job process
 export default function AddJunkSummary({ navigation, route }) {
 
     const { image, selectedweight, selectedquantity, postHeading, description, pickUpAddress, pickContactPerson, pickUpPhoneNumber, pickUpSpecialInstructions, pickUpCity,
         pickUpAddressLat, pickUpAddressLng, sliderValue, operation, postId } = route.params;
 
+    console.log({ route })
     const service = "Junk"
     const { currentUser } = useContext(Context)
 
     const [error, setError] = useState('')
+
+    // image loading state for user profile image
+    const [imageLoading, setImageLoading] = useState(false)
+
+    const uploadImage = async () => {
+        try {
+            if (!image) {
+                return null; // if no image is selected, return null
+            }
+            setImageLoading(true);
+            const response = await fetch(image.uri);
+            const blob = await response.blob();
+            const ref = firebase.storage().ref().child(`post-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
+            const snapshot = await ref.put(blob);
+            setImageLoading(false);
+            return snapshot;
+        } catch (e) {
+            console.log(e.message);
+            setImageLoading(false);
+        }
+    };
+
+    const onPostJobSubmitted = async () => {
+        try {
+            const response = await uploadImage(); // upload image first and get the response
+            const image = await response.ref.getDownloadURL(); // then get the image url from the response
+            console.log('post image url:', image);
+            await postItem(
+                currentUser.uid,
+                service,
+                postHeading,
+                description,
+                selectedweight,
+                selectedquantity,
+                image,
+                sliderValue,
+                pickUpAddress,
+                pickUpCity,
+                pickUpAddressLat,
+                pickUpAddressLng,
+                pickContactPerson,
+                pickUpPhoneNumber,
+                pickUpSpecialInstructions,
+            );
+            navigation.navigate('Confirmation', { confirm: 'Post' })
+        } catch (err) {
+            console.log('onPostJobSubmitted error:', err);
+        }
+    };
 
     return (
         <ScrollView>
@@ -29,29 +81,12 @@ export default function AddJunkSummary({ navigation, route }) {
                     pickUpSpecialInstructions={pickUpSpecialInstructions}
                     sliderValue={sliderValue}
                     dropOffAddress=''
+                    junkSummaryRoute={route}
                 />
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AddItemScreen')}><Text style={styles.buttonTitle}> Edit </Text></TouchableOpacity>
                 {operation === "create" ?
                     <TouchableOpacity style={styles.button}
-                        onPress={async () => {
-                            await postItem(
-                                currentUser.uid,
-                                service,
-                                postHeading,
-                                description,
-                                selectedweight,
-                                selectedquantity,
-                                image,
-                                sliderValue,
-                                pickUpAddress,
-                                pickUpCity,
-                                pickUpAddressLat,
-                                pickUpAddressLng,
-                                pickContactPerson,
-                                pickUpPhoneNumber,
-                                pickUpSpecialInstructions,
-                            ); navigation.navigate('Confirmation', { confirm: 'Post' })
-                        }}><Text style={styles.buttonTitle}>Post a Job</Text></TouchableOpacity> :
+                        onPress={onPostJobSubmitted}><Text style={styles.buttonTitle}>Post a Job</Text></TouchableOpacity> :
                     <TouchableOpacity style={styles.button}
                         onPress={async () => {
                             setError('')
@@ -62,7 +97,7 @@ export default function AddJunkSummary({ navigation, route }) {
                                 description,
                                 selectedweight,
                                 selectedquantity,
-                                // imageUrl,
+                                imageUrl ? imageUrl : image,
                                 sliderValue,
                                 pickUpAddress,
                                 pickUpCity,
