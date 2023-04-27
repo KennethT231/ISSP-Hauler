@@ -4,8 +4,9 @@ import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Context } from '../../context/ContextProvider';
 import { postItem, updateOnePost } from '../../../network';
 import PostInfo from '../../components/PostInfo/PostInfo'
-//import MapView from 'react-native-maps';
-//import MapViewDirections from 'react-native-maps-directions';
+import MapView from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
+import { Marker } from 'react-native-maps';
 //import { GOOGLE_MAP_API } from '@env';
 import firebase from "../../api/firebase";
 
@@ -107,12 +108,12 @@ export default function ErrandSummary({ navigation, route }) {
                     duration={duration}
                     errandSummaryRoute={route}
                 />
-                {/*<MapView
+                <MapView
                     style={styles.map}
                     ref={mapView}
                 >
                     {coordinates.map((coordinate, index) =>
-                        <MapView.Marker key={`coordinate_${index}`} coordinate={coordinate}
+                        <Marker key={`coordinate_${index}`} coordinate={coordinate}
                         />
                     )}
                     <MapViewDirections
@@ -140,7 +141,7 @@ export default function ErrandSummary({ navigation, route }) {
                             console.log(`Error: ${errorMessage}`);
                         }}
                     />
-                </MapView>*/}
+                </MapView>
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ErrandPost1')}><Text style={styles.buttonTitle}> Edit </Text></TouchableOpacity>
 
                 {operation === "create" ?
