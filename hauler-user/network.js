@@ -82,8 +82,9 @@ export async function postItem(
       postDescription: description,
       loadWeight: selectedweight,
       numberOfItems: selectedquantity,
-      imageUrl:
-        "https://cdn.apartmenttherapy.info/image/upload/v1558596110/at/archive/e06c0d4c7d9800f5d664133bf5185b850372f018.jpg",
+      imageUrl: image,
+      // imageUrl:
+      //   "https://cdn.apartmenttherapy.info/image/upload/v1558596110/at/archive/e06c0d4c7d9800f5d664133bf5185b850372f018.jpg",
       price: sliderValue,
       pickUpAddress: pickUpAddress,
       pickUpCity: pickUpCity,
@@ -239,8 +240,9 @@ export async function updateOneUser(
     const res = await axios.post(`${url}/api/users/${uid}`, {
       firstName: firstName,
       lastName: lastName,
-      profilePicUrl:
-        "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/217078i525F6A9EF292601F/image-size/large?v=v2&px=999",
+      profilePicUrl: profilePicUrl,
+      // profilePicUrl:
+      //   "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/217078i525F6A9EF292601F/image-size/large?v=v2&px=999",
       dateOfBirth: dateOfBirth,
       province: province,
       city: city,
@@ -251,9 +253,10 @@ export async function updateOneUser(
       expiryDate: expiryDate,
       cvv: cvv,
     });
+    console.log('updateOneUser response:', JSON.stringify(res.data));
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.log('updateOneUser error:', err);
   }
 }
 

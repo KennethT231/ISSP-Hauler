@@ -1,9 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const bodyParser = require("body-parser");
+// const bodyParser = require("body-parser");
 const stripe = require('stripe')('sk_test_51M23WVAZXbnAuaLLJktMTrL2oSSQKCpqvjDDHkAK1PaYlJMFtLevnKFM9qUTjl6PjS9O3F4jGv7LsX9Yp1XUcRbR00G8JLajvz');
-
 
 require('dotenv').config();
 const app = express();
@@ -28,6 +27,7 @@ app.use('/api/posts', postRoutes);
 app.use('/api/service-providers', serviceProvidersRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/stripe', stripeRoutes)
+
 
 //connecting to MongoAtlas
 const uri = process.env.MONGO_URI;

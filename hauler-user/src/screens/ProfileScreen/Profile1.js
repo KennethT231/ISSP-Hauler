@@ -1,18 +1,19 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Modal, FlatList, TextInput } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, Modal, Alert, ActivityIndicator } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import { FontAwesome } from '@expo/vector-icons';
 import UserInfo1 from '../../components/UserInfo/UserInfo1';
 import UserInfo2 from '../../components/UserInfo/UserInfo2';
 import { Context } from '../../context/ContextProvider';
 import { getOneUser, updateOneUser } from '../../../network';
+import firebase from "../../api/firebase"
 
 export default function Profile1({ navigation }) {
     const { signout, currentUser } = useContext(Context)
 
     const [userInformation, setUserInformation] = useState({})
     const [modalVisible, setModalVisible] = useState(false)
-    const [profilePicUrl, setProfilePicUrl] = useState('')
+    const [profilePicUrl, setProfilePicUrl] = useState(null)
     const [dateOfBirth, setDob] = useState()
     const [province, setProvince] = useState('')
     const [city, setCity] = useState('')
@@ -27,6 +28,11 @@ export default function Profile1({ navigation }) {
     const [error, setError] = useState('')
     const [loading, setLoading] = useState('')
     const [reload, setReload] = useState(true)
+
+    // image which will be from the gallery
+    const [image, setImage] = useState(null)
+    // image loading state for user profile image
+    const [imageLoading, setImageLoading] = useState(false)
 
     // console.log('currentUser from profile: ', currentUser)
     useEffect(() => {
@@ -48,25 +54,54 @@ export default function Profile1({ navigation }) {
     const onEditClicked = async () => {
         setModalVisible(true)
     }
+
+    const uploadImage = async () => {
+        try {
+            if (!image) {
+                return null; // if no image is selected, return null
+            }
+            setImageLoading(true);
+            const response = await fetch(image.uri);
+            const blob = await response.blob();
+            const ref = firebase.storage().ref().child(`profile-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
+            const snapshot = await ref.put(blob);
+            setImageLoading(false);
+            return snapshot;
+        } catch (e) {
+            console.log(e.message);
+            setImageLoading(false);
+        }
+    };
+
     const onEditSubmitted = async () => {
-        await updateOneUser(
-            currentUser.uid,
-            firstName,
-            lastName,
-            profilePicUrl,
-            dateOfBirth,
-            province,
-            city,
-            streetAddress,
-            unitNumber,
-            contactNumber,
-            creditCardNumber,
-            expiryDate,
-            cvv
-        )
-        setReload(!reload)
-        setModalVisible(!modalVisible)
-    }
+        try {
+            const response = await uploadImage(); // upload image first and get the response
+            let profilePicUrl = userInformation.profilePicUrl; // default to previous profile image
+            if (response) { // if a new image was selected, get the download URL of the uploaded image
+                profilePicUrl = await response.ref.getDownloadURL();
+            }
+            await updateOneUser(
+                currentUser.uid,
+                firstName,
+                lastName,
+                profilePicUrl,
+                dateOfBirth,
+                province,
+                city,
+                streetAddress,
+                unitNumber,
+                contactNumber,
+                creditCardNumber,
+                expiryDate,
+                cvv
+            );
+            setReload(!reload);
+            setModalVisible(!modalVisible);
+            Alert.alert('Profile Updated Successfully!');
+        } catch (err) {
+            console.log('onEditSubmitted error:', err);
+        }
+    };
 
     useEffect(() => {
         currentUser &&
@@ -97,15 +132,19 @@ export default function Profile1({ navigation }) {
                     <View style={styles.profileContainer}>
                         <Text > {error && alert(error)}</Text>
                         <View style={styles.avatar}>
-                            <Avatar
-                                title='name'
-                                size='xlarge'
-                                source={{
-                                    uri:
-                                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyhfiaF2hYu20trg3-d2lPSfFaY5W4LP8-wg&usqp=CAU'
-                                }}
-                                containerStyle={{ borderRadius: 30, overflow: 'hidden' }}
-                            />
+                            {imageLoading || !userInformation.profilePicUrl ? (
+                                <ActivityIndicator size="large" color="#0000ff" />
+                            ) : (
+                                <Avatar
+                                    title='name'
+                                    size='xlarge'
+                                    source={{
+                                        uri:
+                                            userInformation?.profilePicUrl || 'https://www.w3schools.com/howto/img_avatar.png',
+                                    }}
+                                    containerStyle={{ borderRadius: 30, overflow: 'hidden' }}
+                                />
+                            )}
                         </View>
 
                         <Text style={styles.user}>
@@ -176,6 +215,7 @@ export default function Profile1({ navigation }) {
                                     profilePicUrl={profilePicUrl}
                                     dateOfBirth={dateOfBirth}
                                     contactNumber={contactNumber}
+                                    uid={currentUser.uid}
                                     setCity={setCity}
                                     setStreetAddress={setStreetAddress}
                                     setUnitNumber={setUnitNumber}
@@ -186,6 +226,9 @@ export default function Profile1({ navigation }) {
                                     setLastName={setLastName}
                                     setProfilePicUrl={setProfilePicUrl}
                                     setError={setError}
+                                    image={image}
+                                    setImage={setImage}
+                                    imageLoading={imageLoading}
                                 />
                                 <UserInfo2
                                     creditCardNumber={creditCardNumber}
@@ -228,7 +271,8 @@ export default function Profile1({ navigation }) {
                     </View>
 
                 </View>
-                : <View></View>}
+                : <View></View>
+            }
         </ScrollView>
     )
 }
@@ -284,9 +328,9 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     buttons: {
-
-        width: '48%',
-        height: 48,
+        marginLeft: '2%',
+        width: '45%',
+        height: 45,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center'
@@ -300,7 +344,7 @@ const styles = StyleSheet.create({
     buttonTitle: {
         color: 'white',
         fontSize: 16,
-        fontWeight: "bold"
+        fontWeight: "bold",
     },
     input: {
         borderColor: 'black',

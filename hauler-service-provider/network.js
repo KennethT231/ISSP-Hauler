@@ -1,7 +1,7 @@
 import axios from 'axios';
 //import { NETWORK_URL } from '@env';
 
-const url = "https://hauler-backend-production.up.railway.app"
+const url = "http://192.168.1.66:3000"
 console.log(url);
 
 //==============================To register Service Provider========================================//
@@ -22,35 +22,35 @@ export async function signUp(
   serviceLocation
 ) {
   try {
-  const res = await axios.post(`${url}/api/service-providers`, {
-    uid: uid,
-    firstName: firstName,
-    lastName: lastName,
-    profilePicUrl: "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/217078i525F6A9EF292601F/image-size/large?v=v2&px=999",
-    dateOfBirth: "01/01/2000",
-    province: province,
-    city: city,
-    streetAddress: streetAddress,
-    unitNumber: unitNumber,
-    email: email,
-    contactNumber: contactNumber,
-    chequeDepositFormUrl: "https://i.pinimg.com/474x/40/f3/1d/40f31dd88a4ec213f8b21d1444242969.jpg",
-    vehicle: vehicleType,
-    driverLicenseExpiry: "01/01/2023",
-    serviceLocation: serviceLocation,
-    driverLicenseUrl: "https://i.pinimg.com/474x/40/f3/1d/40f31dd88a4ec213f8b21d1444242969.jpg",
-    driverAbstractUrl: "https://i.pinimg.com/474x/40/f3/1d/40f31dd88a4ec213f8b21d1444242969.jpg",
-    profileStatus: true,
-    serviceProvided: "Junk Removal",
-    serviceStatus: true,
-    locationStatus: true
-  });
+    const res = await axios.post(`${url}/api/service-providers`, {
+      uid: uid,
+      firstName: firstName,
+      lastName: lastName,
+      profilePicUrl: "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/217078i525F6A9EF292601F/image-size/large?v=v2&px=999",
+      dateOfBirth: "01/01/2000",
+      province: province,
+      city: city,
+      streetAddress: streetAddress,
+      unitNumber: unitNumber,
+      email: email,
+      contactNumber: contactNumber,
+      chequeDepositFormUrl: "https://i.pinimg.com/474x/40/f3/1d/40f31dd88a4ec213f8b21d1444242969.jpg",
+      vehicle: vehicleType,
+      driverLicenseExpiry: "01/01/2023",
+      serviceLocation: serviceLocation,
+      driverLicenseUrl: "https://i.pinimg.com/474x/40/f3/1d/40f31dd88a4ec213f8b21d1444242969.jpg",
+      driverAbstractUrl: "https://i.pinimg.com/474x/40/f3/1d/40f31dd88a4ec213f8b21d1444242969.jpg",
+      profileStatus: true,
+      serviceProvided: "Junk Removal",
+      serviceStatus: true,
+      locationStatus: true
+    });
 
-  console.log('user created');
-  return res
-} catch (error) {
-  console.log(error)
-}
+    console.log('user created');
+    return res
+  } catch (error) {
+    console.log(error)
+  }
 }
 
 
@@ -58,6 +58,7 @@ export async function signUp(
 export async function getAllPosts() {
   try {
     const res = await axios.get(`${url}/api/posts/all`);
+    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -68,6 +69,7 @@ export async function getAllPosts() {
 export async function getPostsByService(service) {
   try {
     const res = await axios.get(`${url}/api/posts/service/${service}`);
+    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -78,6 +80,7 @@ export async function getPostsByService(service) {
 export async function getPostsByLocation(location) {
   try {
     const res = await axios.get(`${url}/api/posts/location/${location}`);
+    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -88,6 +91,7 @@ export async function getPostsByLocation(location) {
 export async function getOnePost(postId) {
   try {
     const res = await axios.get(`${url}/api/posts/one/${postId}`);
+    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -140,6 +144,7 @@ export async function updateOneServiceProvider(
 export async function getPostsByServiceProviderId(uid) {
   try {
     const res = await axios.get(`${url}/api/posts/serviceprovider/${uid}`);
+    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -150,6 +155,7 @@ export async function getPostsByServiceProviderId(uid) {
 export async function getPostsByServiceProviderAndService(uid, service) {
   try {
     const res = await axios.get(`${url}/api/posts/serviceprovider/service/${uid}/${service}`);
+    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -160,6 +166,7 @@ export async function getPostsByServiceProviderAndService(uid, service) {
 export async function getPostsByServiceProviderIdAndLocation(uid, location) {
   try {
     const res = await axios.get(`${url}/api/posts/serviceprovider/location/${uid}/${location}`);
+    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -170,6 +177,7 @@ export async function getPostsByServiceProviderIdAndLocation(uid, location) {
 export async function getResponseByServiseProviderId(uid, postId) {
   try {
     const res = await axios.get(`${url}/api/posts/response/service-provider/${uid}/${postId}`);
+    console.log("res:::"+res.data);
     return res.data;
   } catch (err) {
     console.log(err);
@@ -203,11 +211,11 @@ export async function addServiceProviserResponse(
 
 //=============================== To change post visibility =====================================================//
 
-export async function updatePostVisibility(postId, actionPrice,serviceProviderId) {
+export async function updatePostVisibility(postId, actionPrice, serviceProviderId) {
   try {
-    const res = await axios.post(`${url}/api/posts/one/${postId}`,{
+    const res = await axios.post(`${url}/api/posts/one/${postId}`, {
       price: actionPrice,
-      serviceProviderId:  serviceProviderId
+      serviceProviderId: serviceProviderId
     });
     console.log('Hide post');
     return res
@@ -222,14 +230,15 @@ export async function markOnePostInProgress(postId) {
     return res.data
   } catch (err) {
     console.log(err);
-  }}  
+  }
+}
 
-  //----------------------------------To send gps cordinates'-----------------------------
-export async function sendGpsCordinates(postId,latitude,longitude) {
+//----------------------------------To send gps cordinates'-----------------------------
+export async function sendGpsCordinates(postId, latitude, longitude) {
   try {
-    const res = await axios.post(`${url}/api/posts/serviceprovider/gps/${postId}`,{
-      latitude:latitude,
-      longitude:longitude
+    const res = await axios.post(`${url}/api/posts/serviceprovider/gps/${postId}`, {
+      latitude: latitude,
+      longitude: longitude
     });
     return res.data
   } catch (err) {
@@ -237,23 +246,24 @@ export async function sendGpsCordinates(postId,latitude,longitude) {
   }
 }
 
-  //----------------------------------To mark the driver arrived'-----------------------------
-  export async function markDriverArrival(postId) {
-    try {
-      const res = await axios.post(`${url}/api/posts/serviceprovider/arrived/${postId}`);
-      return res.data
-    } catch (err) {
-      console.log(err);
-    }}  
-  
-export async function createStripeAccount(email, appUrl,serviceProviderID) {
+//----------------------------------To mark the driver arrived'-----------------------------
+export async function markDriverArrival(postId) {
   try {
-  const res = await axios.post(`${url}/api/stripe/createStripeAccount`, {
-    email: email,
-    appUrl: appUrl,
-    serviceProviderID:serviceProviderID
-  })
-  return res.data
+    const res = await axios.post(`${url}/api/posts/serviceprovider/arrived/${postId}`);
+    return res.data
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function createStripeAccount(email, appUrl, serviceProviderID) {
+  try {
+    const res = await axios.post(`${url}/api/stripe/createStripeAccount`, {
+      email: email,
+      appUrl: appUrl,
+      serviceProviderID: serviceProviderID
+    })
+    return res.data
   } catch (err) {
     console.log(err)
   }

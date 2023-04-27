@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import MapView from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
+import { Marker } from "react-native-maps";
 // import { GOOGLE_MAP_API } from "@env";
 import { getOnePost } from "../../../network";
 
@@ -94,7 +95,7 @@ export default function Map({ navigation, route }) {
     <View style={styles.mapContainer}>
       <MapView style={styles.map} ref={mapView}>
         {coordinates.map((coordinate, index) => (
-          <MapView.Marker
+          <Marker
             key={`coordinate_${index}`}
             coordinate={coordinate}
             icon={require("../../../assets/map-marker.png")}

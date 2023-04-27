@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { signUp } from '../../../network';
-import { Text, TextInput, TouchableOpacity, View, ScrollView, Platform } from 'react-native'
+import { Text, TextInput, TouchableOpacity, View, ScrollView, Platform, Button } from 'react-native'
 import { StyleSheet } from 'react-native';
 import { Avatar } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome } from '@expo/vector-icons';
 import { Context } from '../../context/ContextProvider'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 export default function Signup({ navigation }) {
 
@@ -15,7 +16,7 @@ export default function Signup({ navigation }) {
     const [error, setError] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
-    const [dateOfBirth, setDob] = useState('')
+    //const [dateOfBirth, setDob] = useState('')
     const [province, setProvince] = useState('')
     const [city, setCity] = useState('')
     const [streetAddress, setStreetAddress] = useState('')
@@ -23,6 +24,9 @@ export default function Signup({ navigation }) {
     const [contactNumber, setContactNumber] = useState('')
     const [image, setImage] = useState(null)
     const { signup, currentUser } = useContext(Context)
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
 
     useEffect(() => {
         (async () => {
@@ -58,6 +62,7 @@ export default function Signup({ navigation }) {
             const response = await signup(email, password)
             console.log('response', response)
             const currentUid = response.user.uid
+            const dateOfBirth = date.toLocaleDateString()
             const usersignUp = await signUp(
                 currentUid,
                 firstName,
@@ -79,6 +84,11 @@ export default function Signup({ navigation }) {
         }
     }
 
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setShow(false);
+        setDate(currentDate);
+    };
 
     return (
         <ScrollView>
@@ -164,7 +174,7 @@ export default function Signup({ navigation }) {
                     />
 
                     <Text style={styles.text}>Date Of Birth:</Text>
-                    <TextInput
+                    {/*<TextInput
                         style={styles.input}
                         placeholderTextColor="#C0C0C0"
                         placeholder='YYYY-MM-DD'
@@ -173,6 +183,23 @@ export default function Signup({ navigation }) {
                             setDob(date);
                         }}
                         value={dateOfBirth}
+                    />*/}
+
+                    <Button onPress={() => setShow(true)} title="Select a Date"/>
+                    {show && (
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            value={date}
+                            mode='date'
+                            is24Hour={true}
+                            onChange={onChange}
+                        />
+                    )}
+                    <TextInput
+                        //style={styles.input}
+                        placeholderTextColor="#C0C0C0"
+                        value={date.toLocaleDateString()}
+                        style={styles.datePicker}
                     />
 
                     <Text style={styles.text}> Unit Number : </Text>
@@ -272,4 +299,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
     },
+    datePicker: {
+        height: 40,
+        borderColor: '#C0C0C0',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        marginBottom: 20,
+        marginTop: 20
+    }
 });

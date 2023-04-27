@@ -4,15 +4,15 @@ import styles from './styles';
 
 export default function ServiceScreen({ navigation }) {
 
-    return(
-        <View style = {styles.root}>
-            <TouchableOpacity onPress={() => navigation.navigate('AddJunkNavigator',{ screen: 'AddItemScreen',  params: { operation: "create", postId: ""}})} style={styles.button}>
+    return (
+        <View style={styles.root}>
+            <TouchableOpacity onPress={() => navigation.navigate('AddJunkNavigator', { screen: 'AddItemScreen', params: { operation: "create", postId: "" } })} style={styles.button}>
                 <Text style={styles.btnText}>JUNK REMOVAL</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('ErrandNavigator',{ screen: 'ErrandPost1',  params: { service: "Moving", operation: "create", postId: "" }})} style={styles.button}>
+            <TouchableOpacity onPress={() => navigation.navigate('ErrandNavigator', { screen: 'ErrandPost1', params: { service: "Moving", operation: "create", postId: "" } })} style={styles.button}>
                 <Text style={styles.btnText}>MOVING</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('ErrandNavigator', { screen: 'ErrandPost1', params: { service: "Errand", operation: "create", postId: "" }})} style={styles.button}>
+            <TouchableOpacity onPress={() => navigation.navigate('ErrandNavigator', { screen: 'ErrandPost1', params: { service: "Errand", operation: "create", postId: "" } })} style={styles.button}>
                 <Text style={styles.btnText}>ERRAND</Text>
             </TouchableOpacity>
         </View>

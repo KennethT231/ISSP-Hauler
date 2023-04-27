@@ -15,6 +15,8 @@ const Drawer = createDrawerNavigator();
 // this is for android
 export default function NavigationScreen(navigation) {
 
+    const { signin, currentUser } = useContext(Context)
+
     return (
         <Drawer.Navigator
             initialRouteName='Home'
@@ -22,7 +24,7 @@ export default function NavigationScreen(navigation) {
                 return (
                     <DrawerContentScrollView {...props}>
                         <DrawerItemList {...props} />
-                        <SignOutButton />
+                        {/*<SignOutButton />*/}
                     </DrawerContentScrollView>
                 )
             }}
@@ -35,10 +37,10 @@ export default function NavigationScreen(navigation) {
                 name="Post A Job"
                 component={ServiceScreenNavigator}
             />
-            <Drawer.Screen
+            {currentUser ? <Drawer.Screen
                 name="Profile"
                 component={ProfileNavigator}
-            />
+            /> : null}
         </Drawer.Navigator>
     )
 }
