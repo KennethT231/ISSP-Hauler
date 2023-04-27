@@ -16,24 +16,19 @@ export default function AddJunkSummary({ navigation, route }) {
 
     const [error, setError] = useState('')
 
-    // image loading state for user profile image
-    const [imageLoading, setImageLoading] = useState(false)
 
     const uploadImage = async () => {
         try {
             if (!image) {
                 return null; // if no image is selected, return null
             }
-            setImageLoading(true);
             const response = await fetch(image.uri);
             const blob = await response.blob();
             const ref = firebase.storage().ref().child(`junk-post-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
             const snapshot = await ref.put(blob);
-            setImageLoading(false);
             return snapshot;
         } catch (e) {
             console.log(e.message);
-            setImageLoading(false);
         }
     };
 
@@ -61,7 +56,7 @@ export default function AddJunkSummary({ navigation, route }) {
             );
             navigation.navigate('Confirmation', { confirm: 'Post' })
         } catch (err) {
-            Alert.alert("Please include a photo of your junk.")
+            Alert.alert("Please include a photo of the item you want to post")
             console.log('onPostJobSubmitted error:', err);
         }
     };

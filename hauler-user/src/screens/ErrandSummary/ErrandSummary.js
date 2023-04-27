@@ -37,16 +37,13 @@ export default function ErrandSummary({ navigation, route }) {
             if (!image) {
                 return null; // if no image is selected, return null
             }
-            setImageLoading(true);
             const response = await fetch(image.uri);
             const blob = await response.blob();
             const ref = firebase.storage().ref().child(`errand-post-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
             const snapshot = await ref.put(blob);
-            setImageLoading(false);
             return snapshot;
         } catch (e) {
             console.log(e.message);
-            setImageLoading(false);
         }
     };
 
@@ -83,7 +80,7 @@ export default function ErrandSummary({ navigation, route }) {
             );
             navigation.navigate('Confirmation', { confirm: 'Post' })
         } catch (err) {
-            Alert.alert("Please include a photo of your junk.")
+            Alert.alert("Please include a photo of the item you want to post")
             console.log('onPostJobSubmitted error:', err);
         }
     };
