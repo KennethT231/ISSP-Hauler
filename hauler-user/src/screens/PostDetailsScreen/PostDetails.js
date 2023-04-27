@@ -10,7 +10,7 @@ import { Feather } from '@expo/vector-icons';
 // Post Detail Screen after a post is created
 export default function PostDetails({ navigation, route }) {
     const { currentUser } = useContext(Context)
-    console
+
     const [posts, setPosts] = useState('')
     const [error, setError] = useState('')
     const [serviceProvider, setServiceProvider] = useState('')

@@ -65,9 +65,17 @@ export default function PostInfo({ image, selectedweight, selectedquantity, post
             {/* image */}
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Image</Text>
-                {(image && junkSummaryRoute?.name === "AddJunkSummary" && errandSummaryRoute?.name === "ErrandSummary") ? (<Image source={{ uri: image?.uri }} style={styles.imageDisplay} />)
-                    : <Image source={{ uri: image }} style={styles.imageDisplay} />
-                }
+
+                {/* conditionally rendering image depends on route */}
+                {(image && (junkSummaryRoute?.name === "AddJunkSummary" || errandSummaryRoute?.name === "ErrandSummary")) && (
+                    <Image source={{ uri: image?.uri || image }} style={styles.imageDisplay} />
+                )}
+
+                {/* detail page image rendering */}
+                {(image && (junkSummaryRoute?.name !== "AddJunkSummary" && errandSummaryRoute?.name !== "ErrandSummary")) && (
+                    <Image source={{ uri: image }} style={styles.imageDisplay} />
+                )}
+
             </View>
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Pick Up Address</Text>
