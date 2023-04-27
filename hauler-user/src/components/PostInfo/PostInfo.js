@@ -1,44 +1,47 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
-export default function PostInfo({ image, selectedweight, selectedquantity, postHeading, description, pickUpAddress, pickContactPerson, pickUpPhoneNumber, pickUpSpecialInstructions, sliderValue, dropOffAddress, dropOffContactNumber, dropOffContactPerson, dropOffSpecialInstruction, distance }) {
-
+// Review Post Screen - Screen that displays the post information
+export default function PostInfo({ image, selectedweight, selectedquantity, postHeading, description, pickUpAddress, pickContactPerson, pickUpPhoneNumber, pickUpSpecialInstructions, sliderValue, dropOffAddress, dropOffContactNumber, dropOffContactPerson, dropOffSpecialInstruction, distance, junkSummaryRoute, errandSummaryRoute }) {
+    console.log({ junkSummaryRoute })
+    console.log({ errandSummaryRoute })
     const destinationInfo = () => {
-       if(!!dropOffAddress){
-        return ( 
-            <View>
-                <View style={styles.infoContainer}>
-                    <Text style={styles.infoKey}>Drop Off Address</Text>
-                    <Text style={styles.infoValue}>
-                        {dropOffAddress}
-                    </Text>
-                </View>
-                <Text>
-                    <View>
-                        <View style={styles.infoContainer}>
-                            <Text style={styles.infoKey}>Drop Off Contact Name</Text>
-                            <Text style={styles.infoValue}>{dropOffContactPerson}</Text>
-                        </View>
-
-                        <View style={styles.infoContainer}>
-                            <Text style={styles.infoKey}>Drop Off Contact Number</Text>
-                            <Text style={styles.infoValue1}>{dropOffContactNumber}  </Text>
-                            <Text style={styles.iconStyle}><Feather name='phone' size={24} color='white' /></Text>
-                        </View>
+        if (!!dropOffAddress) {
+            return (
+                <View>
+                    <View style={styles.infoContainer}>
+                        <Text style={styles.infoKey}>Drop Off Address</Text>
+                        <Text style={styles.infoValue}>
+                            {dropOffAddress}
+                        </Text>
                     </View>
+                    <Text>
+                        <View>
+                            <View style={styles.infoContainer}>
+                                <Text style={styles.infoKey}>Drop Off Contact Name</Text>
+                                <Text style={styles.infoValue}>{dropOffContactPerson}</Text>
+                            </View>
 
-                </Text>
-                <View style={styles.infoContainer}>
-                    <Text style={styles.infoKey}>Drop Off Instructions</Text>
-                    <Text style={styles.infoValue}>{dropOffSpecialInstruction}</Text>
+                            <View style={styles.infoContainer}>
+                                <Text style={styles.infoKey}>Drop Off Contact Number</Text>
+                                <Text style={styles.infoValue1}>{dropOffContactNumber}  </Text>
+                                <Text style={styles.iconStyle}><Feather name='phone' size={24} color='white' /></Text>
+                            </View>
+                        </View>
+
+                    </Text>
+                    <View style={styles.infoContainer}>
+                        <Text style={styles.infoKey}>Drop Off Instructions</Text>
+                        <Text style={styles.infoValue}>{dropOffSpecialInstruction}</Text>
+                    </View>
+                    <View style={styles.infoContainer}>
+                        <Text style={styles.infoKey}>Distance</Text>
+                        <Text style={styles.infoValue}>{distance} km </Text>
+                    </View>
                 </View>
-                <View style={styles.infoContainer}>
-                    <Text style={styles.infoKey}>Distance</Text>
-                    <Text style={styles.infoValue}>{distance} km </Text>
-                </View>
-            </View>
-        )}
+            )
+        }
         return;
     }
     return (
@@ -58,6 +61,13 @@ export default function PostInfo({ image, selectedweight, selectedquantity, post
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Number of items </Text>
                 <Text style={styles.infoValue}>{selectedquantity}</Text>
+            </View>
+            {/* image */}
+            <View style={styles.infoContainer}>
+                <Text style={styles.infoKey}>Image</Text>
+                {(image && junkSummaryRoute?.name === "AddJunkSummary" && errandSummaryRoute?.name === "ErrandSummary") ? (<Image source={{ uri: image?.uri }} style={styles.imageDisplay} />)
+                    : <Image source={{ uri: image }} style={styles.imageDisplay} />
+                }
             </View>
             <View style={styles.infoContainer}>
                 <Text style={styles.infoKey}>Pick Up Address</Text>
@@ -94,7 +104,7 @@ export default function PostInfo({ image, selectedweight, selectedquantity, post
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 10,   
+        paddingHorizontal: 10,
         paddingBottom: 40,
     },
     infoContainer: {
@@ -138,6 +148,15 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: "bold"
+    },
+    imageDisplay: {
+        width: 100,
+        height: 100,
+        borderRadius: 10,
+        marginRight: 10,
+        marginLeft: 10,
+        marginBottom: 10,
+        marginTop: 10,
     },
 })
 

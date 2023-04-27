@@ -1,5 +1,5 @@
 import React, { useContext, useState, useRef } from 'react'
-import { Text, View, Dimensions, StyleSheet } from 'react-native'
+import { Text, View, Dimensions, StyleSheet, Alert } from 'react-native'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Context } from '../../context/ContextProvider';
 import { postItem, updateOnePost } from '../../../network';
@@ -8,6 +8,7 @@ import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { Marker } from 'react-native-maps';
 //import { GOOGLE_MAP_API } from '@env';
+import firebase from "../../api/firebase";
 
 export default function ErrandSummary({ navigation, route }) {
     const { width, height } = Dimensions.get('window');
@@ -32,6 +33,59 @@ export default function ErrandSummary({ navigation, route }) {
         }
     ])
 
+    const uploadImage = async () => {
+        try {
+            if (!image) {
+                return null; // if no image is selected, return null
+            }
+            const response = await fetch(image.uri);
+            const blob = await response.blob();
+            const ref = firebase.storage().ref().child(`errand-post-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
+            const snapshot = await ref.put(blob);
+            return snapshot;
+        } catch (e) {
+            console.log(e.message);
+        }
+    };
+
+
+    const onPostJobSubmitted = async () => {
+        try {
+            const response = await uploadImage(); // upload image first and get the response
+            const image = await response.ref.getDownloadURL(); // then get the image url from the response
+            console.log('post image url:', image);
+            await postItem(
+                currentUser.uid,
+                service,
+                postHeading,
+                description,
+                selectedweight,
+                selectedquantity,
+                image,
+                sliderValue,
+                pickUpAddress,
+                pickUpCity,
+                pickUpAddressLat,
+                pickUpAddressLng,
+                pickContactPerson,
+                pickUpPhoneNumber,
+                pickUpSpecialInstructions,
+                dropOffAddress,
+                dropOffCity,
+                dropOffAddressLat,
+                dropOffAddressLng,
+                dropOffContactPerson,
+                dropOffPhoneNumber,
+                dropOffSpecialInstructions,
+                distance
+            );
+            navigation.navigate('Confirmation', { confirm: 'Post' })
+        } catch (err) {
+            Alert.alert("Please include a photo of the item you want to post")
+            console.log('onPostJobSubmitted error:', err);
+        }
+    };
+
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -52,6 +106,7 @@ export default function ErrandSummary({ navigation, route }) {
                     sliderValue={sliderValue}
                     distance={distance}
                     duration={duration}
+                    errandSummaryRoute={route}
                 />
                 <MapView
                     style={styles.map}
@@ -90,45 +145,20 @@ export default function ErrandSummary({ navigation, route }) {
                 <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ErrandPost1')}><Text style={styles.buttonTitle}> Edit </Text></TouchableOpacity>
 
                 {operation === "create" ?
-                    <TouchableOpacity style={styles.button} onPress={async () => {
-                        await postItem(
-                            currentUser.uid,
-                            service,
-                            postHeading,
-                            description,
-                            selectedweight,
-                            selectedquantity,
-                            image,
-                            sliderValue,
-                            pickUpAddress,
-                            pickUpCity,
-                            pickUpAddressLat,
-                            pickUpAddressLng,
-                            pickContactPerson,
-                            pickUpPhoneNumber,
-                            pickUpSpecialInstructions,
-                            dropOffAddress,
-                            dropOffCity,
-                            dropOffAddressLat,
-                            dropOffAddressLng,
-                            dropOffContactPerson,
-                            dropOffPhoneNumber,
-                            dropOffSpecialInstructions,
-                            distance
-                        ); navigation.navigate('Confirmation', { confirm: 'Post' })
-                    }}><Text style={styles.buttonTitle}> Post the Job </Text></TouchableOpacity>
+                    <TouchableOpacity style={styles.button} onPress={onPostJobSubmitted}
+                    ><Text style={styles.buttonTitle}> Post the Job </Text></TouchableOpacity>
                     :
                     <TouchableOpacity style={styles.button}
                         onPress={async () => {
                             setError('')
-                           const res=  await updateOnePost(
+                            const res = await updateOnePost(
                                 postId,
                                 // service,
                                 postHeading,
                                 description,
                                 selectedweight,
                                 selectedquantity,
-                                // imageUrl,
+                                imageUrl ? imageUrl : image,
                                 sliderValue,
                                 pickUpAddress,
                                 pickUpCity,

@@ -1,10 +1,10 @@
 import React from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity,Alert} from 'react-native';
+import { StyleSheet, View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import { Card, Badge, Button } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 
-export default function PostsList({ posts, onActiveImagePress, onOffersPress, onAcceptedDetails, onTrackPress,onCompletePress, navigation }) {
-   
+export default function PostsList({ posts, onActiveImagePress, onOffersPress, onAcceptedDetails, onTrackPress, onCompletePress, navigation }) {
+
     return (
         <View style={styles.container}>
             <FlatList
@@ -43,61 +43,61 @@ export default function PostsList({ posts, onActiveImagePress, onOffersPress, on
                                     </View>
                                     <View style={styles.cardButton}>
                                         <Text style={styles.cardButtonContainer}>
-                                            {   (item.status === 'Awaiting Payment') ?
-                                                    <View style={styles.statusButton}>
-                                                        <Button
+                                            {(item.status === 'Awaiting Payment') ?
+                                                <View style={styles.statusButton}>
+                                                    <Button
                                                         buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 100 }}
-                                                        onPress={() => navigation.navigate('PaymentNavigator', {screen:'Payment1', params: {post:item}})}
-                                                        title= "PAY NOW"
-                                                        />
-                                                        <Text style={[styles.cardText, styles.statusText]}>{item.status}</Text>
-                                                    </View> :
+                                                        onPress={() => navigation.navigate('PaymentNavigator', { screen: 'Payment1', params: { post: item } })}
+                                                        title="PAY NOW"
+                                                    />
+                                                    <Text style={[styles.cardText, styles.statusText]}>{item.status}</Text>
+                                                </View> :
                                                 (item.status === 'In Progress') ?
                                                     <View style={styles.statusButton}>
                                                         <Button
                                                             buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 100 }}
-                                                            onPress={() => onTrackPress({post: item})}
-                                                            title= 'Track'
+                                                            onPress={() => onTrackPress({ post: item })}
+                                                            title='Track'
                                                         />
                                                         <Text style={[styles.cardText, styles.statusText]}>{item.status}</Text>
-                                                    </View>:
-                                                (item.status === 'Driver Arrived') ?
-                                                <View style={styles.statusButton}>
-                                                    <Button
-                                                        buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 100 }}
-                                                        onPress={() => onCompletePress({postId: item._id})}
-                                                        title= 'Complete'
-                                                    />
-                                                    <Text style={[styles.cardText, styles.statusText]}>Process Payment</Text>
-                                                </View>:
-                                                (item.status === 'Complete') ?
-                                                <View style={styles.statusButton}>
-                                                    <Button
-                                                        buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 100 }}
-                                                        disabled = {true}
-                                                        title= 'Completed'
-                                                    />
-                                                    <Text style={[styles.cardText, styles.statusText]}>Job Completed</Text>
-                                                </View>
-                                                    : ((item.response.length > 1) ?
+                                                    </View> :
+                                                    (item.status === 'Driver Arrived') ?
                                                         <View style={styles.statusButton}>
                                                             <Button
                                                                 buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 100 }}
-                                                                onPress={() => onOffersPress({ postId: item._id })}
-                                                                title={item.status === 'Negotiating' ? 'See Offers' :`$ ${item.acceptedPrice}`}
+                                                                onPress={() => onCompletePress({ postId: item._id })}
+                                                                title='Complete'
                                                             />
-                                                            <Text style={[styles.cardText, styles.statusText]}>{item.status}</Text>
+                                                            <Text style={[styles.cardText, styles.statusText]}>Process Payment</Text>
                                                         </View> :
-                                                        <View>
-                                                            <Button
-                                                                buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 100 }}
-                                                                onPress={() => onActiveImagePress({ postId: item._id })}
-                                                                title={`$ ${item.price}`}
-                                                            />
-                                                            <Text style={[styles.cardText, styles.statusText]}>Job Posted</Text>
-                                                        </View>
-                                                        
-                                                    )   
+                                                        (item.status === 'Complete') ?
+                                                            <View style={styles.statusButton}>
+                                                                <Button
+                                                                    buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 100 }}
+                                                                    disabled={true}
+                                                                    title='Completed'
+                                                                />
+                                                                <Text style={[styles.cardText, styles.statusText]}>Job Completed</Text>
+                                                            </View>
+                                                            : ((item.response.length > 1) ?
+                                                                <View style={styles.statusButton}>
+                                                                    <Button
+                                                                        buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 100 }}
+                                                                        onPress={() => onOffersPress({ postId: item._id })}
+                                                                        title={item.status === 'Negotiating' ? 'See Offers' : `$ ${item.acceptedPrice}`}
+                                                                    />
+                                                                    <Text style={[styles.cardText, styles.statusText]}>{item.status}</Text>
+                                                                </View> :
+                                                                <View>
+                                                                    <Button
+                                                                        buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 100 }}
+                                                                        onPress={() => onActiveImagePress({ postId: item._id })}
+                                                                        title={`$ ${item.price}`}
+                                                                    />
+                                                                    <Text style={[styles.cardText, styles.statusText]}>Job Posted</Text>
+                                                                </View>
+
+                                                            )
                                             }
                                         </Text>
                                     </View>

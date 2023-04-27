@@ -6,6 +6,7 @@ import SelectWeight from '../../components/SelectWeight/SelectWeight'
 import { Ionicons } from '@expo/vector-icons';
 import { getOnePost } from '../../../network';
 
+// Post A Job Page1 Screen - First page of the post a job process(Moving, Errand)
 export default function ErrandPost1({ navigation, route }) {
 
   const { service, operation, postId } = route.params;
@@ -49,28 +50,26 @@ export default function ErrandPost1({ navigation, route }) {
     })();
   }, []);
 
-  const pickImageAlbum = async () => {
+  const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-      // base64: true,
-      //allowsMultipleSelection: true,
+      aspect: [4, 3],
+      quality: 1
     });
-
-    console.log(result);
-
     if (!result.canceled) {
-      setImage(result.uri);
+      const source = { uri: result.assets[0].uri }
+      console.log(source)
+      setImage(source)
     }
   };
+
 
   return (
     <ScrollView>
       <View style={styles.container}>
 
-        <Text style={styles.text}> Post Heading : </Text>
+        <Text style={styles.text}> Post Headings : </Text>
         <TextInput style={styles.inputLine1}
           onChangeText={(postHeading) => { setPostHeading(postHeading) }}
           value={postHeading}
@@ -101,12 +100,12 @@ export default function ErrandPost1({ navigation, route }) {
 
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button}><Text style={styles.buttonTitle}
-            onPress={() => pickImageAlbum()} >Upload Image</Text>
+            onPress={() => pickImage()} >Upload Image</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.imageContainer}>
-          {image && <Image source={{ uri: image }} style={styles.imageDisplay} />}
+          {image && <Image source={{ uri: image?.uri }} style={styles.imageDisplay} />}
         </View>
 
 

@@ -83,8 +83,9 @@ export async function postItem(
       postDescription: description,
       loadWeight: selectedweight,
       numberOfItems: selectedquantity,
-      imageUrl:
-        "https://cdn.apartmenttherapy.info/image/upload/v1558596110/at/archive/e06c0d4c7d9800f5d664133bf5185b850372f018.jpg",
+      imageUrl: image,
+      // imageUrl:
+      //   "https://cdn.apartmenttherapy.info/image/upload/v1558596110/at/archive/e06c0d4c7d9800f5d664133bf5185b850372f018.jpg",
       price: sliderValue,
       pickUpAddress: pickUpAddress,
       pickUpCity: pickUpCity,
@@ -253,7 +254,7 @@ export async function updateOneUser(
       expiryDate: expiryDate,
       cvv: cvv,
     });
-    console.log('updateOneUser response:', res.data);
+    console.log('updateOneUser response:', JSON.stringify(res.data));
     return res.data;
   } catch (err) {
     console.log('updateOneUser error:', err);
