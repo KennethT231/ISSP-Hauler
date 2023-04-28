@@ -17,13 +17,24 @@ export default function MyPostList({ navigation }) {
     const [posts, setPosts] = useState('')
 
     const searchService = async (value) => {
-        const posts = await getPostsByIdAndService(currentUser && currentUser.uid, value.service)
-        setPosts(posts)
+        if(service === null || service === ''){
+            const posts = await getAllPosts(currentUser.uid)
+            setPosts(posts)
+        } else {
+            const posts = await getPostsByIdAndService(currentUser && currentUser.uid, value.service)
+            setPosts(posts)
+        }
+        //setPosts(posts)
     }
 
     const searchLocation = async (value) => {
-        const posts = await getPostsByIdAndLocation(currentUser && currentUser.uid, value.location)
-        setPosts(posts)
+        if(location === null || location === ''){
+            const posts = await getAllPosts(currentUser.uid)
+            setPosts(posts)
+        } else {
+            const posts = await getPostsByIdAndLocation(currentUser && currentUser.uid, value.location)
+            setPosts(posts)
+        }
     }
     
     const onActiveImagePress = async (value) => {
