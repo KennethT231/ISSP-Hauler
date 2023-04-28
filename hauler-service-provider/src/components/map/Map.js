@@ -16,6 +16,26 @@ export default function Map({ navigation,route }) {
   const mapView = useRef();
   let post = route.params.targetPost;
 
+  const completeJob = () => {
+    try {
+      markDriverArrival(post._id)
+        Alert.alert(
+            "Alert",
+            "Confirm load has been picked up",
+            [
+              {
+                text: "Cancel",
+                style: "cancel"
+              },
+              { text: "Continue", onPress: () => navigation.navigate('MyJobListNavigator', { screen: 'MyJobList' }) }
+            ]
+          );
+    
+    } catch (err) {
+        console.log(err)
+    }
+}
+
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [permissions, setPermissions] = useState(false);
@@ -93,7 +113,7 @@ export default function Map({ navigation,route }) {
             }
           );
 
-          if (distance < 1000) {
+          if (distance < 50) {
             //send a notification to the backend that the driver has arrived
             markDriverArrival(post._id);
             Alert.alert(
