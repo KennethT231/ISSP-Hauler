@@ -6,7 +6,7 @@ import UserInfo1 from '../../components/UserInfo/UserInfo1';
 import UserInfo2 from '../../components/UserInfo/UserInfo2';
 import { Context } from '../../context/ContextProvider';
 import { getOneUser, updateOneUser } from '../../../network';
-import firebase from "../../api/firebase"
+import firebase from '../../api/firebase';
 
 export default function Profile1({ navigation }) {
     const { signout, currentUser } = useContext(Context)
@@ -63,7 +63,7 @@ export default function Profile1({ navigation }) {
             setImageLoading(true);
             const response = await fetch(image.uri);
             const blob = await response.blob();
-            const ref = firebase.storage().ref().child(`profile-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
+            const ref = firebase.storage().ref().child(`user-profile-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
             const snapshot = await ref.put(blob);
             setImageLoading(false);
             return snapshot;
