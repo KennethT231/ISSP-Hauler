@@ -5,6 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import UserInfo1 from '../../components/UserInfo/UserInfo1';
 import UserInfo2 from '../../components/UserInfo/UserInfo2';
 import { Context } from '../../context/ContextProvider';
+import styles from './Profile1Css';
 import { getOneUser, updateOneUser } from '../../../network';
 
 export default function Profile1({ navigation }) {
@@ -145,7 +146,19 @@ export default function Profile1({ navigation }) {
                         <View style={styles.infoContainer}>
                             <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
                             <Text style={styles.userInfo}>
-                                {userInformation.unitNumber}, {userInformation.streetAddress}, {userInformation.city}, {userInformation.province}
+                                {userInformation.unitNumber}, {userInformation.streetAddress}
+                            </Text>
+                        </View>
+                        <View style={styles.infoContainer}>
+                            <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
+                            <Text style={styles.userInfo}>
+                                {userInformation.city}
+                            </Text>
+                        </View>
+                        <View style={styles.infoContainer}>
+                            <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
+                            <Text style={styles.userInfo}>
+                                {userInformation.province}
                             </Text>
                         </View>
                         <View style={styles.infoContainer}>
@@ -233,84 +246,3 @@ export default function Profile1({ navigation }) {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        // marginVertical: 20,
-        width: '100%',
-        backgroundColor: 'white'
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        marginVertical: 10,
-    },
-    profileContainer: {
-        flex: 1,
-        width: '100%',
-    },
-    headerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    avatar: {
-        alignItems: 'center'
-
-    },
-    user: {
-        textAlign: 'center',
-        fontWeight: "bold",
-        fontSize: 35,
-        color: '#5C5C5C',
-        marginBottom: 10
-    },
-    infoContainer: {
-        flexDirection: 'row'
-    },
-    infoIcon: {
-        marginHorizontal: 20,
-        marginVertical: 20,
-    },
-    userInfo: {
-        color: 'black',
-        fontSize: 20,
-        marginVertical: 20,
-    },
-    modalContainer: {
-        margin: 20
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        marginVertical: 10,
-    },
-    buttons: {
-
-        width: '48%',
-        height: 48,
-        borderRadius: 5,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    editButton: {
-        backgroundColor: '#0177FC',
-    },
-    logOutButton: {
-        backgroundColor: '#E0E0E0',
-    },
-    buttonTitle: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: "bold"
-    },
-    input: {
-        borderColor: 'black',
-        borderWidth: 1,
-        height: 48,
-        borderRadius: 5,
-        overflow: 'hidden',
-        backgroundColor: 'white',
-        marginVertical: '1%',
-        marginHorizontal: '2%',
-        paddingLeft: 16
-    },
-})
