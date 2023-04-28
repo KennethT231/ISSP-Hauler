@@ -1,7 +1,7 @@
 import axios from 'axios';
 //import { NETWORK_URL } from '@env';
 
-const url = "http://192.168.1.66:3000"
+const url = "https://hauler-backend-production.up.railway.app"
 console.log(url);
 
 //==============================To register Service Provider========================================//
