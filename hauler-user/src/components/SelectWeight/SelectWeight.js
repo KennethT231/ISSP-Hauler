@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import RNPickerSelect from 'react-native-picker-select-updated-updated';
+import RNPickerSelect from 'react-native-picker-select-updated';
 
 export default function SelectWeight({ selectedweight, setSelectedWeight }) {
 
