@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { createPaymentIntent, markPostPaid, getOneServiceProvider} from "../../../network";
+import { createPaymentIntent, markPostPaid, getOneServiceProvider } from "../../../network";
 import { CardField, useStripe } from "@stripe/stripe-react-native";
 import {
   StyleSheet,
@@ -17,8 +17,10 @@ const getServiceProvider = async (uid) => {
   return serviceProvider //make this set the state and call it in use effect instead?
 }
 
+// Payment Sheet Screen
 export default function PaymentSheet({ navigation, route }) {
   const post = route.params.post;
+  console.log({ post })
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
   const [secret, setSecret] = useState(null);
@@ -71,11 +73,11 @@ export default function PaymentSheet({ navigation, route }) {
       Alert.alert("Success", "Your order is confirmed!");
     }
   };
-  return ( 
+  return (
     <StripeProvider
       publishableKey="pk_test_51M23WVAZXbnAuaLLQ0DTyBlLUIlAiEfXDMG08JJnObkdAfPcWosN99cklgD4fmgsnfqAt8ZDFYzCpjAyXwxwRid00007njU21F"
       merchantIdentifier="hauler-app"
-    > 
+    >
       <View style={styles.container}>
         <View style={styles.infoContainer}>
           <Text style={styles.infoKey}>Post Details:</Text>
