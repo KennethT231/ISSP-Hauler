@@ -4,11 +4,12 @@ import { StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { GooglePlacesAutocomplete, GooglePlacesDetailsQuery } from 'react-native-google-places-autocomplete';
 //import { GOOGLE_MAP_API } from '@env';
-import {getOnePost} from '../../../network'
+import { getOnePost } from '../../../network'
 
+// Post A Job Page2 - Second Page of the post a job process(pick up location)
 export default function AddJunkScreen2({ navigation, route }) {
 
-  const { image, selectedweight, selectedquantity, postHeading, description, operation, postId} = route.params;
+  const { image, selectedweight, selectedquantity, postHeading, description, operation, postId } = route.params;
   const [pickUpAddress, setPickUpAddress] = useState('')
   const [pickUpCity, setPickUpCity] = useState('')
   const [pickUpAddressLat, setPickUpAddressLat] = useState('')
@@ -16,7 +17,7 @@ export default function AddJunkScreen2({ navigation, route }) {
 
   useEffect(() => {
     (async () => {
-      if (operation === "edit"){
+      if (operation === "edit") {
         const post = await getOnePost(postId)
         setPickUpAddress(post.pickUpAddress)
         setPickUpCity(post.pickUpCity)
@@ -24,11 +25,11 @@ export default function AddJunkScreen2({ navigation, route }) {
         setPickUpAddressLng(post.pickUpAddressLng)
       }
     })()
-}, [])
+  }, [])
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}> Enter pick up location </Text>
+      <Text style={styles.text}> Enter pick up location</Text>
       <GooglePlacesAutocomplete
         styles={{
           textInput: {
@@ -45,15 +46,15 @@ export default function AddJunkScreen2({ navigation, route }) {
             paddingHorizontal: 20,
           },
         }}
-        placeholder={operation==="edit"? pickUpAddress : "Full Address"}
+        placeholder={operation === "edit" ? pickUpAddress : "Full Address"}
         minLength={2}
         fetchDetails={true}
-        onPress={(data, details) => { 
-          setPickUpAddress(details.formatted_address), 
-          setPickUpCity(details.vicinity),
-          setPickUpAddressLat(details.geometry.location.lat)
+        onPress={(data, details) => {
+          setPickUpAddress(details.formatted_address),
+            setPickUpCity(details.vicinity),
+            setPickUpAddressLat(details.geometry.location.lat)
           setPickUpAddressLng(details.geometry.location.lng)
-         }
+        }
         }
         value={pickUpAddress}
         onFail={(error) => console.error(error)}
@@ -71,7 +72,7 @@ export default function AddJunkScreen2({ navigation, route }) {
         pickUpAddress: pickUpAddress,
         operation: operation,
         postId: postId,
-        pickUpCity:pickUpCity,
+        pickUpCity: pickUpCity,
         pickUpAddressLat: pickUpAddressLat,
         pickUpAddressLng: pickUpAddressLng
       })}

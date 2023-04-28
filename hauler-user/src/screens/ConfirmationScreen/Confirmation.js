@@ -52,7 +52,7 @@ export default function Confirmation({ navigation, route }) {
 
             <TouchableOpacity onPress={() => navigation.navigate('Home', { screen: 'MyPostList' })} style={styles.button}><Text style={styles.btnText}>Return To My Job List </Text></TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Post A Job', { screen: 'Post A Job' })} style={styles.button}><Text style={styles.btnText}>Return To Posting a Job </Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Post A Job1', { screen: 'AddItemScreen' })} style={styles.button}><Text style={styles.btnText}>Return To Posting a Job </Text></TouchableOpacity>
 
         </View>
     )

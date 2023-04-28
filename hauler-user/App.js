@@ -7,6 +7,7 @@ import { AuthProvider } from './src/context/ContextProvider';
 import { Platform } from 'react-native';
 import BottomTabNavigation from './src/screens/NavigationScreen/BottomTabNavigation'
 import { StripeProvider } from '@stripe/stripe-react-native';
+// import publicIP from 'react-native-public-ip';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,16 @@ const PlatformSpecificNavigator = Platform.select({
   ios: () => BottomTabNavigation,
   android: () => NavigationScreen,
 })();
+
+// publicIP()
+//   .then(ip => {
+//     console.log('ip: ', ip);
+//     // '47.122.71.234'
+//   })
+//   .catch(error => {
+//     console.log(error);
+//     // 'Unable to get IP address.'
+//   });
 
 export default function App() {
   return (

@@ -79,6 +79,7 @@ const updateOneUser = async (req, res) => {
         const {
             firstName,
             lastName,
+            profilePicUrl,
             dateOfBirth,
             province,
             city,
@@ -92,6 +93,7 @@ const updateOneUser = async (req, res) => {
                 $set: {
                     firstName,
                     lastName,
+                    profilePicUrl,
                     dateOfBirth,
                     province,
                     city,
@@ -108,9 +110,34 @@ const updateOneUser = async (req, res) => {
     }
 };
 
+//=============================== Post user profile picture  =================================================//
+const postProfilePic = async (req, res) => {
+    try {
+        const id = req.params.uid;
+        const profilePicUrl = req.file.location;
+        console.log({ profilePicUrl, id });
+
+        // Find the user document by ID
+        const user = await UserData.findById(id);
+
+        // Set the profile picture URL
+        user.profilePicUrl = profilePicUrl;
+
+        // Save the updated user document
+        await user.save();
+
+        res.status(200).send('Profile picture updated successfully!');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+};
+
+
 exports.getOneUser = getOneUser;
 exports.getUser = getUser;
 exports.createUser = createUser;
 exports.deleteOneUser = deleteOneUser;
 exports.updateOneUser = updateOneUser;
+exports.postProfilePic = postProfilePic;
 

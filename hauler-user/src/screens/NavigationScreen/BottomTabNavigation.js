@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import HomeNavigator from './HomeNavigator';
 import ServiceScreenNavigator from './ServiceScreenNavigator';
 import ProfileNavigator from './ProfileNavigator';
+import { Context } from '../../context/ContextProvider';
 
 const BottomTab = createBottomTabNavigator();
 
 const BottomTabNavigation = () => {
+
+    const { signin, currentUser } = useContext(Context)
     return (
         <BottomTab.Navigator
             initialRouteName='Home'
@@ -45,7 +48,7 @@ const BottomTabNavigation = () => {
                     // headerRight: () => <MenuIcon />,
                 }}
             />
-            <BottomTab.Screen
+            {currentUser ? <BottomTab.Screen
                 name='Profile'
                 component={ProfileNavigator}
                 options={{
@@ -54,7 +57,7 @@ const BottomTabNavigation = () => {
                     ),
                     // headerRight: () => <MenuIcon />,
                 }}
-            />
+            /> : null}
         </BottomTab.Navigator>
     );
 };
