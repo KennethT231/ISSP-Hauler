@@ -48,7 +48,7 @@ export default function Profile({ navigation }) {
             setImageLoading(true);
             const response = await fetch(image.uri);
             const blob = await response.blob();
-            const ref = firebase.storage().ref().child(`profile-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
+            const ref = firebase.storage().ref().child(`provider-profile-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
             const snapshot = await ref.put(blob);
             setImageLoading(false);
             return snapshot;

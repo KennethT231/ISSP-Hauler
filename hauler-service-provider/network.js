@@ -9,8 +9,8 @@ export async function signUp(
   uid,
   firstName,
   lastName,
-  // profilePicUrl,
-  // dateOfBirth,
+  profilePicUrl,
+  dateOfBirth,
   province,
   city,
   streetAddress,
@@ -27,7 +27,7 @@ export async function signUp(
       firstName: firstName,
       lastName: lastName,
       profilePicUrl: "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/217078i525F6A9EF292601F/image-size/large?v=v2&px=999",
-      dateOfBirth: "01/01/2000",
+      dateOfBirth: dateOfBirth,
       province: province,
       city: city,
       streetAddress: streetAddress,
@@ -46,7 +46,7 @@ export async function signUp(
       locationStatus: true
     });
 
-    console.log('user created');
+    console.log('user created: ' + JSON.stringify(res.data));
     return res
   } catch (error) {
     console.log(error)
