@@ -1,131 +1,20 @@
-import React, {useRef, useState,useEffect} from 'react'
-import { Dimensions, ActivityIndicator,
+import React, {useRef, useState, useEffect} from 'react'
+import { Dimensions,
   StyleSheet,PermissionsAndroid, 
   View,Linking,Text,TouchableOpacity,
   Alert} from 'react-native'
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
-// import { GOOGLE_MAP_API } from '@env';
-// import Geolocation from 'react-native-geolocation-service';
+//import { GOOGLE_MAP_API } from '@env';
+import * as Location from 'expo-location';
 import { sendGpsCordinates } from '../../../network';
-// import { getDistance, getPreciseDistance } from "geo-lib";
+import { getDistance } from "geolib";
 import { markDriverArrival } from '../../../network';
 
 export default function Map({ navigation,route }) {
   const { width, height } = Dimensions.get("window");
   const mapView = useRef();
-  // let post = route.params.targetPost;
-  
-  const [userPos, setUserPos] = useState({ latitude: null, longitude: null });
-
-  const [distance,setDistance] = useState(50000);
-
-  // const [coordinates, setCoordinates] = useState([
-  //   {
-  //     latitude: post.driverLat,
-  //     longitude:post.driverLong,
-  //   },
-  //   {
-  //     latitude: post.pickUpAddressLat,
-  //     longitude: post.pickUpAddressLng,
-  //   },
-  // ]);
-
-  // const scheme = Platform.select({ ios: "maps:0,0?q=", android: "geo:0,0?q=" });
-  // const latLng = `${lat},${lng}`;
-  // const label = "Custom Label";
-  // const url = Platform.select({
-  //   ios: `${scheme}${label}@${latLng}`,
-  //   android: `${scheme}${latLng}(${label})`,
-  // });
-  // Linking.openURL(url);
-
-  // useEffect(() => {
-  //   const fetchCurrentCoords = async () => {
-  //     const options = {
-  //       enableHighAccuracy: true,
-  //       timeout: 5000,
-  //       maximumAge: 0,
-  //     };
-
-  //     function success(pos) {
-  //       const { latitude, longitude } = pos.coords;
-
-  //       const newCoordinate = {
-  //         latitude,
-  //         longitude,
-  //       };
-
-  //       let newdata = [...coordinates];
-  //       newdata[0] = newCoordinate;
-
-  //       setCoordinates(newdata);
-
-  //       // console.log("Your current position is:");
-  //       // console.log(`Latitude : ${latitude}`);
-  //       // console.log(`Longitude: ${longitude}`);
-  //     }
-
-  //     function error(err) {
-  //       console.warn(`ERROR(${err.code}): ${err.message}`);
-  //     }
-
-  //     await Geolocation.getCurrentPosition(success, error, options);
-  //   };
-
-  //   fetchCurrentCoords();
-
-  //   async function getlocation() {
-  //     try {
-  //       const granted = await PermissionsAndroid.request(
-  //         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
-  //       );
-
-  //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //         // console.log("You can use the ACCESS_FINE_LOCATION");
-
-  //         Geolocation.watchPosition(
-  //           (position) => {
-  //             const { latitude, longitude } = position.coords;
-
-  //             const newCoordinate = {
-  //               latitude,
-  //               longitude,
-  //             };
-  //             sendGpsCordinates(post._id, latitude, longitude);
-  //             let newdata = [...coordinates];
-  //             newdata[0] = newCoordinate;
-              
-  //             setCoordinates(newdata);
-
-
-
-  //           },
-  //           (error) => console.log(error),
-  //           {
-  //             enableHighAccuracy: true,
-  //             timeout: 20000,
-  //             maximumAge: 1000,
-  //             distanceFilter: 10,
-  //           }
-  //         );
-  //       } else {
-  //         // console.log("ACCESS_FINE_LOCATION permission denied");
-  //       }
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   }
-  //   getlocation();
-  // }, []);
-
-  // useEffect(()=>{
-  //   const curdistance = getDistance(coordinates[0], coordinates[1]);
-  //   console.log("current distance" + curdistance)
-  //   setDistance(curdistance);
-  //   console.log(distance)
-  // })
-
+  let post = route.params.targetPost;
 
   const completeJob = () => {
     try {
@@ -147,39 +36,149 @@ export default function Map({ navigation,route }) {
     }
 }
 
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [permissions, setPermissions] = useState(false);
+  const [distance,setDistance] = useState(50000);
+  const [coordinates, setCoordinates] = useState([
+    {
+      latitude: post.driverLat,
+      longitude:post.driverLong,
+    },
+    {
+      latitude: post.pickUpAddressLat,
+      longitude: post.pickUpAddressLng,
+    },
+  ]);
+
+  //hook for creating a maps route for the driver once they accept the job
+  useEffect(() => {
+    (async () => {
+      //permissions for location
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+      setPermissions(true);
+
+      //get Location object of the driver and store in state
+      //Location object contains:
+      //  coords: {
+      //    latitude: number,
+      //    longitude: number,
+      //    and other useful info
+      //  },
+      //  timestamp: number,
+      //
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+
+      //update the coordinates state with the current lat/long of the driver
+      const { latitude, longitude } = location.coords;
+      const newCoordinate = { latitude, longitude };
+      let newdata = [...coordinates];
+      newdata[0] = newCoordinate;
+      setCoordinates(newdata);
+    })();
+  }, []);
+
+  //hook for updating the driver's location every 5 seconds
+  useEffect(() => {
+    if (permissions) {
+        (async () => {
+          let location = await Location.watchPositionAsync(
+            {
+              accuracy: Location.Accuracy.BestForNavigation,
+              timeInterval: 5000,
+              distanceInterval: 0,
+            },
+            (location) => {
+              setLocation(location);
+              const { latitude, longitude } = location.coords;
+              const newCoordinate = { latitude, longitude };
+              let newdata = [...coordinates];
+              newdata[0] = newCoordinate;
+              setCoordinates(newdata);
+              
+              //send the new coordinates to the backend
+              sendGpsCordinates(post._id,latitude,longitude);
+
+              //check if the driver has arrived at the pickup location
+              let distance = getDistance(
+                { latitude: latitude, longitude: longitude },
+                { latitude: post.pickUpAddressLat, longitude: post.pickUpAddressLng }
+              );
+              setDistance(distance);
+            }
+          );
+
+          if (distance < 50) {
+            //send a notification to the backend that the driver has arrived
+            markDriverArrival(post._id);
+            Alert.alert(
+              "You have arrived!",
+              "Please wait for the customer to come out.",
+              [
+                {
+                  text: "OK",
+                  onPress: () => {
+                    navigation.navigate("MyJobListNavigator", { screen: "MyJobList" });
+                    Location.stopLocationUpdatesAsync(location);
+                  },
+                },
+              ]
+            );
+          }
+        })();
+    }
+  }, [permissions]);
+
   return (
     <View style={styles.mapContainer}>
+      <Text style={styles.listTitle}>Pickup Address: {post.pickUpAddress}</Text>
+      <Text style={styles.listTitle}>Dropoff Address: {post.dropOffAddress}</Text>
+      <Text style={styles.listTitle}>Distance: {distance} meters</Text>
+
+      <TouchableOpacity style={[styles.button, styles.startRouteButton]} onPress={() => {
+        navigation.navigate("MyJobListNavigator", {screen: "MyJobList"});
+        Location.stopLocationUpdatesAsync(location);
+      }
+      }>
+        <Text style={[styles.buttonTitle, styles.listTitle]}>Stop</Text>
+      </TouchableOpacity>
+
       <MapView style={styles.map} ref={mapView}>
-        {/* {coordinates.map((coordinate, index) => (
-          <MapView.Marker
+        {console.log("coordinates", coordinates)}
+        {coordinates.map((coordinate, index) => (
+          <Marker
             key={`coordinate_${index}`}
             coordinate={coordinate}
-            // icon={require("../../../assets/map-marker.png")}
-            icon={require("./assets/map-marker.png")}
+            icon={require("../../../assets/map-marker.png")}
           />
-        ))} */}
-        {/* <MapViewDirections
+        ))}
+        <MapViewDirections
           apikey={"AIzaSyCMvEs9takJvuKNDt0RaIm-xfZH2uCUr-s"}
           origin={coordinates[0]}
           waypoints={coordinates}
           destination={coordinates[coordinates.length - 1]}
-          strokeWidth={3}
+          strokeWidth={5}
           strokeColor="#0000ff"
           optimizeWaypoints={true}
           onReady={(result) => {
             mapView.current.fitToCoordinates(result.coordinates, {
               edgePadding: {
-                right: width / 20,
-                bottom: height / 20,
-                left: width / 20,
-                top: height / 20,
+                right: width / 10,
+                bottom: height / 10,
+                left: width / 10,
+                top: height / 10,
               },
             });
           }}
           onError={(errorMessage) => {
             console.log(`Error: ${errorMessage}`);
           }}
-        /> */}
+        />
       </MapView>
       { (distance <= 50) &&
         <TouchableOpacity
@@ -189,36 +188,36 @@ export default function Map({ navigation,route }) {
                     </TouchableOpacity>
       }
     </View>
-  );
-}
+    );
+};
 
-const styles = StyleSheet.create({
-  map: {
-    width: Dimensions.get("window").width - 30,
-    height: 550,
-    borderRadius: 20,
-  },
-  mapContainer: {
-    paddingTop: 30,
-    paddingBottom: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonTitle: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: "bold"
-  },    
-  listTitle:{
-  color: 'black'
-  },
-  button: {
-    backgroundColor: '#06C167',
-    marginVertical: 10,
-    height: 48,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '90%'
-  },
-});
+  const styles = StyleSheet.create({
+    map: {
+      width: Dimensions.get("window").width - 30,
+      height: 550,
+      borderRadius: 20,
+    },
+    mapContainer: {
+      paddingTop: 30,
+      paddingBottom: 30,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    buttonTitle: {
+      color: 'white',
+      fontSize: 16,
+      fontWeight: "bold"
+    },    
+    listTitle:{
+    color: 'black'
+    },
+    button: {
+      backgroundColor: '#06C167',
+      marginVertical: 10,
+      height: 48,
+      borderRadius: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '90%'
+    },
+  });

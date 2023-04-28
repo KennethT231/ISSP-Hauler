@@ -103,7 +103,6 @@ export async function getOneServiceProvider(uid) {
   try {
     console.log(uid);
     const res = await axios.get(`${url}/api/service-providers/${uid}`);
-    console.log(res.data);
     return res.data;
   } catch (err) {
     console.log(err);
