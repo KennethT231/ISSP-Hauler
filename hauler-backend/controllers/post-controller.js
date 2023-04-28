@@ -166,6 +166,7 @@ const getPostsByIdAndService = async (req, res) => {
 const deleteOnePost = async (req, res) => {
     try {
         const id = req.params.postId;
+        console.log('delete post id', id)
         let activePost = await PostData.findOne({ _id: id, status: { $in: ['Available', 'Negotiating'] } })
         if (!!activePost) {
             await PostData.deleteOne({ _id: id });
