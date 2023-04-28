@@ -99,7 +99,7 @@ export default function Signup({ navigation }) {
                 <View
                     style={{ flex: 1, width: '100%' }}>
                     <View style={styles.avatarView}>
-                        <TouchableOpacity onPress={() => pickImageAlbum()}>
+                        {/* <TouchableOpacity onPress={() => pickImageAlbum()}>
                             <Avatar
                                 size={40}
                                 rounded
@@ -111,7 +111,7 @@ export default function Signup({ navigation }) {
                                 <View style={styles.icon1}>
                                     <FontAwesome name="user-circle" size={40} color="#1177FC" /></View>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     <Text > {error && alert(error)}</Text>
 
@@ -185,7 +185,7 @@ export default function Signup({ navigation }) {
                         value={dateOfBirth}
                     />*/}
 
-                    <Button onPress={() => setShow(true)} title="Select a Date"/>
+                    <Button onPress={() => setShow(true)} title="Select a Date" />
                     {show && (
                         <DateTimePicker
                             testID="dateTimePicker"
