@@ -3,7 +3,7 @@ import { ScrollView, TouchableOpacity, Text, View, StyleSheet, Alert } from 'rea
 import { postItem, updateOnePost } from '../../../network';
 import PostInfo from '../../components/PostInfo/PostInfo';
 import { Context } from '../../context/ContextProvider';
-import firebase from "../../api/firebase";
+import firebase from '../../api/firebase';
 
 // Post A Job Summary Screen - Summary page of the post a job process
 export default function AddJunkSummary({ navigation, route }) {

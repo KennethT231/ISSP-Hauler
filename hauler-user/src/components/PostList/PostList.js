@@ -1,31 +1,50 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { StyleSheet, View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import { Card, Badge, Button } from 'react-native-elements';
 import { FlatList, Swipeable } from 'react-native-gesture-handler';
 import { MaterialIcons } from '@expo/vector-icons';
 import { deleteOnePost } from '../../../network';
+// import firebase from '../../api/firebase';
+import { Context } from '../../context/ContextProvider';
 
 export default function PostsList({ posts, onActiveImagePress, onOffersPress, onAcceptedDetails, onTrackPress, onCompletePress, navigation }) {
     const [error, setError] = useState('');
+    const { currentUser } = useContext(Context)
+    console.log(currentUser.uid)
 
     const swipeableRef = useRef(null);
     // console.log('ref!!', swipeableRef.current)
-    // console.log('posts', posts)
 
-    const onDeletePress = async (postId) => {
-        setError('')
-        const res = await deleteOnePost(postId)
-        if (res === "Post deleted") {
-            navigation.navigate('Confirmation', { confirm: 'delete' })
-        } else {
-            setError(res)
+    const onDeletePress = async (postId, imageUri) => {
+        setError('');
+        try {
+            // Delete the image from Firebase Storage
+            // const regex = /%2..*%2F(.*?)\?alt/;
+            // const match = imageUri.match(regex);
+            // const fileName = match ? match[1] : null;
+
+            // if (fileName) {
+            //     const imageRef = firebase.storage().ref().child(`junk-post-image/${currentUser.uid}/${fileName}`);
+            //     await imageRef.delete();
+            // }
+
+            // Delete the post from the database
+            const res = await deleteOnePost(postId);
+            if (res === "Post deleted") {
+                navigation.navigate('Confirmation', { confirm: 'delete' });
+            } else {
+                setError(res);
+            }
+            console.log('delete post', postId);
+        } catch (e) {
+            console.log(e.message);
+            setError('Error deleting post');
         }
-        console.log('delete post', postId);
     }
 
-    const handleSwipeableOpen = (postId) => {
-        swipeableRef.current?.close();
 
+    const handleSwipeableOpen = (postId, imageUri) => {
+        swipeableRef.current?.close();
         Alert.alert(
             'Delete Post',
             'Are you sure you want to delete this post?',
@@ -36,15 +55,15 @@ export default function PostsList({ posts, onActiveImagePress, onOffersPress, on
                     style: 'destructive',
                     onPress: () => {
                         // call the delete post API here
-                        onDeletePress(postId);
+                        onDeletePress(postId, imageUri);
                     },
                 },
             ],
         );
     };
-    const renderRightActions = (postId) => (
+    const renderRightActions = (postId, imageUri) => (
         <TouchableOpacity
-            onPress={() => handleSwipeableOpen(postId)}
+            onPress={() => handleSwipeableOpen(postId, imageUri)}
             style={styles.rightAction}>
             <MaterialIcons
                 name="delete"
@@ -61,13 +80,14 @@ export default function PostsList({ posts, onActiveImagePress, onOffersPress, on
                 data={posts}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => {
+                    console.log('item', item)
                     return (
                         item && (
                             // conditionally render the swipeable component dependending on the status of the post
                             item.status === 'Available' ? (
                                 <Swipeable
                                     ref={swipeableRef}
-                                    renderRightActions={() => renderRightActions(item._id)}
+                                    renderRightActions={() => renderRightActions(item._id, item.loadImages[0].imageUrl)}
                                     overshootRight={false}>
                                     <View style={styles.cardContainer}>
                                         <Card containerStyle={{ borderRadius: 10, padding: 10 }}>
