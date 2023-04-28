@@ -10,7 +10,7 @@ import { Context } from '../../context/ContextProvider';
 export default function PostsList({ posts, onActiveImagePress, onOffersPress, onAcceptedDetails, onTrackPress, onCompletePress, navigation }) {
     const [error, setError] = useState('');
     const { currentUser } = useContext(Context)
-    console.log(currentUser.uid)
+    //console.log(currentUser.uid)
 
     const swipeableRef = useRef(null);
     // console.log('ref!!', swipeableRef.current)
