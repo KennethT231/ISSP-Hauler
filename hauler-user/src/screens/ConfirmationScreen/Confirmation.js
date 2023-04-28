@@ -32,6 +32,11 @@ export default function Confirmation({ navigation, route }) {
                 <Text style={styles.text}>Job Completed Successfully!!!</Text>
             )
         }
+        else if (confirm === 'paid') {
+            return (
+                <Text style={styles.text}>Payment Success!!!</Text>
+            )
+        }
         else {
             return (
                 <Text style={styles.text}>Offer Declined!!!</Text>
