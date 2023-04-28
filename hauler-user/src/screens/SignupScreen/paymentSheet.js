@@ -70,7 +70,8 @@ export default function PaymentSheet({ navigation, route }) {
       Alert.alert(`Error code: ${error.code}`, error.message);
     } else {
       await markPostPaid(post._id)
-      Alert.alert("Success", "Your order is confirmed!");
+      //Alert.alert("Success", "Your order is confirmed!");
+      navigation.navigate('Confirmation', { confirm: 'paid'});
     }
   };
   return (
