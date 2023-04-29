@@ -20,7 +20,7 @@ const getServiceProvider = async (uid) => {
 // Payment Sheet Screen
 export default function PaymentSheet({ navigation, route }) {
   const post = route.params.post;
-  console.log({ post })
+  console.log('post from payment sheet', post)
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
   const [secret, setSecret] = useState(null);

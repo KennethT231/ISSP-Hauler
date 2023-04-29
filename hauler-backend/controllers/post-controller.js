@@ -262,6 +262,7 @@ const changeJobStatusToDriving = async (req, res) => {
 }
 
 //================================ To change post visibilty on both apps =============================//
+// generate accepted price and service provider id
 const updatePostVisibility = async (req, res) => {
     try {
         const id = req.params.postId;

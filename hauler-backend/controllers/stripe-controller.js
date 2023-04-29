@@ -44,6 +44,7 @@ const createStripeAccountLink = async (req, res) => {
   }
 }
 
+// generate payment intent
 const createPaymentIntent = async (req, res) => {
   console.log(req.body)
   const amount = req.body.amount * 100;
@@ -68,7 +69,9 @@ const createPaymentIntent = async (req, res) => {
       $set: {
         paymentIntent: paymentIntent.id
       }
-    });
+    },
+    { useFindAndModify: false }
+  );
 
   res.json({
     paymentIntent: paymentIntent.client_secret,
