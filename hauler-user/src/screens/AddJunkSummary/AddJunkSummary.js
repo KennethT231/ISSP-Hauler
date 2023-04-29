@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { ScrollView, TouchableOpacity, Text, View, StyleSheet, Alert } from 'react-native'
+import { ScrollView, TouchableOpacity, Text, View, StyleSheet, Alert, ActivityIndicator } from 'react-native'
 import { postItem, updateOnePost } from '../../../network';
 import PostInfo from '../../components/PostInfo/PostInfo';
 import { Context } from '../../context/ContextProvider';
@@ -15,6 +15,7 @@ export default function AddJunkSummary({ navigation, route }) {
     const { currentUser } = useContext(Context)
 
     const [error, setError] = useState('')
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const uploadImage = async () => {
@@ -33,6 +34,7 @@ export default function AddJunkSummary({ navigation, route }) {
     };
 
     const onPostJobSubmitted = async () => {
+        setIsLoading(true); // set isLoading to true to display the loading indicator
         try {
             const response = await uploadImage(); // upload image first and get the response
             const image = await response.ref.getDownloadURL(); // then get the image url from the response
@@ -54,60 +56,73 @@ export default function AddJunkSummary({ navigation, route }) {
                 pickUpPhoneNumber,
                 pickUpSpecialInstructions,
             );
+            setIsLoading(false); // set isLoading to false to hide the loading indicator
             navigation.navigate('Confirmation', { confirm: 'Post' })
         } catch (err) {
             Alert.alert("Please include a photo of the item you want to post")
             console.log('onPostJobSubmitted error:', err);
+        } finally {
+            setIsLoading(false); // set isLoading back to false to hide the loading indicator
         }
     };
 
     return (
         <ScrollView>
             <View style={styles.container}>
-                <PostInfo
-                    postHeading={postHeading}
-                    description={description}
-                    pickUpAddress={pickUpAddress}
-                    image={image}
-                    selectedweight={selectedweight}
-                    selectedquantity={selectedquantity}
-                    pickContactPerson={pickContactPerson}
-                    pickUpPhoneNumber={pickUpPhoneNumber}
-                    pickUpSpecialInstructions={pickUpSpecialInstructions}
-                    sliderValue={sliderValue}
-                    dropOffAddress=''
-                    junkSummaryRoute={route}
-                />
-                {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('AddItemScreen')}><Text style={styles.buttonTitle}> Edit </Text></TouchableOpacity> */}
-                {operation === "create" ?
-                    <TouchableOpacity style={styles.button}
-                        onPress={onPostJobSubmitted}><Text style={styles.buttonTitle}>Post a Job</Text></TouchableOpacity> :
-                    <TouchableOpacity style={styles.button}
-                        onPress={async () => {
-                            setError('')
-                            const res = await updateOnePost(
-                                postId,
-                                // service,
-                                postHeading,
-                                description,
-                                selectedweight,
-                                selectedquantity,
-                                imageUrl ? imageUrl : image,
-                                sliderValue,
-                                pickUpAddress,
-                                pickUpCity,
-                                pickUpAddressLat,
-                                pickUpAddressLng,
-                                pickContactPerson,
-                                pickUpPhoneNumber,
-                                pickUpSpecialInstructions,
-                            );
-                            if (res === 'Post updated') {
-                                navigation.navigate('Confirmation', { confirm: 'Edit' })
-                            } else {
-                                setError(res)
-                            }
-                        }}><Text style={styles.buttonTitle}>Submit Edited Post</Text></TouchableOpacity>}
+                {isLoading ?
+                    <View style={styles.loading}>
+                        <ActivityIndicator size="large" color="#0000ff" />
+                    </View>
+                    : (
+                        <>
+                            <PostInfo
+                                postHeading={postHeading}
+                                description={description}
+                                pickUpAddress={pickUpAddress}
+                                image={image}
+                                selectedweight={selectedweight}
+                                selectedquantity={selectedquantity}
+                                pickContactPerson={pickContactPerson}
+                                pickUpPhoneNumber={pickUpPhoneNumber}
+                                pickUpSpecialInstructions={pickUpSpecialInstructions}
+                                sliderValue={sliderValue}
+                                dropOffAddress=''
+                                junkSummaryRoute={route}
+                            />
+                            {operation === "create" ?
+                                <TouchableOpacity style={styles.button}
+                                    onPress={onPostJobSubmitted}>
+                                    <Text style={styles.buttonTitle}>Post a Job</Text>
+                                </TouchableOpacity>
+                                :
+                                <TouchableOpacity style={styles.button}
+                                    onPress={async () => {
+                                        setError('')
+                                        const res = await updateOnePost(
+                                            postId,
+                                            // service,
+                                            postHeading,
+                                            description,
+                                            selectedweight,
+                                            selectedquantity,
+                                            imageUrl ? imageUrl : image,
+                                            sliderValue,
+                                            pickUpAddress,
+                                            pickUpCity,
+                                            pickUpAddressLat,
+                                            pickUpAddressLng,
+                                            pickContactPerson,
+                                            pickUpPhoneNumber,
+                                            pickUpSpecialInstructions,
+                                        );
+                                        if (res === 'Post updated') {
+                                            navigation.navigate('Confirmation', { confirm: 'Edit' })
+                                        } else {
+                                            setError(res)
+                                        }
+                                    }}><Text style={styles.buttonTitle}>Submit Edited Post</Text></TouchableOpacity>}
+                        </>
+                    )}
             </View>
             <Text > {error && alert(error)}</Text>
         </ScrollView>
@@ -121,6 +136,11 @@ const styles = StyleSheet.create({
         width: '100%',
         minHeight: 600,
         paddingVertical: 10
+    },
+    loading: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     button: {
         backgroundColor: '#0177FC',

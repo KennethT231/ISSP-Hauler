@@ -2,8 +2,8 @@ import axios from "axios";
 //import { NETWORK_URL } from "@env";
 
 //const url = NETWORK_URL;
-const url = "https://hauler-backend-production.up.railway.app"
-// const url = "http://192.168.1.66:3000"
+// const url = "https://hauler-backend-production.up.railway.app"
+const url = "http://192.168.1.66:3000"
 console.log("Connectimg to server");
 console.log(url);
 
@@ -290,6 +290,7 @@ export async function createPaymentIntent(postId, amount, serviceProviderAccount
       amount: amount,
       serviceProviderAccount: serviceProviderAccount
     })
+    console.log('data from createPaymentIntetn', res.data)
     return res.data
   } catch (err) {
     console.log(err)

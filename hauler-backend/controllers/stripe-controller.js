@@ -3,50 +3,51 @@ const ServiceProviderData = require('../models/serviceProviderProfile')
 const PostData = require('../models/posts')
 
 const createStripeAccount = async (req, res) => {
-    const serviceProviderID = req.body.serviceProviderID;
-    try { 
+  const serviceProviderID = req.body.serviceProviderID;
+  try {
     const account = await stripe.accounts.create({
-        type: 'express',
-        country: 'CA',
-        email: req.body.email,
-        capabilities: {
-          transfers: {requested: true},
-        },
-      });
-  
-      const updateWithStripe = await ServiceProviderData.findOneAndUpdate({uid:serviceProviderID},{stripeAcc:account.id});
+      type: 'express',
+      country: 'CA',
+      email: req.body.email,
+      capabilities: {
+        transfers: { requested: true },
+      },
+      // requested_capabilities: ['card_payment', 'transfers'],
+    });
 
-      const accountLink = await stripe.accountLinks.create({
-        account: account.id,
-        refresh_url: `http://${req.body.appUrl}`,
-        return_url: `http://${req.body.appUrl}`,
-        type: 'account_onboarding',
-      });
-      res.send(accountLink.url)
-    } catch (err) {
-        console.log(err)
-    }
+    const updateWithStripe = await ServiceProviderData.findOneAndUpdate({ uid: serviceProviderID }, { stripeAcc: account.id });
 
-}
-
-const createStripeAccountLink = async(req, res) => {
-    try {
     const accountLink = await stripe.accountLinks.create({
-        account: req.body.accountId,
-        refresh_url: `http://${req.body.appUrl}`,
-        return_url: `http://${req.body.appUrl}`,
-        type: 'account_onboarding',
-      });
-      console.log(accountLink)
-    } catch (err) {
-        console.log(err)
-    }
+      account: account.id,
+      refresh_url: `http://${req.body.appUrl}`,
+      return_url: `http://${req.body.appUrl}`,
+      type: 'account_onboarding',
+    });
+    res.send(accountLink.url)
+  } catch (err) {
+    console.log(err)
+  }
+
 }
 
-const createPaymentIntent = async(req, res) => {
+const createStripeAccountLink = async (req, res) => {
+  try {
+    const accountLink = await stripe.accountLinks.create({
+      account: req.body.accountId,
+      refresh_url: `http://${req.body.appUrl}`,
+      return_url: `http://${req.body.appUrl}`,
+      type: 'account_onboarding',
+    });
+    console.log(accountLink)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
+const createPaymentIntent = async (req, res) => {
   console.log(req.body)
   const amount = req.body.amount * 100;
-  const applicationFee = amount *0.13;
+  const applicationFee = amount * 0.13;
   const paymentIntent = await stripe.paymentIntents.create({
     amount: amount,
     currency: 'cad',
@@ -60,13 +61,13 @@ const createPaymentIntent = async(req, res) => {
     },
   });
 
-console.log(paymentIntent.client_secret)
+  console.log(paymentIntent.client_secret)
 
   await PostData.findOneAndUpdate({ _id: req.body.postId },
     {
-        $set: {
-          paymentIntent: paymentIntent.id
-        }
+      $set: {
+        paymentIntent: paymentIntent.id
+      }
     });
 
   res.json({

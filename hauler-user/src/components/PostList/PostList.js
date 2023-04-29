@@ -7,6 +7,7 @@ import { deleteOnePost } from '../../../network';
 // import firebase from '../../api/firebase';
 import { Context } from '../../context/ContextProvider';
 
+// List of posts at the home screen
 export default function PostsList({ posts, onActiveImagePress, onOffersPress, onAcceptedDetails, onTrackPress, onCompletePress, navigation }) {
     const [error, setError] = useState('');
     const { currentUser } = useContext(Context)
@@ -67,7 +68,7 @@ export default function PostsList({ posts, onActiveImagePress, onOffersPress, on
             style={styles.rightAction}>
             <MaterialIcons
                 name="delete"
-                size={40}
+                size={35}
                 color="red"
                 style={styles.actionIcon}
             />
