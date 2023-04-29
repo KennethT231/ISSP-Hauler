@@ -45,7 +45,7 @@ const postChangeEventEmitter = PostModel.watch(pipeline, options)
 postChangeEventEmitter.on('change', (change) => {
 
     paymentIntent = change.fullDocument.paymentIntent
-    console.log(change.fullDocument.paymentIntent)
+    console.log('change.fullDocument.paymentIntent', change.fullDocument.paymentIntent)
 
     amountToCapture = change.fullDocument.acceptedPrice * 100;
 
