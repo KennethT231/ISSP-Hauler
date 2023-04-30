@@ -1,41 +1,42 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, Image, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Card, Button } from 'react-native-elements'
 import ServiceProviderCard from '../../components/ServiceProviderCard/ServiceProviderCard';
-import {getOneServiceProvider, getOnePost} from '../../../network'
+import { getOneServiceProvider, getOnePost } from '../../../network'
 
 export default function JobOffers({ navigation, route }) {
     const { postId } = route.params;
+    console.log('job offers')
 
     const [post, setPost] = useState('')
-    const[serviceProviders, setServiceProviders] = useState('')
+    const [serviceProviders, setServiceProviders] = useState('')
 
-    const onStatusDetailsPress =(value) =>{
+    const onStatusDetailsPress = (value) => {
         navigation.navigate('OfferDetails', { serviceProviderId: value.serviceProviderId, postId: value.postId })
     }
 
     useEffect(() => {
-            (async () => {
-                const newPost = await getOnePost(postId)
-                setPost(newPost)
-                const serviceProvidersIds = [newPost.response.slice(1).map(a => { return a.serviceProviderId })]
-                const serviceProviders = await Promise.all( serviceProvidersIds[0].map(async (a) => {
-                    if (!!a) {
-                        return await getOneServiceProvider(a);
-                    } else { return null }
-                }))
-                setServiceProviders(serviceProviders)
-            })()
+        (async () => {
+            const newPost = await getOnePost(postId)
+            setPost(newPost)
+            const serviceProvidersIds = [newPost.response.slice(1).map(a => { return a.serviceProviderId })]
+            const serviceProviders = await Promise.all(serviceProvidersIds[0].map(async (a) => {
+                if (!!a) {
+                    return await getOneServiceProvider(a);
+                } else { return null }
+            }))
+            setServiceProviders(serviceProviders)
+        })()
     }, [])
 
     return (
-        <View style={styles.container}>     
+        <View style={styles.container}>
             <ServiceProviderCard
                 post={post}
                 serviceProviders={serviceProviders}
                 onStatusDetailsPress={onStatusDetailsPress}
-                 />
+            />
         </View>
     )
 }
@@ -47,7 +48,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'white'
     },
     text: {
-       width: '100%'
+        width: '100%'
     },
     btnContainer: {
         display: 'flex',
