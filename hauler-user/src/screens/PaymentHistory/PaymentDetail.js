@@ -31,8 +31,8 @@ const PaymentDetail = () => {
                 <Text style={styles.heading}>Pickup Details</Text>
                 <Text style={styles.label}>Address:</Text>
                 <Text style={styles.text}>{post.pickUpAddress}</Text>
-                <Text style={styles.label}>City:</Text>
-                <Text style={styles.text}>{post.pickUpCity}</Text>
+                {/*<Text style={styles.label}>City:</Text>
+                <Text style={styles.text}>{post.pickUpCity}</Text>*/}
                 <Text style={styles.label}>Contact Person:</Text>
                 <Text style={styles.text}>{post.pickUpContactPerson}</Text>
                 <Text style={styles.label}>Contact Number:</Text>
@@ -45,8 +45,8 @@ const PaymentDetail = () => {
                     <Text style={styles.heading}>Dropoff Details</Text>
                     <Text style={styles.label}>Address:</Text>
                     <Text style={styles.text}>{post.dropOffAddress}</Text>
-                    <Text style={styles.label}>City:</Text>
-                    <Text style={styles.text}>{post.dropOffCity}</Text>
+                    {/*<Text style={styles.label}>City:</Text>
+                    <Text style={styles.text}>{post.dropOffCity}</Text>*/}
                     <Text style={styles.label}>Contact Person:</Text>
                     <Text style={styles.text}>{post.dropOffContactPerson}</Text>
                     <Text style={styles.label}>Contact Number:</Text>
