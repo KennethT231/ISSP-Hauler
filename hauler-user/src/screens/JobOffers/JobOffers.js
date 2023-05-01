@@ -30,6 +30,8 @@ export default function JobOffers({ navigation, route }) {
         })()
     }, [])
 
+    console.log({ serviceProviders })
+
     return (
         <View style={styles.container}>
             <ServiceProviderCard
