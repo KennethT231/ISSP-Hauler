@@ -132,7 +132,7 @@ const PaymentHistory = ({ navigation }) => {
                 )}
             </View>
             <View style={styles.chartContainer}>
-                {isPaid && (
+                {isPaid.length > 0 ? (
                     <BarChart
                         data={chartData}
                         width={380}
@@ -141,7 +141,7 @@ const PaymentHistory = ({ navigation }) => {
                         chartConfig={chartConfig}
                         style={styles.chart}
                     />
-                )}
+                ): <Text>No Payment History</Text>}
             </View>
 
             {/* total spent amount */}
