@@ -257,6 +257,18 @@ export default function Profile1({ navigation }) {
                             </ScrollView>
                         </Modal>
                     </View>
+                    {/* payment history */}
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            style={styles.paymentHistoryButton}
+                            disabled={!!loading} // added !!
+                            onPress={() => onPaymentHistoryClicked()}
+                        >
+                            <Text style={styles.buttonTitle}>
+                                Payment History
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
                             style={[styles.buttons, styles.editButton]}
@@ -269,18 +281,6 @@ export default function Profile1({ navigation }) {
                             disabled={!!loading} // added !!
                             onPress={() => onSignOutClicked()}>
                             <Text style={styles.buttonTitle}>Log Out</Text>
-                        </TouchableOpacity>
-                    </View>
-                    {/* payment history */}
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                            style={styles.paymentHistoryButton}
-                            disabled={!!loading} // added !!
-                            onPress={() => onPaymentHistoryClicked()}
-                        >
-                            <Text style={styles.buttonTitle}>
-                                Payment History
-                            </Text>
                         </TouchableOpacity>
                     </View>
 
