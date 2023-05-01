@@ -195,7 +195,9 @@ export default function Signup({ navigation }) {
                             <Text style={styles.buttonTitle}>Upload Void Cheque</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={styles.buttons}>
+                            style={styles.buttons} onPress={
+                                () => navigation.navigate('Verification')}>
+                            
                             <Text style={styles.buttonTitle}>Upload Driver License</Text>
                         </TouchableOpacity>
                         <TouchableOpacity

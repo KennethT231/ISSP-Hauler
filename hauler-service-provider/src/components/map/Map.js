@@ -10,6 +10,7 @@ import * as Location from 'expo-location';
 import { sendGpsCordinates } from '../../../network';
 import { getDistance } from "geolib";
 import { markDriverArrival } from '../../../network';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function Map({ navigation,route }) {
   const { width, height } = Dimensions.get("window");
@@ -115,6 +116,7 @@ export default function Map({ navigation,route }) {
 
           if (distance < 50) {
             //send a notification to the backend that the driver has arrived
+            console.log("driver has arrived");
             markDriverArrival(post._id);
             Alert.alert(
               "You have arrived!",
@@ -123,7 +125,7 @@ export default function Map({ navigation,route }) {
                 {
                   text: "OK",
                   onPress: () => {
-                    navigation.navigate("MyJobListNavigator", { screen: "MyJobList" });
+                    // navigation.navigate("MyJobListNavigator", { screen: "MyJobList" });
                     Location.stopLocationUpdatesAsync(location);
                   },
                 },
@@ -135,12 +137,14 @@ export default function Map({ navigation,route }) {
   }, [permissions]);
 
   return (
-    <View style={styles.mapContainer}>
+    <ScrollView contentContainerStyle = {styles.container}>
+      <View style={styles.header}>
       <Text style={styles.listTitle}>Pickup Address: {post.pickUpAddress}</Text>
       <Text style={styles.listTitle}>Dropoff Address: {post.dropOffAddress}</Text>
       <Text style={styles.listTitle}>Distance: {distance} meters</Text>
+    </View>
 
-      <TouchableOpacity style={[styles.button, styles.startRouteButton]} onPress={() => {
+      <TouchableOpacity style={[styles.backButton]} onPress={() => {
         navigation.navigate("MyJobListNavigator", {screen: "MyJobList"});
         Location.stopLocationUpdatesAsync(location);
       }
@@ -187,7 +191,7 @@ export default function Map({ navigation,route }) {
           <Text style={[styles.buttonTitle, styles.listTitle]}>Arrived on Site</Text>
                     </TouchableOpacity>
       }
-    </View>
+    </ScrollView>
     );
 };
 
@@ -213,6 +217,15 @@ export default function Map({ navigation,route }) {
     },
     button: {
       backgroundColor: '#06C167',
+      marginVertical: 10,
+      height: 48,
+      borderRadius: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '90%'
+    },
+    backButton: {
+      backgroundColor: '#FF0000',
       marginVertical: 10,
       height: 48,
       borderRadius: 10,

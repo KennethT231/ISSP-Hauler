@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 import Signin from '../../../screens/SigninScreen/Signin';
 import SignUp from '../../../screens/SignUpScreen/SignUp';
 import Home from '../../../screens/HomeScreen/Home';
+import Verification from '../../../screens/Verification/Verification';
 import { Context } from '../../../context/ContextProvider';
 
 const HomeStack = createStackNavigator();
@@ -30,6 +31,12 @@ const HomeNavigator = () => {
                         component={SignUp}
                         // options={{ headerShown: false }}
                     />
+                    <HomeStack.Screen
+                        name='Verification'
+                        component={Verification}
+                        // options={{ headerShown: false }}
+                    />
+
                 </>
                 :
                 <>
