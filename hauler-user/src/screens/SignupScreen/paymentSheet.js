@@ -20,7 +20,7 @@ const getServiceProvider = async (uid) => {
 // Payment Sheet Screen
 export default function PaymentSheet({ navigation, route }) {
   const post = route.params.post;
-  console.log({ post })
+  console.log('post from payment sheet', post)
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
   const [secret, setSecret] = useState(null);
@@ -29,17 +29,21 @@ export default function PaymentSheet({ navigation, route }) {
   // need to add servive provider strip account id to schem and post here
   const fetchPaymentSheetParams = async () => {
     const serviceProviderFetch = await getServiceProvider(post.acceptedServiceProvider)
+    // get service provider after payment made
+    console.log({ serviceProviderFetch })
     setServiceProvider(serviceProviderFetch)
     const intent = await createPaymentIntent(
       post._id,
       post.acceptedPrice,
       serviceProviderFetch.stripeAcc
     );
+    console.log({ intent })
     return intent;
   };
 
   const initializePaymentSheet = async () => {
     const { paymentIntent } = await fetchPaymentSheetParams();
+    console.log({ paymentIntent })
     setSecret(paymentIntent);
     const { error } = await initPaymentSheet({
       merchantDisplayName: "Hauler",
@@ -61,7 +65,7 @@ export default function PaymentSheet({ navigation, route }) {
   }, []);
 
   const openPaymentSheet = async () => {
-    console.log(secret);
+    console.log('secret', secret);
     const { error } = await presentPaymentSheet({
       clientSecret: secret,
     });
@@ -70,7 +74,8 @@ export default function PaymentSheet({ navigation, route }) {
       Alert.alert(`Error code: ${error.code}`, error.message);
     } else {
       await markPostPaid(post._id)
-      Alert.alert("Success", "Your order is confirmed!");
+      //Alert.alert("Success", "Your order is confirmed!");
+      navigation.navigate('Confirmation', { confirm: 'paid' });
     }
   };
   return (

@@ -3,6 +3,7 @@ import axios from "axios";
 
 //const url = NETWORK_URL;
 const url = "https://hauler-backend-production.up.railway.app"
+// const url = "http://192.168.1.66:3000"
 console.log("Connectimg to server");
 console.log(url);
 
@@ -201,7 +202,7 @@ export async function updatePostVisibility(
       price: actionPrice,
       serviceProviderId: serviceProviderId,
     });
-    console.log("Hide post");
+    console.log("Hide post", res.data);
     return res;
   } catch (err) {
     console.log(err);
@@ -289,6 +290,7 @@ export async function createPaymentIntent(postId, amount, serviceProviderAccount
       amount: amount,
       serviceProviderAccount: serviceProviderAccount
     })
+    console.log('data from createPaymentIntetn', res.data)
     return res.data
   } catch (err) {
     console.log(err)

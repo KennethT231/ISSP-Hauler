@@ -12,14 +12,15 @@ const BottomTabNavigation = () => {
     return (
         <BottomTab.Navigator
             initialRouteName='Home'
-            tabBarOptions={{
-                keyboardHidesTabBar: true,
-                showLabel: false,
-                goBack: 'history',
-                style: {
-                    backgroundColor: 'grey',
-                    height: '8%',
-                },
+            screenOptions={{
+                "tabBarHideOnKeyboard": true,
+                "tabBarShowLabel": false,
+                "tabBarStyle": [
+                    {
+                    "display": "flex"
+                    },
+                    null
+                ]
             }}
         >
             <BottomTab.Screen
