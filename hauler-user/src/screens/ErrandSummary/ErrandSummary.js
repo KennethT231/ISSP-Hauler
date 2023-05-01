@@ -1,12 +1,14 @@
 import React, { useContext, useState, useRef } from 'react'
-import { Text, View, Dimensions, StyleSheet } from 'react-native'
+import { Text, View, Dimensions, StyleSheet, Alert, ActivityIndicator } from 'react-native'
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { Context } from '../../context/ContextProvider';
 import { postItem, updateOnePost } from '../../../network';
 import PostInfo from '../../components/PostInfo/PostInfo'
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
+import { Marker } from 'react-native-maps';
 //import { GOOGLE_MAP_API } from '@env';
+import firebase from '../../api/firebase';
 
 export default function ErrandSummary({ navigation, route }) {
     const { width, height } = Dimensions.get('window');
@@ -31,126 +33,170 @@ export default function ErrandSummary({ navigation, route }) {
         }
     ])
 
+    const [isLoading, setIsLoading] = useState(false);
+
+
+    const uploadImage = async () => {
+        try {
+            if (!image) {
+                return null; // if no image is selected, return null
+            }
+            const response = await fetch(image.uri);
+            const blob = await response.blob();
+            const ref = firebase.storage().ref().child(`errand-moving-post-image/${currentUser.uid}${image.uri.substring(image.uri.lastIndexOf('/') + 1)}`);
+            const snapshot = await ref.put(blob);
+            return snapshot;
+        } catch (e) {
+            console.log(e.message);
+        }
+    };
+
+
+    const onPostJobSubmitted = async () => {
+        setIsLoading(true); // set isLoading to true to display the loading indicator
+        try {
+            const response = await uploadImage(); // upload image first and get the response
+            const image = await response.ref.getDownloadURL(); // then get the image url from the response
+            console.log('post image url:', image);
+            await postItem(
+                currentUser.uid,
+                service,
+                postHeading,
+                description,
+                selectedweight,
+                selectedquantity,
+                image,
+                sliderValue,
+                pickUpAddress,
+                pickUpCity,
+                pickUpAddressLat,
+                pickUpAddressLng,
+                pickContactPerson,
+                pickUpPhoneNumber,
+                pickUpSpecialInstructions,
+                dropOffAddress,
+                dropOffCity,
+                dropOffAddressLat,
+                dropOffAddressLng,
+                dropOffContactPerson,
+                dropOffPhoneNumber,
+                dropOffSpecialInstructions,
+                distance
+            );
+            setIsLoading(false); // set isLoading to false to hide the loading indicator
+            navigation.navigate('Confirmation', { confirm: 'Post' })
+        } catch (err) {
+            Alert.alert("Please include a photo of the item you want to post")
+            console.log('onPostJobSubmitted error:', err);
+        } finally {
+            setIsLoading(false); // set isLoading to false to hide the loading indicator
+        }
+    };
+
     return (
         <ScrollView>
             <View style={styles.container}>
-                <PostInfo
-                    postHeading={postHeading}
-                    description={description}
-                    selectedweight={selectedweight}
-                    selectedquantity={selectedquantity}
-                    pickUpAddress={pickUpAddress}
-                    image={image}
-                    pickContactPerson={pickContactPerson}
-                    pickUpPhoneNumber={pickUpPhoneNumber}
-                    pickUpSpecialInstructions={pickUpSpecialInstructions}
-                    dropOffAddress={dropOffAddress}
-                    dropOffContactPerson={dropOffContactPerson}
-                    dropOffContactNumber={dropOffPhoneNumber}
-                    dropOffSpecialInstruction={dropOffSpecialInstructions}
-                    sliderValue={sliderValue}
-                    distance={distance}
-                    duration={duration}
-                />
-                <MapView
-                    style={styles.map}
-                    ref={mapView}
-                >
-                    {coordinates.map((coordinate, index) =>
-                        <MapView.Marker key={`coordinate_${index}`} coordinate={coordinate}
-                        />
-                    )}
-                    <MapViewDirections
-                        apikey={"AIzaSyCMvEs9takJvuKNDt0RaIm-xfZH2uCUr-s"}
-                        origin={coordinates[0]}
-                        waypoints={coordinates}
-                        destination={coordinates[coordinates.length - 1]}
-                        strokeWidth={3}
-                        strokeColor='#DE0303'
-                        optimizeWaypoints={true}
-                        onReady={result => {
-                            setDistance(result.distance)
-                            setDuration(result.duration)
-                            mapView.current.fitToCoordinates(result.coordinates, {
-                                edgePadding: {
-                                    right: (width / 20),
-                                    bottom: (height / 20),
-                                    left: (width / 20),
-                                    top: (height / 20),
-                                }
-                            }
-                            );
-                        }}
-                        onError={(errorMessage) => {
-                            console.log(`Error: ${errorMessage}`);
-                        }}
-                    />
-                </MapView>
-                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ErrandPost1')}><Text style={styles.buttonTitle}> Edit </Text></TouchableOpacity>
+                {isLoading ?
+                    <View style={styles.loading}>
+                        <ActivityIndicator size="large" color="#0177FC" />
+                    </View>
+                    : (
+                        <>
+                            <PostInfo
+                                postHeading={postHeading}
+                                description={description}
+                                selectedweight={selectedweight}
+                                selectedquantity={selectedquantity}
+                                pickUpAddress={pickUpAddress}
+                                image={image}
+                                pickContactPerson={pickContactPerson}
+                                pickUpPhoneNumber={pickUpPhoneNumber}
+                                pickUpSpecialInstructions={pickUpSpecialInstructions}
+                                dropOffAddress={dropOffAddress}
+                                dropOffContactPerson={dropOffContactPerson}
+                                dropOffContactNumber={dropOffPhoneNumber}
+                                dropOffSpecialInstruction={dropOffSpecialInstructions}
+                                sliderValue={sliderValue}
+                                distance={distance}
+                                duration={duration}
+                                errandSummaryRoute={route}
+                            />
+                            <MapView
+                                style={styles.map}
+                                ref={mapView}
+                            >
+                                {coordinates.map((coordinate, index) =>
+                                    <Marker key={`coordinate_${index}`} coordinate={coordinate}
+                                    />
+                                )}
+                                <MapViewDirections
+                                    apikey={"AIzaSyCMvEs9takJvuKNDt0RaIm-xfZH2uCUr-s"}
+                                    origin={coordinates[0]}
+                                    waypoints={coordinates}
+                                    destination={coordinates[coordinates.length - 1]}
+                                    strokeWidth={3}
+                                    strokeColor='#DE0303'
+                                    optimizeWaypoints={true}
+                                    onReady={result => {
+                                        setDistance(result.distance)
+                                        setDuration(result.duration)
+                                        mapView.current.fitToCoordinates(result.coordinates, {
+                                            edgePadding: {
+                                                right: (width / 20),
+                                                bottom: (height / 20),
+                                                left: (width / 20),
+                                                top: (height / 20),
+                                            }
+                                        }
+                                        );
+                                    }}
+                                    onError={(errorMessage) => {
+                                        console.log(`Error: ${errorMessage}`);
+                                    }}
+                                />
+                            </MapView>
+                            {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ErrandPost1')}><Text style={styles.buttonTitle}> Edit </Text></TouchableOpacity> */}
 
-                {operation === "create" ?
-                    <TouchableOpacity style={styles.button} onPress={async () => {
-                        await postItem(
-                            currentUser.uid,
-                            service,
-                            postHeading,
-                            description,
-                            selectedweight,
-                            selectedquantity,
-                            image,
-                            sliderValue,
-                            pickUpAddress,
-                            pickUpCity,
-                            pickUpAddressLat,
-                            pickUpAddressLng,
-                            pickContactPerson,
-                            pickUpPhoneNumber,
-                            pickUpSpecialInstructions,
-                            dropOffAddress,
-                            dropOffCity,
-                            dropOffAddressLat,
-                            dropOffAddressLng,
-                            dropOffContactPerson,
-                            dropOffPhoneNumber,
-                            dropOffSpecialInstructions,
-                            distance
-                        ); navigation.navigate('Confirmation', { confirm: 'Post' })
-                    }}><Text style={styles.buttonTitle}> Post the Job </Text></TouchableOpacity>
-                    :
-                    <TouchableOpacity style={styles.button}
-                        onPress={async () => {
-                            setError('')
-                           const res=  await updateOnePost(
-                                postId,
-                                // service,
-                                postHeading,
-                                description,
-                                selectedweight,
-                                selectedquantity,
-                                // imageUrl,
-                                sliderValue,
-                                pickUpAddress,
-                                pickUpCity,
-                                pickUpAddressLat,
-                                pickUpAddressLng,
-                                pickContactPerson,
-                                pickUpPhoneNumber,
-                                pickUpSpecialInstructions,
-                                dropOffAddress,
-                                dropOffCity,
-                                dropOffAddressLat,
-                                dropOffAddressLng,
-                                dropOffContactPerson,
-                                dropOffPhoneNumber,
-                                dropOffSpecialInstructions,
-                                distance,
-                            );
-                            if (res === 'Post updated') {
-                                navigation.navigate('Confirmation', { confirm: 'Edit' })
-                            } else {
-                                setError(res)
-                            }
-                        }}><Text style={styles.buttonTitle}>Submit Edited Post</Text></TouchableOpacity>}
+                            {operation === "create" ?
+                                <TouchableOpacity style={styles.button} onPress={onPostJobSubmitted}
+                                ><Text style={styles.buttonTitle}> Post the Job </Text></TouchableOpacity>
+                                :
+                                <TouchableOpacity style={styles.button}
+                                    onPress={async () => {
+                                        setError('')
+                                        const res = await updateOnePost(
+                                            postId,
+                                            // service,
+                                            postHeading,
+                                            description,
+                                            selectedweight,
+                                            selectedquantity,
+                                            imageUrl ? imageUrl : image,
+                                            sliderValue,
+                                            pickUpAddress,
+                                            pickUpCity,
+                                            pickUpAddressLat,
+                                            pickUpAddressLng,
+                                            pickContactPerson,
+                                            pickUpPhoneNumber,
+                                            pickUpSpecialInstructions,
+                                            dropOffAddress,
+                                            dropOffCity,
+                                            dropOffAddressLat,
+                                            dropOffAddressLng,
+                                            dropOffContactPerson,
+                                            dropOffPhoneNumber,
+                                            dropOffSpecialInstructions,
+                                            distance,
+                                        );
+                                        if (res === 'Post updated') {
+                                            navigation.navigate('Confirmation', { confirm: 'Edit' })
+                                        } else {
+                                            setError(res)
+                                        }
+                                    }}><Text style={styles.buttonTitle}>Submit Edited Post</Text></TouchableOpacity>}
+                        </>
+                    )}
             </View>
             <Text > {error && alert(error)}</Text>
         </ScrollView>
@@ -162,6 +208,11 @@ const styles = StyleSheet.create({
         flex: 1,
         minHeight: 600,
         backgroundColor: 'white',
+    },
+    loading: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     screenHeading: {
         fontSize: 30,

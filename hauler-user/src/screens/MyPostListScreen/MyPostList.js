@@ -5,7 +5,7 @@ import SearchByLocation from '../../components/SearchByLocation/SearchByLocation
 import PostsList from '../../components/PostList/PostList'
 import { Context } from '../../context/ContextProvider'
 import { useIsFocused } from "@react-navigation/native";
-import { getAllPosts, getPostsByIdAndLocation, getPostsByIdAndService,markJobComplete} from '../../../network';
+import { getAllPosts, getPostsByIdAndLocation, getPostsByIdAndService, markJobComplete } from '../../../network';
 
 
 export default function MyPostList({ navigation }) {
@@ -17,29 +17,40 @@ export default function MyPostList({ navigation }) {
     const [posts, setPosts] = useState('')
 
     const searchService = async (value) => {
-        const posts = await getPostsByIdAndService(currentUser && currentUser.uid, value.service)
-        setPosts(posts)
+        if(service === null || service === ''){
+            const posts = await getAllPosts(currentUser.uid)
+            setPosts(posts)
+        } else {
+            const posts = await getPostsByIdAndService(currentUser && currentUser.uid, value.service)
+            setPosts(posts)
+        }
+        //setPosts(posts)
     }
 
     const searchLocation = async (value) => {
-        const posts = await getPostsByIdAndLocation(currentUser && currentUser.uid, value.location)
-        setPosts(posts)
+        if(location === null || location === ''){
+            const posts = await getAllPosts(currentUser.uid)
+            setPosts(posts)
+        } else {
+            const posts = await getPostsByIdAndLocation(currentUser && currentUser.uid, value.location)
+            setPosts(posts)
+        }
     }
-    
+
     const onActiveImagePress = async (value) => {
-        navigation.navigate('PostDetails', {postId: value.postId})
+        navigation.navigate('PostDetails', { postId: value.postId })
     }
 
     const onAcceptedDetails = async (value) => {
-        navigation.navigate('PostDetails', {postId: value.postId})
+        navigation.navigate('PostDetails', { postId: value.postId })
     }
 
     const onOffersPress = async (value) => {
-        navigation.navigate('JobOffers', {postId: value.postId})
+        navigation.navigate('JobOffers', { postId: value.postId })
     }
 
     const onTrackPress = async (value) => {
-        navigation.navigate('TrackingMap', {post: value.post})
+        navigation.navigate('TrackingMap', { post: value.post })
     }
 
     const onCompletePress = async (value) => {
@@ -48,17 +59,19 @@ export default function MyPostList({ navigation }) {
             "Alert",
             "Comfirm the driver picked up load",
             [
-              {
-                text: "Cancel",
-                style: "cancel"
-              },
-              { text: "Continue",
-               onPress: async() =>{
-                await markJobComplete(value.postId)
-                navigation.navigate('Confirmation',{confirm:'complete'})
-            }}
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "Continue",
+                    onPress: async () => {
+                        await markJobComplete(value.postId)
+                        navigation.navigate('Confirmation', { confirm: 'complete' })
+                    }
+                }
             ]
-          );
+        );
     }
 
     useEffect(() => {
@@ -69,8 +82,8 @@ export default function MyPostList({ navigation }) {
             })()
     }, [isFocused])
 
-return (
-    <View style={styles.container}>
+    return (
+        <View style={styles.container}>
             <SearchByLocation
                 location={location}
                 setLocation={setLocation}
@@ -87,7 +100,7 @@ return (
                 onAcceptedDetails={onAcceptedDetails}
                 onOffersPress={onOffersPress}
                 onTrackPress={onTrackPress}
-                onCompletePress= {onCompletePress}
+                onCompletePress={onCompletePress}
                 navigation={navigation}
             />
         </View>

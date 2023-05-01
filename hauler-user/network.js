@@ -3,6 +3,7 @@ import axios from "axios";
 
 //const url = NETWORK_URL;
 const url = "https://hauler-backend-production.up.railway.app"
+// const url = "http://192.168.1.66:3000"
 console.log("Connectimg to server");
 console.log(url);
 
@@ -82,8 +83,9 @@ export async function postItem(
       postDescription: description,
       loadWeight: selectedweight,
       numberOfItems: selectedquantity,
-      imageUrl:
-        "https://cdn.apartmenttherapy.info/image/upload/v1558596110/at/archive/e06c0d4c7d9800f5d664133bf5185b850372f018.jpg",
+      imageUrl: image,
+      // imageUrl:
+      //   "https://cdn.apartmenttherapy.info/image/upload/v1558596110/at/archive/e06c0d4c7d9800f5d664133bf5185b850372f018.jpg",
       price: sliderValue,
       pickUpAddress: pickUpAddress,
       pickUpCity: pickUpCity,
@@ -200,7 +202,7 @@ export async function updatePostVisibility(
       price: actionPrice,
       serviceProviderId: serviceProviderId,
     });
-    console.log("Hide post");
+    console.log("Hide post", res.data);
     return res;
   } catch (err) {
     console.log(err);
@@ -239,8 +241,9 @@ export async function updateOneUser(
     const res = await axios.post(`${url}/api/users/${uid}`, {
       firstName: firstName,
       lastName: lastName,
-      profilePicUrl:
-        "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/217078i525F6A9EF292601F/image-size/large?v=v2&px=999",
+      profilePicUrl: profilePicUrl,
+      // profilePicUrl:
+      //   "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/217078i525F6A9EF292601F/image-size/large?v=v2&px=999",
       dateOfBirth: dateOfBirth,
       province: province,
       city: city,
@@ -251,9 +254,10 @@ export async function updateOneUser(
       expiryDate: expiryDate,
       cvv: cvv,
     });
+    console.log('updateOneUser response:', JSON.stringify(res.data));
     return res.data;
   } catch (err) {
-    console.log(err);
+    console.log('updateOneUser error:', err);
   }
 }
 
@@ -286,6 +290,7 @@ export async function createPaymentIntent(postId, amount, serviceProviderAccount
       amount: amount,
       serviceProviderAccount: serviceProviderAccount
     })
+    console.log('data from createPaymentIntetn', res.data)
     return res.data
   } catch (err) {
     console.log(err)

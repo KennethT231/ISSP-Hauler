@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View, TextInput, ScrollView, FlatList } from 'react-native';
 
 export default function OfferInfo({ response, setOffer, onSendOffer, offer, onAccept, onDecline }) {
-
+    // console.log({ response })
     return (
         <View style={styles.container}>
             {response ?
@@ -33,40 +33,61 @@ export default function OfferInfo({ response, setOffer, onSendOffer, offer, onAc
 
                     />
                 </View> : <View></View>}
-            <View style={styles.footerContainer}>
-                <View style={styles.offerContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder='Enter offer price'
-                        placeholderTextColor='#C0C0C0'
-                        onChangeText={(price) => { setOffer(price) }}
-                        value={offer}
-                    />
+            {response.responseStatus === "Accepted" ? (
+                <>
+                    <View style={styles.footerContainer}>
+                        <View style={styles.buttonContainer}>
+                            <>
+                                <TouchableOpacity
+                                    disabled={response.userActionButtons}
+                                    style={styles.acceptedButton}
+                                    onPress={() => onAccept()}>
+                                    <Text style={styles.acceptedButtonTitle}>
+                                        ACCEPTED
+                                    </Text>
+                                </TouchableOpacity>
+                            </>
+                        </View>
+                    </View>
+                </>
+            ) : (
+                <>
+                    <View style={styles.footerContainer}>
+                        <View style={styles.offerContainer}>
+                            <TextInput
+                                style={styles.input}
+                                placeholder='Enter offer price'
+                                placeholderTextColor='#C0C0C0'
+                                onChangeText={(price) => { setOffer(price) }}
+                                value={offer}
+                            />
 
-                    <TouchableOpacity
-                        disabled={response ? response.userActionButtons : false}
-                        style={[styles.button, styles.offerButton]}
-                        onPress={() => onSendOffer()}>
-                        <Text style={[styles.buttonTitle, styles.offerButtonTitle]}>SEND OFFER</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={styles.buttonContainer}>
-                    <>
-                        <TouchableOpacity
-                            disabled={response.userActionButtons}
-                            style={[styles.button, styles.acceptButton]}
-                            onPress={() => onAccept()}>
-                            <Text style={styles.buttonTitle}>ACCEPT</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            disabled={response.userActionButtons}
-                            style={[styles.button, styles.declineButton]}
-                            onPress={() => onDecline()}>
-                            <Text style={styles.buttonTitle}>DECLINE</Text>
-                        </TouchableOpacity>
-                    </>
-                </View>
-            </View>
+                            <TouchableOpacity
+                                disabled={response ? response.userActionButtons : false}
+                                style={[styles.button, styles.offerButton]}
+                                onPress={() => onSendOffer()}>
+                                <Text style={[styles.buttonTitle, styles.offerButtonTitle]}>SEND OFFER</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.buttonContainer}>
+                            <>
+                                <TouchableOpacity
+                                    disabled={response.userActionButtons}
+                                    style={[styles.button, styles.acceptButton]}
+                                    onPress={() => onAccept()}>
+                                    <Text style={styles.buttonTitle}>ACCEPT</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    disabled={response.userActionButtons}
+                                    style={[styles.button, styles.declineButton]}
+                                    onPress={() => onDecline()}>
+                                    <Text style={styles.buttonTitle}>DECLINE</Text>
+                                </TouchableOpacity>
+                            </>
+                        </View>
+                    </View>
+                </>
+            )}
         </View>
     )
 }
@@ -158,5 +179,18 @@ const styles = StyleSheet.create({
         marginHorizontal: '2%',
         paddingHorizontal: 10,
         width: '62%'
+    },
+    acceptedButton: {
+        backgroundColor: '#E0E0E0',
+        width: '100%',
+        height: 60,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    acceptedButtonTitle: {
+        color: 'navy',
+        fontSize: 16,
+        fontWeight: "bold"
     },
 })

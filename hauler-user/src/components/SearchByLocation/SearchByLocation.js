@@ -29,6 +29,7 @@ export default function SearchByLocation({ location, setLocation, searchLocation
                 onValueChange={(value) => { setLocation(value); searchLocation({ location: value }) }}
                 placeholder={{ label: "Search by Location", value: null }}
                 items={[
+                    { label: 'Vancouver', value: 'Vancouver'},
                     { label: 'Surrey', value: 'Surrey' },
                     { label: 'Langely', value: 'Langley' },
                     { label: 'Richmond', value: 'Richmond' },

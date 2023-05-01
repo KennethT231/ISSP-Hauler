@@ -32,6 +32,11 @@ export default function Confirmation({ navigation, route }) {
                 <Text style={styles.text}>Job Completed Successfully!!!</Text>
             )
         }
+        else if (confirm === 'paid') {
+            return (
+                <Text style={styles.text}>Payment Success!!!</Text>
+            )
+        }
         else {
             return (
                 <Text style={styles.text}>Offer Declined!!!</Text>
@@ -52,7 +57,7 @@ export default function Confirmation({ navigation, route }) {
 
             <TouchableOpacity onPress={() => navigation.navigate('Home', { screen: 'MyPostList' })} style={styles.button}><Text style={styles.btnText}>Return To My Job List </Text></TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Post A Job', { screen: 'Post A Job' })} style={styles.button}><Text style={styles.btnText}>Return To Posting a Job </Text></TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Post A Job1', { screen: 'AddItemScreen' })} style={styles.button}><Text style={styles.btnText}>Return To Posting a Job </Text></TouchableOpacity>
 
         </View>
     )

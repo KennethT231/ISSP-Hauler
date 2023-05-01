@@ -100,7 +100,7 @@ export default function Signup({ navigation }) {
                 <View
                     style={{ flex: 1, width: '100%' }}>
                     <View style={styles.avatarView}>
-                        <TouchableOpacity onPress={() => pickImageAlbum()}>
+                        {/* <TouchableOpacity onPress={() => pickImageAlbum()}>
                             <Avatar
                                 size={40}
                                 rounded
@@ -111,7 +111,7 @@ export default function Signup({ navigation }) {
                             <View style={styles.icon1}>
                                    <FontAwesome name="user-circle" size={40} color="#000000" /></View>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     <Text > {error && alert(error)}</Text>
 

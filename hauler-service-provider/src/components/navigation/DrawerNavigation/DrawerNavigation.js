@@ -1,6 +1,5 @@
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import MenuIcon from '../MenuIcon/MenuIcon';
 import HomeNavigator from '../HomeNavigator/HomeNavigator';
 import SearchJobsNavigator from'../SearchJobsNavigator/SearchJobsNavigator';
 import MyJobListNavigator from '../MyJobListNavigator/MyJobListNavigator';
@@ -18,19 +17,27 @@ export default function DrawerNavigation() {
         // options={{ headerTitle: 'Home', headerRight: () => <MenuIcon /> }}
       />
       <Drawer.Screen
-        name="Search Jobs"
+        name="SearchJobsNavigator"
         component={SearchJobsNavigator}
-        // options={{ headerTitle: 'Home', headerRight: () => <MenuIcon /> }}
+        options={{ headerTitle: 'Search Jobs',
+        drawerLabel: 'Search Jobs',
+        // , headerRight: () => <MenuIcon />
+       }}
       />
       <Drawer.Screen
-        name="My JobList"
+        name="MyJobListNavigator"
         component={MyJobListNavigator}
-        // options={{ headerTitle: 'My Job List', headerRight: () => <MenuIcon /> }}
+        options={{ headerTitle: 'My Job List',
+        drawerLabel: 'My Job List',
+        // , headerRight: () => <MenuIcon /> 
+      }}
       />
       <Drawer.Screen
         name="Profile"
         component={ProfileNavigator}
-        // options={{ headerTitle: 'Profile', headerRight: () => <MenuIcon /> }}
+        options={{ drawerLabel: 'Account',
+          //headerTitle: 'Profile', headerRight: () => <MenuIcon /> 
+        }}
       />
     </Drawer.Navigator>
   );

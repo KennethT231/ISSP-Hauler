@@ -3,8 +3,9 @@ import { Text, View, ScrollView, TextInput, SafeAreaView, Picker } from 'react-n
 import styles from './AddJunkScreen3Css';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Slider from '@react-native-community/slider';
-import {getOnePost} from '../../../network'
+import { getOnePost } from '../../../network'
 
+// Post A Job Screen 3 - Third page of the post a job process
 export default function AddJunkScreen3({ navigation, route }) {
 
     const [pickContactPerson, setPickContactPerson] = useState('')
