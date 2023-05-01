@@ -6,6 +6,9 @@ export default function ServiceScreen({ navigation }) {
 
     return(
         <View style = {styles.root}>
+            <View style={styles.header}>
+              <Text style={styles.headerText}>OPTIONS</Text>
+            </View>
             <TouchableOpacity onPress={() => navigation.navigate('AddJunkNavigator',{ screen: 'AddItemScreen',  params: { operation: "create", postId: ""}})} style={styles.button}>
                 <Text style={styles.btnText}>JUNK REMOVAL</Text>
             </TouchableOpacity>

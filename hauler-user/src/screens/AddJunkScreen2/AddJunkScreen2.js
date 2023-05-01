@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Text, View } from 'react-native'
-import { StyleSheet } from 'react-native';
+import styles from './AddJunkScreen2Css';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { GooglePlacesAutocomplete, GooglePlacesDetailsQuery } from 'react-native-google-places-autocomplete';
 //import { GOOGLE_MAP_API } from '@env';
@@ -32,9 +32,9 @@ export default function AddJunkScreen2({ navigation, route }) {
       <GooglePlacesAutocomplete
         styles={{
           textInput: {
-            backgroundColor: "#F5F5F5",
+            backgroundColor: "#ffffff",
             height: 44,
-            borderRadius: 10,
+            borderRadius: 30,
             paddingVertical: 5,
             paddingHorizontal: 10,
             marginHorizontal: 20,
@@ -82,33 +82,3 @@ export default function AddJunkScreen2({ navigation, route }) {
   )
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    height: '100%',
-    width: '100%',
-    backgroundColor: 'white',
-  },
-  text: {
-    color: '#BFBFBF',
-    marginLeft: 25,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10
-  },
-  buttonTitle: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: "bold"
-  },
-  button: {
-    backgroundColor: '#0177FC',
-    alignSelf: 'center',
-    marginVertical: 10,
-    width: '90%',
-    height: 48,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: 'center'
-  },
-})

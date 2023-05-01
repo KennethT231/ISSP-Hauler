@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Text, View, TextInput, ScrollView, Image, Platform, TouchableOpacity } from 'react-native'
-import { StyleSheet } from 'react-native';
+import styles from './AddIrwmScreenCss';
 import * as ImagePicker from 'expo-image-picker';
 import SelectWeight from '../../components/SelectWeight/SelectWeight';
 import { Ionicons } from '@expo/vector-icons';
@@ -82,10 +82,12 @@ export default function AddItemScreen({ navigation, route }) {
           value={description}
         />
 
-        <SelectWeight
-          selectedweight={selectedweight}
-          setSelectedWeight={setSelectedWeight}
-        />
+        <View styles={styles.select}>
+          <SelectWeight
+            selectedweight={selectedweight}
+            setSelectedWeight={setSelectedWeight}
+          />
+        </View>
 
         <View style={styles.view}>
           <Text style={styles.text}> Number of Items  </Text>
@@ -115,99 +117,10 @@ export default function AddItemScreen({ navigation, route }) {
                 operation: operation,
                 postId: postId
               }
-            )} style={styles.button}>
+            )} style={styles.button} >
             <Text style={styles.buttonTitle}>Next</Text></TouchableOpacity>
         </View>
       </View>
     </ScrollView>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    minHeight: 600,
-    width: '100%',
-    backgroundColor: 'white',
-  },
-  inputLine1: {
-    overflow: 'hidden',
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 20,
-    marginRight: 30,
-    paddingLeft: 16,
-    width: '90%',
-    borderBottomWidth: 1.0,
-    borderColor: '#BFBFBF',
-  },
-  button: {
-    backgroundColor: '#0177FC',
-    alignSelf: 'center',
-    marginVertical: 10,
-    width: '90%',
-    height: 48,
-    borderRadius: 10,
-    alignItems: "center",
-    justifyContent: 'center'
-  },
-  buttonTitle: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: "bold"
-  },
-  imageContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  imageDisplay: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
-  },
-  imageRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  imageColumn: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '50%',
-  },
-  thumbnail: {
-    width: 100,
-    height: 100,
-    resizeMode: "contain"
-  },
-  text: {
-    color: '#BFBFBF',
-    marginLeft: 25,
-    fontWeight: 'bold',
-    marginTop: 20
-  },
-  TouchableOpacityStyle: {
-    width: 50,
-    height: 50,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 5,
-    marginLeft: 10
-  },
-  view: {
-    flexDirection: 'row',
-    marginTop: 25
-  },
-  numberDisplay: {
-    color: 'black',
-    fontSize: 20,
-    paddingTop: 15,
-    marginLeft: 10
-  },
-  footerContainer: {
-    backgroundColor: 'white',
-    width: '100%',
-    position: 'absolute',
-    bottom: 0
-  },
-})

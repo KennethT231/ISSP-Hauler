@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Text, View, ScrollView, TextInput, SafeAreaView, Picker } from 'react-native'
-import { StyleSheet } from 'react-native';
+import styles from './AddJunkScreen3Css';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Slider from '@react-native-community/slider';
 import {getOnePost} from '../../../network'
@@ -94,56 +94,3 @@ export default function AddJunkScreen3({ navigation, route }) {
         </ScrollView>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        display: 'flex',
-        minHeight: 600,
-        width: '100%',
-        backgroundColor: 'white',
-    },
-    inputLine1: {
-        overflow: 'hidden',
-        marginTop: 10,
-        marginBottom: 10,
-        marginLeft: 20,
-        marginRight: 30,
-        paddingLeft: 16,
-        width: '90%',
-        borderBottomWidth: 1.0,
-        borderColor: '#BFBFBF',
-    },
-    text: {
-        color: '#BFBFBF',
-        marginLeft: 25,
-        fontWeight: 'bold',
-        marginTop: 20
-    },
-    button: {
-        backgroundColor: '#0177FC',
-        alignSelf: 'center',
-        marginVertical: 10,
-        width: '90%',
-        height: 48,
-        borderRadius: 10,
-        alignItems: "center",
-        justifyContent: 'center'
-    },
-    buttonTitle: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: "bold"
-    },
-    text: {
-        color: '#BFBFBF',
-        marginLeft: 25,
-        fontWeight: 'bold',
-        marginTop: 20
-    },
-    containerSlider: {
-        flex: 1,
-        padding: 20,
-        justifyContent: 'center',
-
-    },
-})

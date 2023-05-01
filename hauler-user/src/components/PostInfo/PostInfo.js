@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import styles from './PostInfoCss';
 import { Feather } from '@expo/vector-icons';
 
 export default function PostInfo({ image, selectedweight, selectedquantity, postHeading, description, pickUpAddress, pickContactPerson, pickUpPhoneNumber, pickUpSpecialInstructions, sliderValue, dropOffAddress, dropOffContactNumber, dropOffContactPerson, dropOffSpecialInstruction, distance }) {
@@ -71,8 +72,8 @@ export default function PostInfo({ image, selectedweight, selectedquantity, post
                     <Text style={styles.infoValue}>{pickContactPerson}</Text>
                 </View>
 
-                <View style={styles.infoContainer}>
-                    <Text style={styles.infoKey}>Pick Up Contact Number</Text>
+                <View style={styles.infoContainer1}>
+                    <Text style={styles.infoKey1}>Pick Up Contact Number</Text>
                     <Text style={styles.infoValue1}>{pickUpPhoneNumber}  </Text>
                     <Text style={styles.iconStyle}><Feather name='phone' size={24} color='white' /></Text>
                 </View>
@@ -91,54 +92,3 @@ export default function PostInfo({ image, selectedweight, selectedquantity, post
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        paddingHorizontal: 10,   
-        paddingBottom: 40,
-    },
-    infoContainer: {
-        flexDirection: 'row',
-        marginVertical: 10
-    },
-    imageContainer: {
-        marginVertical: 10
-    },
-    infoKey: {
-        color: '#A9A9A9',
-        width: 140,
-    },
-    infoValue: {
-        marginRight: 10,
-        width: '65%',
-        fontWeight: 'bold',
-    },
-    infoValue1: {
-        marginRight: 10,
-        fontWeight: 'bold',
-        paddingTop: 8
-    },
-    iconStyle: {
-        backgroundColor: '#0077FC',
-        borderRadius: 20,
-        padding: 5,
-        overflow: 'hidden'
-    },
-    buttons: {
-        backgroundColor: '#0077FC',
-        marginVertical: 10,
-        height: 48,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '90%',
-
-    },
-    buttonTitle: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: "bold"
-    },
-})
-
-

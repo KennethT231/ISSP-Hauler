@@ -85,6 +85,7 @@ export default function AddJunkSummary({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+
     container: {
         backgroundColor: 'white',
         flex: 1,
@@ -92,22 +93,34 @@ const styles = StyleSheet.create({
         minHeight: 600,
         paddingVertical: 10
     },
+
     button: {
-        backgroundColor: '#0177FC',
+        backgroundColor: '#1970d4',
         alignSelf: 'center',
         marginVertical: 10,
         width: '90%',
         height: 48,
         borderRadius: 10,
         alignItems: "center",
-        justifyContent: 'center'
+        justifyContent: 'center',
+        shadowColor: '#0177FC',
+        marginTop: 20,
+        shadowOpacity: 0.8,
+        shadowOffset: {
+          height: 2,
+          width: 2,
+        },
+        elevation: 5
     },
+
     buttonTitle: {
         color: 'white',
         fontSize: 16,
         fontWeight: "bold"
     },
+
     view: {
         flexDirection: 'row'
     }
+
 })

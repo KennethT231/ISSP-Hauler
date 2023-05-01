@@ -5,7 +5,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#05329c', 
+    backgroundColor: '#fcfafa', 
   },
 
   header: {
@@ -17,28 +17,35 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 30,
     fontWeight: 'bold',
-    color: '#fff', 
+    color: '#000000', 
   },
 
   text: {
     fontSize: 18,
     fontWeight: 'bold',
     marginVertical: 10,
-    color: '#fff', 
+    color: '#000000', 
   },
 
   input: {
     height: 40,
     borderColor: '#3d3b3b',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 20,
     backgroundColor: '#fff', 
   },
 
   button: {
-    backgroundColor: '#C0C0C0', 
+    backgroundColor: '#1970d4',
+    shadowColor: '#0177FC',
+    shadowOpacity: 0.8,
+    shadowOffset: {
+      height: 2,
+      width: 2,
+    },
+    elevation: 5,
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
@@ -60,7 +67,7 @@ const styles = StyleSheet.create({
     borderColor: '#C0C0C0',
     backgroundColor: '#d4d4d4',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 20,
     marginTop: 20

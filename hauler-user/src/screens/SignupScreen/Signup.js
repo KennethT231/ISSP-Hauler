@@ -108,7 +108,8 @@ export default function Signup({ navigation }) {
                                 backgroundColor='lightgrey'
                             />
                             <View style={styles.evilIcon}>
-                                <FontAwesome name="user-circle-o" size={38} color="white" />
+                            <View style={styles.icon1}>
+                                   <FontAwesome name="user-circle" size={40} color="#000000" /></View>
                             </View>
                         </TouchableOpacity>
                     </View>
