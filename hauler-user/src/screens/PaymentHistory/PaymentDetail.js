@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
 import { useRoute } from "@react-navigation/native";
+import { getOneServiceProvider } from "../../../network";
 
 const PaymentDetail = () => {
     const route = useRoute();
     const post = route.params.post;
     console.log("payment detail", post);
+    const [serviceProvider, setServiceProvider] = useState({});
+
+    useEffect(() => {
+        getServiceProvider();
+    }, []);
+
+    const getServiceProvider = async () => {
+        const sP = await getOneServiceProvider(post.acceptedServiceProvider);
+        setServiceProvider(sP);
+    }
 
     return (
         <ScrollView style={styles.container}>
@@ -50,6 +61,17 @@ const PaymentDetail = () => {
                 <Text style={styles.text}>${post.acceptedPrice}</Text>
                 <Text style={styles.label}>Status:</Text>
                 <Text style={styles.text}>{post.status}</Text>
+            </View>
+            <View style={styles.section}>
+                <Text style={styles.heading}>Service Provider Details</Text>
+                <Text style={styles.label}>First Name:</Text>
+                <Text style={styles.text}>{serviceProvider.firstName}</Text>
+                <Text style={styles.label}>Last Name:</Text>
+                <Text style={styles.text}>{serviceProvider.lastName}</Text>
+                <Text style={styles.label}>Email:</Text>
+                <Text style={styles.text}>{serviceProvider.email}</Text>
+                <Text style={styles.label}>Contact Number:</Text>
+                <Text style={styles.text}>{serviceProvider.contactNumber}</Text>
             </View>
             <View style={styles.section}>
                 {post.loadImages.map((image) => (
