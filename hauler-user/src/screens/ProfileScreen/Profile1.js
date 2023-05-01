@@ -103,12 +103,14 @@ export default function Profile1({ navigation }) {
         }
     };
 
+    const onPaymentHistoryClicked = () => {
+        navigation.navigate('PaymentHistory')
+    }
+
     useEffect(() => {
         currentUser &&
             (async () => {
                 const profile = await getOneUser(currentUser.uid)
-                console.log(currentUser.uid)
-                console.log('profile from profile1: ', profile)
                 setUserInformation(profile)
                 setCity(profile.city)
                 setStreetAddress(profile.streetAddress)
@@ -269,6 +271,18 @@ export default function Profile1({ navigation }) {
                             <Text style={styles.buttonTitle}>Log Out</Text>
                         </TouchableOpacity>
                     </View>
+                    {/* payment history */}
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity
+                            style={styles.paymentHistoryButton}
+                            disabled={!!loading} // added !!
+                            onPress={() => onPaymentHistoryClicked()}
+                        >
+                            <Text style={styles.buttonTitle}>
+                                Payment History
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
 
                 </View>
                 : <View></View>
@@ -356,5 +370,13 @@ const styles = StyleSheet.create({
         marginVertical: '1%',
         marginHorizontal: '2%',
         paddingLeft: 16
+    },
+    paymentHistoryButton: {
+        backgroundColor: 'navy',
+        width: '90%',
+        height: 45,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 })

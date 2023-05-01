@@ -14,6 +14,8 @@ import { Context } from '../../context/ContextProvider';
 import Confirmation from '../ConfirmationScreen/Confirmation';
 import PaymentNavigator from './PaymentNavigator';
 import Map from '../../components/Map/Map';
+import PaymentHistoryScreenNavigator from './PaymentHistoryNavigator';
+import PaymentDetail from '../PaymentHistory/PaymentDetail';
 
 const HomeStack = createStackNavigator();
 
@@ -102,6 +104,21 @@ const HomeNavigator = () => {
                     <HomeStack.Screen
                         name='TrackingMap'
                         component={Map} />
+                    <HomeStack.Screen
+                        name='PaymentHistory'
+                        component={PaymentHistoryScreenNavigator}
+                        options={{
+                            headerTitle: 'Payment History',
+                        }}
+                    />
+                    <HomeStack.Screen
+                        name='PaymentDetail'
+                        component={PaymentDetail}
+                        options={{
+                            headerTitle: 'Payment Detail',
+                        }}
+                    />
+
                 </>
             }
         </HomeStack.Navigator>
