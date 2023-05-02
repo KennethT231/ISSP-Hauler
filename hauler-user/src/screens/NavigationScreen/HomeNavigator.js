@@ -123,7 +123,7 @@ const HomeNavigator = () => {
                         name='VerificationForm'
                         component={VerificationForm}
                         options={{
-                            headerTitle: 'Verification',
+                            headerShown: false,
                         }}
                     />
                 </>
