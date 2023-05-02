@@ -25,6 +25,7 @@ export default function Signup({ navigation }) {
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    const [verificationStatus, setVerificationStatus] = useState(null)
 
     useEffect(() => {
         (async () => {
@@ -42,34 +43,30 @@ export default function Signup({ navigation }) {
             setError("Password does not match")
             return
         }
+
         try {
             setError("")
+
+            // Call the signup function and navigate to the verification form immediately
             const response = await signup(email, password)
-
             const currentUid = response.user.uid
+            navigation.navigate('VerificationForm', {
+                currentUid,
+                firstName,
+                lastName,
+                image,
+                dateOfBirth: date.toISOString(),
+                province,
+                city,
+                streetAddress,
+                unitNumber,
+                email,
+                contactNumber
+            })
 
-            const userVerification = await verifyUser(contactNumber)
-
-            console.log('userVerification', userVerification)
-
-            if (userVerification.status === 200) {
-                navigation.navigate('VerificationForm', {
-                    currentUid,
-                    firstName,
-                    lastName,
-                    image,
-                    dateOfBirth: date,
-                    province,
-                    city,
-                    streetAddress,
-                    unitNumber,
-                    email,
-                    contactNumber
-                });
-
-            } else {
-                setError('Verification failed')
-            }
+            // Start the verification process in the background
+            const verificationResponse = await verifyUser(contactNumber)
+            setVerificationStatus(verificationResponse.status)
         } catch (err) {
             setError(err.message)
         }
@@ -105,6 +102,7 @@ export default function Signup({ navigation }) {
                         </TouchableOpacity> */}
                     </View>
                     <Text > {error && alert(error)}</Text>
+                    <Text > {verificationStatus === 400 && alert("Verification failed")}</Text>
 
                     {/*================================== Text Input fields for user================================================= */}
                     <Text style={styles.text}>First Name:</Text>

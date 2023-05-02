@@ -1,7 +1,7 @@
 const UserData = require('../models/userProfile.js')
 const textflow = require("textflow.js")
 
-textflow.useKey("w4bJAcqBJlRks4hi254u1aMGyiJ4wS3mB3MHnbSDC2IlybQkjGbp1QS8PABvtM56");
+textflow.useKey("gNowxeefRdwq8dLFv7ddQE8AyTdVO7GJCSxUwBXrUTAobrsdtp4MO06iDZQFbU3E");
 
 //================================== To register new user =========================================//
 const createUser = async (req, res) => {
