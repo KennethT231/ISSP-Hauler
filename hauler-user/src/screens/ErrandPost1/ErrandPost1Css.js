@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
 
   container: {
     display: 'flex',
-    minHeight: 800,
+    minHeight: 600,
     width: '100%',
     backgroundColor: '#f0f0f0',
   },
@@ -12,11 +12,11 @@ const styles = StyleSheet.create({
   inputLine1: {
     overflow: 'hidden',
     marginTop: 10,
+    marginBottom: 10,
     marginLeft: 20,
     marginRight: 30,
     paddingLeft: 16,
     width: '90%',
-    borderBottomWidth: 1.0,
     height: 40,
     borderColor: '#3d3b3b',
     borderWidth: 1,
@@ -36,7 +36,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: 'center',
     shadowColor: '#0177FC',
-    marginTop: 30,
     shadowOpacity: 0.8,
     shadowOffset: {
       height: 2,
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
   buttonTitle: {
     color: 'white',
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
 
   imageContainer: {
@@ -72,10 +71,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     width: '50%',
-  },
-
-  select: {
-    fontSize: '310%'
   },
 
   thumbnail: {
@@ -126,11 +121,12 @@ const styles = StyleSheet.create({
   },
 
   footerContainer: {
+    backgroundColor: '#f0f0f0',
     width: '100%',
     position: 'absolute',
     bottom: 0
   },
 
-})
+});
 
 export default styles;

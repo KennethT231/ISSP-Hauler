@@ -132,7 +132,7 @@ export default function AddJunkSummary({ navigation, route }) {
 const styles = StyleSheet.create({
 
     container: {
-        backgroundColor: 'white',
+        backgroundColor: '#f0f0f0',
         flex: 1,
         width: '100%',
         minHeight: 600,
