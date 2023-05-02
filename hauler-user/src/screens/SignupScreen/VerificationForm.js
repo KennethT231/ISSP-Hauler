@@ -6,8 +6,6 @@ import { signUp } from '../../../network';
 export default function VerificationForm({ navigation, route }) {
     const [code, setCode] = useState("")
 
-    // console.log("route.params in verification: ", route.params)
-
     const onSignUpPressWithVerification = async () => {
         try {
             const response = await signUp(route.params.currentUid, route.params.firstName, route.params.lastName, route.params.image, route.params.dateOfBirth, route.params.province, route.params.city, route.params.streetAddress, route.params.unitNumber, route.params.email, route.params.contactNumber, code)
@@ -29,11 +27,24 @@ export default function VerificationForm({ navigation, route }) {
                 2-Step Verification
             </Text>
 
-            <TextInput style={styles.textinput}
-                placeholder="Enter the code sent to you"
-                value={code}
-                onChangeText={setCode}
-            ></TextInput>
+            <View style={styles.codeInputContainer}>
+                {[1, 2, 3, 4, 5, 6].map((index) => (
+                    <TextInput
+                        key={index}
+                        style={styles.codeInput}
+                        maxLength={1}
+                        keyboardType="number-pad"
+                        onChangeText={(value) => {
+                            let newCode = code.split('');
+                            newCode[index - 1] = value;
+                            setCode(newCode.join(''));
+                        }}
+                        value={code[index - 1]}
+                    />
+                ))}
+            </View>
+
+            <Text style={styles.codeText}>Please enter the 6-digit code sent to you:</Text>
 
             <TouchableOpacity
                 style={styles.button}
@@ -63,13 +74,25 @@ const styles = StyleSheet.create({
         borderBottomColor: "#199187",
         borderBottomWidth: 1,
     },
-    textinput: {
-        alignSelf: "stretch",
-        height: 40,
-        marginBottom: 30,
-        color: "#000",
-        borderBottomColor: "navy",
-        borderBottomWidth: 1,
+    codeInputContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 10,
+    },
+    codeInput: {
+        backgroundColor: '#f5f5f5',
+        width: 45,
+        height: 45,
+        borderRadius: 10,
+        fontSize: 24,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    codeText: {
+        color: '#333',
+        fontSize: 16,
+        marginBottom: 20,
+        textAlign: 'center',
     },
     button: {
         alignSelf: "stretch",
@@ -83,8 +106,4 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
 });
-
-
-
-
 

@@ -55,7 +55,7 @@ export default function Signup({ navigation }) {
                 firstName,
                 lastName,
                 image,
-                dateOfBirth: date.toISOString(),
+                dateOfBirth: date.toISOString().split('T')[0],
                 province,
                 city,
                 streetAddress,
