@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { signUp } from '../../../network';
-import { Text, TextInput, TouchableOpacity, View, ScrollView, Platform, Button } from 'react-native'
+import { verifyUser } from '../../../network';
+import { Text, TextInput, TouchableOpacity, View, ScrollView, Platform, Button, Alert } from 'react-native'
 import { StyleSheet } from 'react-native';
-import { Avatar } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
-import { FontAwesome } from '@expo/vector-icons';
 import { Context } from '../../context/ContextProvider'
 import DateTimePicker from '@react-native-community/datetimepicker';
 
@@ -39,19 +37,6 @@ export default function Signup({ navigation }) {
         })();
     }, []);
 
-    //===============================function for the image display from phone gallery =======================//
-    const pickImageAlbum = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
-        });
-        if (!result.canceled) {
-            setImage(result.uri)
-        }
-    };
-
     const onSignUpClicked = async () => {
         if (password !== confirmPassword) {
             setError("Password does not match")
@@ -60,25 +45,31 @@ export default function Signup({ navigation }) {
         try {
             setError("")
             const response = await signup(email, password)
-            console.log('response', response)
+
             const currentUid = response.user.uid
-            const dateOfBirth = date.toLocaleDateString()
-            const usersignUp = await signUp(
-                currentUid,
-                firstName,
-                lastName,
-                image,
-                dateOfBirth,
-                province,
-                city,
-                streetAddress,
-                unitNumber,
-                email,
-                contactNumber
-            )
-            // get correct data here
-            console.log('usersignUp', usersignUp)
-            navigation.navigate('MyPostList')
+
+            const userVerification = await verifyUser(contactNumber)
+
+            console.log('userVerification', userVerification)
+
+            if (userVerification.status === 200) {
+                navigation.navigate('VerificationForm', {
+                    currentUid,
+                    firstName,
+                    lastName,
+                    image,
+                    dateOfBirth: date,
+                    province,
+                    city,
+                    streetAddress,
+                    unitNumber,
+                    email,
+                    contactNumber
+                });
+
+            } else {
+                setError('Verification failed')
+            }
         } catch (err) {
             setError(err.message)
         }
@@ -249,7 +240,7 @@ export default function Signup({ navigation }) {
 
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => onSignUpClicked()}>
+                        onPress={onSignUpClicked}>
                         <Text style={styles.buttonTitle}> Complete Sign Up </Text>
                     </TouchableOpacity>
                 </View>
