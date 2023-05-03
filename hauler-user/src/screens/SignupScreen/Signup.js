@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { signUp } from '../../../network';
-import { Text, TextInput, TouchableOpacity, View, ScrollView, Platform, Button } from 'react-native'
+import { verifyUser } from '../../../network';
+import { Text, TextInput, TouchableOpacity, View, ScrollView, Platform, Button, Alert } from 'react-native'
 import { StyleSheet } from 'react-native';
-import { Avatar } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome } from '@expo/vector-icons';
 import { Context } from '../../context/ContextProvider';
@@ -28,6 +27,7 @@ export default function Signup({ navigation }) {
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    const [verificationStatus, setVerificationStatus] = useState(null)
 
     useEffect(() => {
         (async () => {
@@ -40,46 +40,35 @@ export default function Signup({ navigation }) {
         })();
     }, []);
 
-    //===============================function for the image display from phone gallery =======================//
-    const pickImageAlbum = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
-            aspect: [1, 1],
-            quality: 1,
-        });
-        if (!result.canceled) {
-            setImage(result.uri)
-        }
-    };
-
     const onSignUpClicked = async () => {
         if (password !== confirmPassword) {
             setError("Password does not match")
             return
         }
+
         try {
             setError("")
+
+            // Call the signup function and navigate to the verification form immediately
             const response = await signup(email, password)
-            console.log('response', response)
             const currentUid = response.user.uid
-            const dateOfBirth = date.toLocaleDateString()
-            const usersignUp = await signUp(
+            navigation.navigate('VerificationForm', {
                 currentUid,
                 firstName,
                 lastName,
                 image,
-                dateOfBirth,
+                dateOfBirth: date.toISOString().split('T')[0],
                 province,
                 city,
                 streetAddress,
                 unitNumber,
                 email,
                 contactNumber
-            )
-            // get correct data here
-            console.log('usersignUp', usersignUp)
-            navigation.navigate('MyPostList')
+            })
+
+            // Start the verification process in the background
+            const verificationResponse = await verifyUser(contactNumber)
+            setVerificationStatus(verificationResponse.status)
         } catch (err) {
             setError(err.message)
         }
@@ -114,6 +103,7 @@ export default function Signup({ navigation }) {
                         </TouchableOpacity> */}
                     </View>
                     <Text > {error && alert(error)}</Text>
+                    <Text > {verificationStatus === 400 && alert("Verification failed")}</Text>
 
                     {/*================================== Text Input fields for user================================================= */}
                     <Text style={styles.text}>First Name:</Text>
@@ -249,7 +239,7 @@ export default function Signup({ navigation }) {
 
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={() => onSignUpClicked()}>
+                        onPress={onSignUpClicked}>
                         <Text style={styles.buttonTitle}> Complete Sign Up </Text>
                     </TouchableOpacity>
                 </View>

@@ -15,7 +15,8 @@ const userProfileSchema = new Schema({
     streetAddress: { type: String, required: true },
     unitNumber: { type: String, required: true },
     email: { type: String, required: true },
-    contactNumber: { type: String, required: true }
+    contactNumber: { type: String, required: true },
+    code: { type: String, required: true },
 }, { collection: 'userregistrations' })
 
 module.exports = mongoose.model('UserRegistration', userProfileSchema);
