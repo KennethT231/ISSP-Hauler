@@ -135,30 +135,37 @@ export default function PostInfo({ posts, contact }) {
 }
 
 const styles = StyleSheet.create({
+
     container: {
         width: '95%',
     },
+
     infoContainer: {
         flexDirection: 'row',
         marginVertical: 10
     },
+
     imageContainer: {
         marginVertical: 10
     },
+
     infoKey: {
         color: '#A9A9A9',
         width: 140,
     },
+
     infoValue: {
         marginRight: 10,
         width: '65%',
         fontWeight: 'bold',
     },
+
     infoValue1: {
         marginRight: 10,
         fontWeight: 'bold',
         paddingTop: 8
     },
+
     iconStyle: {
         backgroundColor: '#0077FC',
         borderRadius: 20,
@@ -169,7 +176,8 @@ const styles = StyleSheet.create({
         width: '100%',
         marginHorizontal: 16
     },
-    buttons: {
+
+    buttons:{
         backgroundColor: '#0077FC',
         marginVertical: 10,
         height: 48,
@@ -179,11 +187,13 @@ const styles = StyleSheet.create({
         width: '90%',
 
     },
+
     buttonTitle: {
         color: 'white',
         fontSize: 16,
         fontWeight: "bold"
     },
+    
 })
 
 

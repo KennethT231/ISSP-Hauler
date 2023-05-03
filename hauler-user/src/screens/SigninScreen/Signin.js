@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { Text, TextInput, TouchableOpacity, View, Image, ScrollView } from 'react-native'
 import { Context } from '../../context/ContextProvider';
-import { StyleSheet } from 'react-native';
+import styles from './SigninCss';
 
 export default function Signin({ navigation }) {
     const [email, setEmail] = useState('')
@@ -79,6 +79,7 @@ export default function Signin({ navigation }) {
     )
 }
 
+/*
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -149,3 +150,4 @@ const styles = StyleSheet.create({
         paddingTop: 120
     }
 })
+*/

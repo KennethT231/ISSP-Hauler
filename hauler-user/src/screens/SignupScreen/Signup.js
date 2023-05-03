@@ -3,8 +3,10 @@ import { verifyUser } from '../../../network';
 import { Text, TextInput, TouchableOpacity, View, ScrollView, Platform, Button, Alert } from 'react-native'
 import { StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { Context } from '../../context/ContextProvider'
+import { FontAwesome } from '@expo/vector-icons';
+import { Context } from '../../context/ContextProvider';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import styles from './SignupCss';
 
 export default function Signup({ navigation }) {
 
@@ -95,9 +97,8 @@ export default function Signup({ navigation }) {
                                 backgroundColor='lightgrey'
                             />
                             <View style={styles.evilIcon}>
-                                <FontAwesome name="user-circle-o" size={38} color="white" />
-                                <View style={styles.icon1}>
-                                    <FontAwesome name="user-circle" size={40} color="#1177FC" /></View>
+                            <View style={styles.icon1}>
+                                   <FontAwesome name="user-circle" size={40} color="#000000" /></View>
                             </View>
                         </TouchableOpacity> */}
                     </View>
@@ -174,7 +175,7 @@ export default function Signup({ navigation }) {
                         value={dateOfBirth}
                     />*/}
 
-                    <Button onPress={() => setShow(true)} title="Select a Date" />
+                    <Button style={styles.selectBtn} onPress={() => setShow(true)} title="Select a Date"/>
                     {show && (
                         <DateTimePicker
                             testID="dateTimePicker"
@@ -247,54 +248,3 @@ export default function Signup({ navigation }) {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#fff',
-    },
-    header: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    headerText: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        color: '#1177FC',
-    },
-    text: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginVertical: 10,
-    },
-    input: {
-        height: 40,
-        borderColor: '#C0C0C0',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 20,
-    },
-    button: {
-        backgroundColor: '#1177FC',
-        padding: 10,
-        borderRadius: 5,
-        alignItems: 'center',
-        marginVertical: 10,
-    },
-    buttonTitle: {
-        color: '#fff',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    datePicker: {
-        height: 40,
-        borderColor: '#C0C0C0',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 20,
-        marginTop: 20
-    }
-});
