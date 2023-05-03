@@ -7,6 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Context } from '../../context/ContextProvider';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import styles from './SignupCss';
+import ReactNativePhoneInput from 'react-native-phone-input';
 
 export default function Signup({ navigation }) {
 
@@ -229,12 +230,23 @@ export default function Signup({ navigation }) {
                     />
 
                     <Text style={styles.text}> Phone Number : </Text>
-                    <TextInput
+                    {/*<TextInput
                         style={styles.input}
                         placeholder='(XXX) XXX-XXXX'
                         placeholderTextColor="#C0C0C0"
                         onChangeText={(contactNumber) => { setError(""); setContactNumber(contactNumber) }}
                         value={contactNumber}
+                    />*/}
+
+                    <ReactNativePhoneInput
+                        onChangePhoneNumber={(value) => { setError(""); setContactNumber(value)}}
+                        initialCountry={'ca'}
+                        //initialValue="13178675309"
+                        //textProps={{
+                        //    placeholder: '(XXX) XXX-XXXX'
+                        //}}
+                        //textComponent={TextInput}
+                        style={styles.input}
                     />
 
                     <TouchableOpacity
