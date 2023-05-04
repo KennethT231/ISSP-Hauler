@@ -58,7 +58,7 @@ export async function signUp(
 export async function getAllPosts() {
   try {
     const res = await axios.get(`${url}/api/posts/all`);
-    console.log("res:::" + res.data);
+    console.log("res:::getAllPosts::" + JSON.stringify(res.data));
 
     return res.data;
   } catch (err) {
@@ -145,7 +145,7 @@ export async function updateOneServiceProvider(
 export async function getPostsByServiceProviderId(uid) {
   try {
     const res = await axios.get(`${url}/api/posts/serviceprovider/${uid}`);
-    console.log("res:::" + res.data);
+    console.log("res:::getPostsByServiceProviderId:::" + JSON.stringify(res.data));
     return res.data;
   } catch (err) {
     console.log(err);

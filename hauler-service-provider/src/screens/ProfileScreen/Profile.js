@@ -29,10 +29,17 @@ export default function Profile({ navigation }) {
     // image loading state for user profile image
     const [imageLoading, setImageLoading] = useState(false)
 
+    // useEffect(() => {
+    //     if (!currentUser) {
+    //         setServiceProvider(null);
+    //     }
+    // }, [currentUser])
+
     const onSignOutClicked = async () => {
         try {
             setError("")
             setLoading(true)
+            // setServiceProvider('');
             await signout()
             navigation.navigate('Home')
         } catch (err) {
@@ -40,11 +47,6 @@ export default function Profile({ navigation }) {
         }
         setLoading(false)
     }
-    useEffect(() => {
-        if (serviceProvider) {
-            navigation.navigate('Home')
-        }
-    }, [serviceProvider])
     const uploadImage = async () => {
         try {
             if (!image) {
@@ -65,6 +67,10 @@ export default function Profile({ navigation }) {
     const onEditClicked = async () => {
         setModalVisible(true)
     }
+    const onPaymentHistoryClicked = () => {
+        navigation.navigate('PaymentHistory')
+    }
+
     const onEditSubmitted = async () => {
         try {
             const response = await uploadImage(); // upload image first and get the response
@@ -156,7 +162,7 @@ export default function Profile({ navigation }) {
                         <View style={styles.infoContainer}>
                             <FontAwesome style={styles.infoIcon} name='envelope' size={24} color='black' />
                             <Text style={styles.userInfo}>
-                                {currentUser && currentUser.email}
+                                {currentUser && currentUser?.email}
                             </Text>
                         </View>
                         <View style={styles.infoContainer}>
@@ -251,7 +257,16 @@ export default function Profile({ navigation }) {
                             onPress={() => onSignOutClicked()}>
                             <Text style={styles.buttonTitle}>Log Out</Text>
                         </TouchableOpacity>
-
+                    {/* payment history */}
+                        <TouchableOpacity
+                            style={styles.paymentHistoryButton}
+                            disabled={!!loading} // added !!
+                            onPress={() => onPaymentHistoryClicked()}
+                        >
+                            <Text style={styles.buttonTitle}>
+                                Payment History
+                            </Text>
+                        </TouchableOpacity>
                 </View>
                 : <View></View>}
         </ScrollView>
@@ -320,6 +335,14 @@ color: 'black'
         color: 'white',
         fontSize: 16,
         fontWeight: "bold"
+    },
+    paymentHistoryButton: {
+        backgroundColor: 'navy',
+        width: '90%',
+        height: 45,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 })
 
