@@ -39,6 +39,7 @@ const BottomTabNavigation = () => {
                 options={{
                     tabBarIcon: () =>
                         <FontAwesome name='search' size={25} color='black' />,
+                    drawerLabel: 'Search Jobs',
                 }}
             />
             <BottomTab.Screen
@@ -46,7 +47,8 @@ const BottomTabNavigation = () => {
                 component={MyJobListNavigator}
                 options={{
                     tabBarIcon: () =>
-                        <FontAwesome5 name="list-ul" size={25} color="black" />
+                    <FontAwesome5 name="list-ul" size={25} color="black" />,
+                    drawerLabel: 'My Job List',
                 }}
             />
             {currentUser ? <BottomTab.Screen
@@ -54,7 +56,8 @@ const BottomTabNavigation = () => {
                 component={Profile}
                 options={{
                     tabBarIcon: () =>
-                        <FontAwesome name="user" size={25} color="black" />
+                        <FontAwesome name="user" size={25} color="black" />,
+                    drawerLabel: 'Account',
                 }}
             /> : null}
         </BottomTab.Navigator>

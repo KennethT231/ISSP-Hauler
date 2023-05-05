@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, ScrollView, Picker, Linking} from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Button, ScrollView, Picker, Linking} from 'react-native';
 import UserInfo from '../../../src/components/userInfo/UserInfo';
 import { Context } from '../../../src/context/ContextProvider';
 import { signUp, createStripeAccount } from '../../../network';
 import RNPickerSelect from 'react-native-picker-select-updated';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 
 export default function Signup({ navigation }) {
@@ -14,8 +15,9 @@ export default function Signup({ navigation }) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [profilePicUrl, setProfilePicUrl] = useState('')
+    //const [profilePicUrl, setProfilePicUrl] = useState('')
     const [dateOfBirth, setDob] = useState('')
+    const [image, setImage] = useState(null)
     const [province, setProvince] = useState('')
     const [city, setCity] = useState('')
     const [streetAddress, setStreetAddress] = useState('')
@@ -28,6 +30,9 @@ export default function Signup({ navigation }) {
     const [lastName, setLastName] = useState('')
     const [error, setError] = useState('')
     const [loading, setLoading] = useState('')
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
 
     const printUrl = async () => {
         const appUrl = await Linking.getInitialURL()
@@ -44,12 +49,17 @@ export default function Signup({ navigation }) {
             setLoading(true)
             const response = await signup(email, password)
             const currentUid = response.user.uid
+            const dateOfBirth = date.toLocaleDateString()
+            console.log('dateOfBirth:: ', dateOfBirth);
+            setDob(dateOfBirth)
             setUid(currentUid)
-            await signUp(currentUid,
+            const signUp = await signUp(
+                currentUid,
                 firstName,
                 lastName,
                 // profilePicUrl,
-                // dateOfBirth,
+                image,
+                dateOfBirth,
                 province,
                 city,
                 streetAddress,
@@ -60,7 +70,7 @@ export default function Signup({ navigation }) {
                 // driverLicenseExpiry,
                 serviceLocation,
             )
-
+            console.log('sign up:: ', signUp);
             const appUrl = await Linking.getInitialURL()
             const stripeUrl = await createStripeAccount(email, appUrl,currentUid)
             console.log('stripe url', stripeUrl)
@@ -72,6 +82,22 @@ export default function Signup({ navigation }) {
         }
         setLoading(false)
     }
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate;
+        setShow(false);
+        setDate(currentDate);
+    };
+    // useEffect(() => {
+    //     (async () => {
+    //         if (Platform.OS !== 'web') {
+    //             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    //             if (status !== 'granted') {
+    //                 alert('Sorry!! We need camera roll permission to make this work.');
+    //             }
+    //         }
+    //     })();
+    // }, []);
 
     return (
         <ScrollView>
@@ -101,7 +127,6 @@ export default function Signup({ navigation }) {
                         value={confirmPassword}
                     />
                     <UserInfo
-                        dateOfBirth={dateOfBirth}
                         province={province}
                         city={city}
                         streetAddress={streetAddress}
@@ -109,17 +134,36 @@ export default function Signup({ navigation }) {
                         contactNumber={contactNumber}
                         firstName={firstName}
                         lastName={lastName}
-                        profilePicUrl={profilePicUrl}
+                        // profilePicUrl={profilePicUrl}
                         setProvince={setProvince}
                         setCity={setCity}
                         setStreetAddress={setStreetAddress}
                         setUnitNumber={setUnitNumber}
-                        setProfilePicUrl={setProfilePicUrl}
+                        //setProfilePicUrl={setProfilePicUrl}
                         setLastName={setLastName}
-                        setDob={setDob}
+                        //setDob={setDob}
                         setContactNumber={setContactNumber}
                         setFirstName={setFirstName}
                         setError={setError}
+                    />
+                  <Text style={styles.text1}>Date Of Birth:</Text>
+                  <View style={styles.date}>
+                  <Button onPress={() => setShow(true)} title="Select a Date" />
+                    {show && (
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            value={date}
+                            mode='date'
+                            is24Hour={true}
+                            onChange={onChange}
+                            onChangeText={(date) => { setError(""); setDob(date) }}
+                        />
+                    )}
+                  </View>
+                    <TextInput
+                        placeholderTextColor="#C0C0C0"
+                        value={date.toLocaleDateString()}
+                        style={styles.datePicker}
                     />
 
                   <View style={styles.picker}>
@@ -195,7 +239,9 @@ export default function Signup({ navigation }) {
                             <Text style={styles.buttonTitle}>Upload Void Cheque</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={styles.buttons}>
+                            style={styles.buttons} onPress={
+                                () => navigation.navigate('Verification')}>
+                            
                             <Text style={styles.buttonTitle}>Upload Driver License</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -238,6 +284,26 @@ const styles = StyleSheet.create({
         marginVertical: '2%',
         backgroundColor: 'white'
     },
+    date: {
+        marginLeft: '10%',
+        marginRight: '2%',
+        width: '80%',
+        marginTop: 20,
+    },
+
+    datePicker: {
+        height: 40,
+        width: '80%',
+        borderColor: '#C0C0C0',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        marginBottom: 20,
+        marginTop: 10,
+        marginLeft: '10%',
+        marginRight: '2%',
+    },
     logo: {
         width: 200,
         height: 100,
@@ -267,7 +333,7 @@ const styles = StyleSheet.create({
         marginVertical: '1%',
     },
     button: {
-        backgroundColor: '#0077FC',
+        backgroundColor: '#2196f3',
         marginLeft: '2%',
         marginRight: '2%',
         marginTop: 50,

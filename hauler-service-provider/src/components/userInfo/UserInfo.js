@@ -6,12 +6,12 @@ export default function UserInfo({ firstName, lastName, province, city, streetAd
     unitNumber, setCity, setStreetAddress, setUnitNumber, profilePicUrl, dateOfBirth, setDob, contactNumber, setContactNumber, setProvince, setFirstName, setLastName, setProfilePicUrl, setError }) {
     return (
         <View>
-             <Text style={styles.text1}> profilePicUrl : </Text>
+             {/* <Text style={styles.text1}> profilePicUrl : </Text>
             <TextInput
                 style={styles.input}
                 onChangeText={(profilePic) => { setError(""); setProfilePicUrl(profilePic) }}
                 value={profilePicUrl}
-            />
+            /> */}
              <Text style={styles.text1}> First Name : </Text>
             <TextInput
                 style={styles.input}
@@ -24,12 +24,12 @@ export default function UserInfo({ firstName, lastName, province, city, streetAd
                 onChangeText={(lname) => { setError(""); setLastName(lname) }}
                 value={lastName}
             />
-             <Text style={styles.text1}> Date of Birth : </Text>
+             {/* <Text style={styles.text1}> Date of Birth : </Text>
             <TextInput
                 style={styles.input}
                 onChangeText={(date) => { setError(""); setDob(date) }}
                 value={dateOfBirth}
-            />
+            /> */}
              <Text style={styles.text1}> Province : </Text>
             <TextInput
                 style={styles.input}
@@ -77,6 +77,20 @@ const styles = StyleSheet.create({
     text1: {
         color: '#BFBFBF',
         marginLeft: '5%'
+    },
+    text: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginVertical: 10,
+    },
+        datePicker: {
+        height: 40,
+        borderColor: '#C0C0C0',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        marginBottom: 20,
+        marginTop: 20
     },
 })
 
