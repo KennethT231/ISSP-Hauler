@@ -42,13 +42,15 @@ export default function App() {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    const alphaNumericData = data.replace(/[^a-zA-Z0-9]/g, '\n');
-    const dataArray = alphaNumericData.split('\n').filter((item) => item !== '');
+    const alphaNumericData = data
+    const dataArray = alphaNumericData.split('$').filter((item) => item !== '');
+    console.log(dataArray);
+
     const licenseInformation = new LicenseInformation();
     licenseInformation.firstName = dataArray[2];
     licenseInformation.lastName = dataArray[1];
     licenseInformation.middleName = dataArray[3];
-    licenseInformation.licenseNumber = dataArray[12].substring(-1, 15);
+    //licenseInformation.licenseNumber = dataArray[12].substring(-1, 15);
 
 
     setLicenseInfo(dataArray);
@@ -85,8 +87,7 @@ export default function App() {
         }}
       />
       {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
-        {licenseInfo != null && <Text style={styles.text}>{licenseInfo}</Text>}
-        {capturedImage != null && <HTMLImageElement src={capturedImage.uri} /> }
+      {licenseInfo != null && <Text style={styles.text}>{licenseInfo}</Text>}
     </View>
   );
 }

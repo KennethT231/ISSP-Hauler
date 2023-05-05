@@ -53,7 +53,7 @@ export default function JobConfirmation({ navigation, route }) {
                     <Text style={styles.infoKey}>Total Earning</Text>
                     <Text style={styles.infoValue}>$ {posts.acceptedPrice ? posts.acceptedPrice : actionPrice}</Text>
                 </View>
-                { (posts.status === "Paid" || "In Progress") &&
+                { (posts.status === "Paid") &&
                 <TouchableOpacity
                     style={[styles.button, styles.startRouteButton]}
                     onPress={() => onStartRoutePressed(posts)}>
