@@ -7,7 +7,7 @@ import PostInfo from '../../components/PostInfo/PostInfo'
 import MapView from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import { Marker } from 'react-native-maps';
-//import { GOOGLE_MAP_API } from '@env';
+import { GOOGLE_MAP_API } from '@env';
 import firebase from '../../api/firebase';
 
 export default function ErrandSummary({ navigation, route }) {
@@ -136,7 +136,7 @@ export default function ErrandSummary({ navigation, route }) {
                                     />
                                 )}
                                 <MapViewDirections
-                                    apikey={"AIzaSyCMvEs9takJvuKNDt0RaIm-xfZH2uCUr-s"}
+                                    apikey={GOOGLE_MAP_API}
                                     origin={coordinates[0]}
                                     waypoints={coordinates}
                                     destination={coordinates[coordinates.length - 1]}

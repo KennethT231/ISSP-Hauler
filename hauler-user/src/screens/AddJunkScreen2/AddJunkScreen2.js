@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Text, View, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { GooglePlacesAutocomplete, GooglePlacesDetailsQuery } from 'react-native-google-places-autocomplete';
-//import { GOOGLE_MAP_API } from '@env';
+import { GOOGLE_MAP_API } from '@env';
 import { getOnePost } from '../../../network'
 
 // Post A Job Page2 - Second Page of the post a job process(pick up location)
@@ -58,7 +58,7 @@ export default function AddJunkScreen2({ navigation, route }) {
         value={pickUpAddress}
         onFail={(error) => console.error(error)}
         query={{
-          key: "AIzaSyCMvEs9takJvuKNDt0RaIm-xfZH2uCUr-s",
+          key: GOOGLE_MAP_API,
           language: 'en', // language of the results
         }}
       />

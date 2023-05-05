@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
     },
     imageDisplay: {
-        width: 300,
+        width: "100%",
         height: 200,
         borderRadius: 10,
         borderWidth: 2,
