@@ -35,9 +35,8 @@ export default function VerificationForm({ navigation, route }) {
                         maxLength={1}
                         keyboardType="number-pad"
                         onChangeText={(value) => {
-                            let newCode = code.split('');
-                            newCode[index - 1] = value;
-                            setCode(newCode.join(''));
+                            let newCode = code + value;
+                            setCode(newCode);
                         }}
                         value={code[index - 1]}
                     />
