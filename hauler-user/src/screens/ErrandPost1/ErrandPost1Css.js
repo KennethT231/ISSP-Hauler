@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 20,
-    backgroundColor: '#fff', 
+    backgroundColor: '#fff',
   },
 
   button: {
@@ -57,9 +57,9 @@ const styles = StyleSheet.create({
   },
 
   imageDisplay: {
-    width: 200,
-    height: 200,
-    resizeMode: 'contain',
+    width: 300,
+    height: 300,
+    resizeMode: "contain"
   },
 
   imageRow: {
@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 20,
-    backgroundColor: '#fff', 
+    backgroundColor: '#fff',
     overflow: 'hidden',
     marginTop: 30,
     marginLeft: 20,
