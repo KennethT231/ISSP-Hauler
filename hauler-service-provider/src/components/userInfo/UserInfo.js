@@ -54,12 +54,12 @@ export default function UserInfo({ firstName, lastName, province, city, streetAd
                 onChangeText={(unitNumber) => { setError(""); setUnitNumber(unitNumber) }}
                 value={unitNumber}
             />
-             <Text style={styles.text1}> Contact Number : </Text>
+             {/* <Text style={styles.text1}> Contact Number : </Text>
             <TextInput
                 style={styles.input}
                 onChangeText={(number) => { setError(""); setContactNumber(number) }}
                 value={contactNumber}
-            />
+            /> */}
         </View>
     )
 }

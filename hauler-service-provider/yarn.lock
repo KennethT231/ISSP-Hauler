@@ -1376,8 +1376,18 @@
     resolve-from "^5.0.0"
     sucrase "^3.20.0"
 
+<<<<<<< HEAD
 "@expo/ngrok-bin-win32-x64@2.3.41":
   version "2.3.41"
+=======
+"@expo/ngrok-bin-win32-ia32@2.3.41":
+  version "2.3.41"
+  resolved "https://registry.npmjs.org/@expo/ngrok-bin-win32-ia32/-/ngrok-bin-win32-ia32-2.3.41.tgz"
+  integrity sha512-0+vPbKvUA+a9ERgiAknmZCiWA3AnM5c6beI+51LqmjKEM4iAAlDmfXNJ89aAbvZMUtBNwEPHzJHnaM4s2SeBhA==
+
+"@expo/ngrok-bin-win32-x64@2.3.41":
+  version "2.3.41"
+>>>>>>> ad3e6efd66f030ae77cee0ca78382fb5561ad8ec
   resolved "https://registry.npmjs.org/@expo/ngrok-bin-win32-x64/-/ngrok-bin-win32-x64-2.3.41.tgz"
   integrity sha512-mncsPRaG462LiYrM8mQT8OYe3/i44m3N/NzUeieYpGi8+pCOo8TIC23kR9P93CVkbM9mmXsy3X6hq91a8FWBdA==
 
@@ -1450,6 +1460,29 @@
     "@xmldom/xmldom" "~0.7.0"
     base64-js "^1.2.3"
     xmlbuilder "^14.0.0"
+
+<<<<<<< HEAD
+"@expo/prebuild-config@6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/@expo/prebuild-config/-/prebuild-config-6.0.1.tgz"
+  integrity sha512-WK3FDht1tdXZGCvtG5s7HSwzhsc7Tyu2DdqV9jVUsLtGD42oqUepk13mEWlU9LOTBgLsoEueKjoSK4EXOXFctw==
+=======
+"@expo/prebuild-config@6.0.0":
+  version "6.0.0"
+  resolved "https://registry.npmjs.org/@expo/prebuild-config/-/prebuild-config-6.0.0.tgz"
+  integrity sha512-UW0QKAoRelsalVMhAG1tmegwS+2tbefvUi6/0QiKPlMLg8GFDQ5ZnzsSmuljD0SzT5yGg8oSpKYhnrXJ6pRmIQ==
+>>>>>>> ad3e6efd66f030ae77cee0ca78382fb5561ad8ec
+  dependencies:
+    "@expo/config" "~8.0.0"
+    "@expo/config-plugins" "~6.0.0"
+    "@expo/config-types" "^48.0.0"
+    "@expo/image-utils" "0.3.22"
+    "@expo/json-file" "^8.2.37"
+    debug "^4.3.1"
+    fs-extra "^9.0.0"
+    resolve-from "^5.0.0"
+    semver "7.3.2"
+    xml2js "0.4.23"
 
 "@expo/prebuild-config@6.0.1":
   version "6.0.1"
@@ -2358,7 +2391,11 @@
   dependencies:
     invariant "^2.2.4"
 
+<<<<<<< HEAD
 "@react-native-picker/picker@^2.4.8":
+=======
+"@react-native-picker/picker@^2.4.8", "@react-native-picker/picker@>= 2.0":
+>>>>>>> ad3e6efd66f030ae77cee0ca78382fb5561ad8ec
   version "2.4.10"
   resolved "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.4.10.tgz"
   integrity sha512-EvAlHmPEPOwvbP6Pjg/gtDV3XJzIjIxr10fXFNlX5r9HeHw582G1Zt2o8FLyB718nOttgj8HYUTGxvhu4N65sQ==
@@ -3467,6 +3504,11 @@ bl@^4.1.0:
     buffer "^5.5.0"
     inherits "^2.0.4"
     readable-stream "^3.4.0"
+
+blinkid-react-native@^6.1.1:
+  version "6.1.1"
+  resolved "https://registry.npmjs.org/blinkid-react-native/-/blinkid-react-native-6.1.1.tgz"
+  integrity sha512-Scj9qZ/dgeh6fueDyaR2c6s41PcHVBhKGCdCAgYPPyI9de/WO6D0XjNXRte+6j0gnjoWfzXinIH4fExCa3FEyg==
 
 blueimp-md5@^2.10.0:
   version "2.19.0"
@@ -4841,11 +4883,6 @@ event-target-shim@^5.0.0, event-target-shim@^5.0.1:
   resolved "https://registry.npmjs.org/event-target-shim/-/event-target-shim-5.0.1.tgz"
   integrity sha512-i/2XbnSz/uxRCU6+NdVJgKWDTM427+MqYbkQzD321DuCQJUqOuJKIA0IM2+W2xtYHdKOmZ4dR6fExsd4SXL+WQ==
 
-eventemitter3@^1.1.1:
-  version "1.2.0"
-  resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-1.2.0.tgz"
-  integrity sha512-DOFqA1MF46fmZl2xtzXR3MPCRsXqgoFqdXcrCVYM3JNnfUeHTm/fh/v/iU7gBFpwkuBmoJPAm5GuhdDfSEJMJA==
-
 eventemitter3@^4.0.0:
   version "4.0.7"
   resolved "https://registry.npmjs.org/eventemitter3/-/eventemitter3-4.0.7.tgz"
@@ -5058,10 +5095,17 @@ expo-updates@^0.16.4:
     fbemitter "^3.0.0"
     resolve-from "^5.0.0"
 
+<<<<<<< HEAD
 expo@*, expo@>=46.0.9:
   version "48.0.16"
   resolved "https://registry.npmjs.org/expo/-/expo-48.0.16.tgz"
   integrity sha512-3LOfO80FZn+K3NngaP80LC2KE4rQcuzF3hQB6k8877A3Y/UPF5jmr8H7jlRrfvWSaYlenwzHhMs6Lyhr3zwfGw==
+=======
+expo@*, expo@>=46.0.9, expo@~48.0.11:
+  version "48.0.12"
+  resolved "https://registry.npmjs.org/expo/-/expo-48.0.12.tgz"
+  integrity sha512-DjHYxIHOEvsM+yd2JFnRXtogTZKYWVhyT76Q8CKz91cdM7coXPtTAC23dj9nHx6aKP8RmHnpr902lY5uYPP83A==
+>>>>>>> ad3e6efd66f030ae77cee0ca78382fb5561ad8ec
   dependencies:
     "@babel/runtime" "^7.20.0"
     "@expo/cli" "0.7.1"
@@ -5646,6 +5690,14 @@ globby@^6.1.0:
     pify "^2.0.0"
     pinkie-promise "^2.0.0"
 
+<<<<<<< HEAD
+=======
+google-libphonenumber@^3.2.32:
+  version "3.2.32"
+  resolved "https://registry.npmjs.org/google-libphonenumber/-/google-libphonenumber-3.2.32.tgz"
+  integrity sha512-mcNgakausov/B/eTgVeX8qc8IwWjRrupk9UzZZ/QDEvdh5fAjE7Aa211bkZpZj42zKkeS6MTT8avHUwjcLxuGQ==
+
+>>>>>>> ad3e6efd66f030ae77cee0ca78382fb5561ad8ec
 got@^11.5.1:
   version "11.8.6"
   resolved "https://registry.npmjs.org/got/-/got-11.8.6.tgz"
@@ -8551,6 +8603,15 @@ react-native-maps@>=1.0.0, react-native-maps@1.3.2:
   dependencies:
     "@types/geojson" "^7946.0.8"
 
+react-native-phone-input@^1.3.6:
+  version "1.3.6"
+  resolved "https://registry.npmjs.org/react-native-phone-input/-/react-native-phone-input-1.3.6.tgz"
+  integrity sha512-siT4vzeng6894F64PfcMoy4MQs9xap/ucA1WK9UHywWH4N9FX/h12AD191x3hiskKod9QG3mCeQJXg3EZkjf9g==
+  dependencies:
+    google-libphonenumber "^3.2.32"
+    lodash "^4.17.21"
+    prop-types "^15.8.1"
+
 react-native-picker-select-updated@^9.0.3:
   version "9.0.3"
   resolved "https://registry.npmjs.org/react-native-picker-select-updated/-/react-native-picker-select-updated-9.0.3.tgz"
@@ -8634,7 +8695,7 @@ react-native-vector-icons@>7.0.0:
     postcss-value-parser "^4.2.0"
     styleq "^0.1.2"
 
-react-native@*, react-native@^0.71.7, "react-native@>= 0.50.0", "react-native@>= 0.64.3", react-native@>=0.57:
+react-native@*, react-native@^0.71.7, "react-native@>= 0.50.0", "react-native@>= 0.64.3", react-native@>=0.57, react-native@>=0.69.9:
   version "0.71.7"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.71.7.tgz"
   integrity sha512-Id6iRLS581fJMFGbBl1jP5uSmjExtGOvw5Gvh7694zISXjsRAsFMmU+izs0pyCLqDBoHK7y4BT7WGPGw693nYw==

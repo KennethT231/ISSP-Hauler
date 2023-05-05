@@ -5,7 +5,7 @@ import { Context } from '../../../src/context/ContextProvider';
 import { signUp, createStripeAccount } from '../../../network';
 import RNPickerSelect from 'react-native-picker-select-updated';
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import ReactNativePhoneInput from 'react-native-phone-input';
 
 export default function Signup({ navigation }) {
   
@@ -33,6 +33,8 @@ export default function Signup({ navigation }) {
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    const [verificationStatus, setVerificationStatus] = useState(null)
+
 
     const printUrl = async () => {
         const appUrl = await Linking.getInitialURL()
@@ -50,10 +52,9 @@ export default function Signup({ navigation }) {
             const response = await signup(email, password)
             const currentUid = response.user.uid
             const dateOfBirth = date.toLocaleDateString()
-            console.log('dateOfBirth:: ', dateOfBirth);
             setDob(dateOfBirth)
             setUid(currentUid)
-            const signUp = await signUp(
+            navigation.navigate('VerificationForm', {
                 currentUid,
                 firstName,
                 lastName,
@@ -69,13 +70,15 @@ export default function Signup({ navigation }) {
                 vehicleType,
                 // driverLicenseExpiry,
                 serviceLocation,
-            )
-            console.log('sign up:: ', signUp);
+            })
             const appUrl = await Linking.getInitialURL()
             const stripeUrl = await createStripeAccount(email, appUrl,currentUid)
             console.log('stripe url', stripeUrl)
             await Linking.openURL(stripeUrl)
-            navigation.navigate('Home')
+
+            // Start the verification process in the background
+            const verificationResponse = await verifyProvider(contactNumber)
+            setVerificationStatus(verificationResponse.status)
         } catch (err) {
             console.log(err)
             setError(err.message)
@@ -126,6 +129,25 @@ export default function Signup({ navigation }) {
                         onChangeText={(password) => { setError(""); setConfirmPassword(password) }}
                         value={confirmPassword}
                     />
+                    <Text style={styles.text1}> Phone Number : </Text>
+                    {/*<TextInput
+                        style={styles.input}
+                        placeholder='(XXX) XXX-XXXX'
+                        placeholderTextColor="#C0C0C0"
+                        onChangeText={(contactNumber) => { setError(""); setContactNumber(contactNumber) }}
+                        value={contactNumber}
+                    />*/}
+
+                    <ReactNativePhoneInput
+                        onChangePhoneNumber={(value) => { setError(""); setContactNumber(value)}}
+                        initialCountry={'ca'}
+                        //initialValue="13178675309"
+                        //textProps={{
+                        //    placeholder: '(XXX) XXX-XXXX'
+                        //}}
+                        //textComponent={TextInput}
+                        style={styles.input}
+                    />
                     <UserInfo
                         province={province}
                         city={city}
@@ -142,7 +164,7 @@ export default function Signup({ navigation }) {
                         //setProfilePicUrl={setProfilePicUrl}
                         setLastName={setLastName}
                         //setDob={setDob}
-                        setContactNumber={setContactNumber}
+                        //setContactNumber={setContactNumber}
                         setFirstName={setFirstName}
                         setError={setError}
                     />
