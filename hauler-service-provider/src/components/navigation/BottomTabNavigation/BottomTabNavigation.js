@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome, FontAwesome5 } from '@expo/vector-icons';
 import SearchJobsNavigator from '../SearchJobsNavigator/SearchJobsNavigator';
 import MyJobListNavigator from '../MyJobListNavigator/MyJobListNavigator';
 import Profile from '../../../screens/ProfileScreen/Profile';
 import HomeNavigator from '../HomeNavigator/HomeNavigator';
+import { Context } from '../../../context/ContextProvider';
 
 const BottomTab = createBottomTabNavigator();
 
 const BottomTabNavigation = () => {
+    const { currentUser } = useContext(Context)
     return (
         <BottomTab.Navigator
             initialRouteName='Home'
@@ -17,7 +19,7 @@ const BottomTabNavigation = () => {
                 "tabBarShowLabel": false,
                 "tabBarStyle": [
                     {
-                    "display": "flex"
+                        "display": "flex"
                     },
                     null
                 ]
@@ -49,15 +51,15 @@ const BottomTabNavigation = () => {
                     drawerLabel: 'My Job List',
                 }}
             />
-            <BottomTab.Screen
+            {currentUser ? <BottomTab.Screen
                 name='Profile'
                 component={Profile}
                 options={{
                     tabBarIcon: () =>
-                    <FontAwesome name="user" size={25} color="black" />,
+                        <FontAwesome name="user" size={25} color="black" />,
                     drawerLabel: 'Account',
                 }}
-            />
+            /> : null}
         </BottomTab.Navigator>
     );
 };

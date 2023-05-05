@@ -10,7 +10,7 @@ const BottomTab = createBottomTabNavigator();
 
 const BottomTabNavigation = () => {
 
-    const { signin, currentUser } = useContext(Context)
+    const { currentUser } = useContext(Context)
     return (
         <BottomTab.Navigator
             initialRouteName='Home'

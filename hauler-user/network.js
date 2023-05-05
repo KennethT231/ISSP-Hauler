@@ -19,7 +19,8 @@ export async function signUp(
   streetAddress,
   unitNumber,
   email,
-  contactNumber
+  contactNumber,
+  code
 ) {
   const res = await axios.post(`${url}/api/users`, {
     uid: uid,
@@ -33,9 +34,18 @@ export async function signUp(
     streetAddress: streetAddress,
     unitNumber: unitNumber,
     email: email,
-    contactNumber: contactNumber
+    contactNumber: contactNumber,
+    code: code,
   });
   console.log("user created");
+  return res;
+}
+
+export async function verifyUser(contactNumber) {
+  const res = await axios.post(`${url}/api/users/verify/2FA`, {
+    contactNumber: contactNumber
+  });
+  console.log("user verified");
   return res;
 }
 

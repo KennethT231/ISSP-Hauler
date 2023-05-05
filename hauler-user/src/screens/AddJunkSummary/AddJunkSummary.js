@@ -37,6 +37,11 @@ export default function AddJunkSummary({ navigation, route }) {
         setIsLoading(true); // set isLoading to true to display the loading indicator
         try {
             const response = await uploadImage(); // upload image first and get the response
+            if (response === null) {
+                Alert.alert('Please select an image');
+                setIsLoading(false);
+                return;
+            }
             const image = await response.ref.getDownloadURL(); // then get the image url from the response
             console.log('post image url:', image);
             await postItem(
@@ -56,11 +61,13 @@ export default function AddJunkSummary({ navigation, route }) {
                 pickUpPhoneNumber,
                 pickUpSpecialInstructions,
             );
+            console.log(currentUser.uid)
             setIsLoading(false); // set isLoading to false to hide the loading indicator
             navigation.navigate('Confirmation', { confirm: 'Post' })
         } catch (err) {
-            Alert.alert("Please include a photo of the item you want to post")
-            console.log('onPostJobSubmitted error:', err);
+            Alert.alert('Error', 'Please login to post a job');
+            navigation.navigate('Signin')
+            console.log('onPostJobSubmitted error:', err.message);
         } finally {
             setIsLoading(false); // set isLoading back to false to hide the loading indicator
         }
@@ -130,8 +137,9 @@ export default function AddJunkSummary({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
+
     container: {
-        backgroundColor: 'white',
+        backgroundColor: '#f0f0f0',
         flex: 1,
         width: '100%',
         minHeight: 600,
@@ -143,21 +151,32 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     button: {
-        backgroundColor: '#0177FC',
+        backgroundColor: '#1970d4',
         alignSelf: 'center',
         marginVertical: 10,
         width: '90%',
         height: 48,
         borderRadius: 10,
         alignItems: "center",
-        justifyContent: 'center'
+        justifyContent: 'center',
+        shadowColor: '#0177FC',
+        marginTop: 20,
+        shadowOpacity: 0.8,
+        shadowOffset: {
+            height: 2,
+            width: 2,
+        },
+        elevation: 5
     },
+
     buttonTitle: {
         color: 'white',
         fontSize: 16,
         fontWeight: "bold"
     },
+
     view: {
         flexDirection: 'row'
     }
+
 })
