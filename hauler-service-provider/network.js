@@ -55,6 +55,14 @@ export async function signUp(
 }
 
 
+//================================== To verify provider =========================================//
+export async function verifyProvider(contactNumber) {
+  const res = await axios.post(`${url}/api/service-providers/verify/2FA`, {
+    contactNumber: contactNumber
+  });
+  console.log("user verified");
+  return res;
+}
 //================================== To get All active posts =========================================//
 export async function getAllPosts() {
   try {

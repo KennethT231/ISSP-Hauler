@@ -33,7 +33,7 @@ const PaymentHistory = ({ navigation }) => {
     }, []);
 
     // filter paid posts
-    const isPaid = posts.filter((post) => post.status === "Paid");
+    const isPaid = posts.filter((post) => post.status === "Paid" || post.status == "Complete");
     console.log(isPaid);
 
     // total amount paid
@@ -85,16 +85,16 @@ const PaymentHistory = ({ navigation }) => {
     };
 
     const renderItem = ({ item }) => {
-        const paymentDate = item.status === "Paid" && (
+        const paymentDate = (item.status === "Paid" || item.status === "Complete") && (
             new Date(item.timeStamp).toLocaleDateString()
         )
-        const paymentStatus = item.status === "Paid" && (
+        const paymentStatus = (item.status === "Paid" || item.status === "Complete") && (
             <View style={{ backgroundColor: "#27AE60", padding: 5, borderRadius: 5 }}>
                 <Text style={{ color: "#fff" }}>Paid</Text>
             </View>
         )
 
-        const paidPrice = item.status === "Paid" && (
+        const paidPrice = (item.status === "Paid" || item.status === "Complete") && (
             <Text>${item.acceptedPrice}</Text>
         )
 
@@ -181,7 +181,7 @@ const PaymentHistory = ({ navigation }) => {
                         renderItem={renderItem}
                     />
                 ) : (
-                    <Text>No payments yet</Text>
+                    <Text>No payments or complete yet</Text>
                 )}
             </View>
         </View>
