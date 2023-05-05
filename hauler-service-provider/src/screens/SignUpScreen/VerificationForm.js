@@ -8,10 +8,10 @@ export default function VerificationForm({ navigation, route }) {
 
     const onSignUpPressWithVerification = async () => {
         try {
-            const response = await signUp(route.params.currentUid, route.params.firstName, route.params.lastName, route.params.image, route.params.dateOfBirth, route.params.province, route.params.city, route.params.streetAddress, route.params.unitNumber, route.params.email, route.params.contactNumber, code)
+            const response = await signUp(route.params.currentUid, route.params.firstName, route.params.lastName, route.params.image, route.params.dateOfBirth, route.params.province, route.params.city, route.params.streetAddress, route.params.unitNumber, route.params.email, route.params.vehicleType, route.params.serviceLocation, route.params.contactNumber, code)
             console.log("response in verification: ", response);
             if (response.status === 201) {
-                navigation.navigate("MyPostList");
+                navigation.navigate("Home");
                 Alert.alert("You have successfully signed up!");
             } else {
                 Alert.alert("Please enter the correct code");

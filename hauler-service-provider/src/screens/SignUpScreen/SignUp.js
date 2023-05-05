@@ -2,10 +2,11 @@ import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Button, ScrollView, Picker, Linking} from 'react-native';
 import UserInfo from '../../../src/components/userInfo/UserInfo';
 import { Context } from '../../../src/context/ContextProvider';
-import { signUp, createStripeAccount } from '../../../network';
+import { signUp, createStripeAccount,verifyProvider } from '../../../network';
 import RNPickerSelect from 'react-native-picker-select-updated';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ReactNativePhoneInput from 'react-native-phone-input';
+
 
 export default function Signup({ navigation }) {
   
@@ -78,6 +79,7 @@ export default function Signup({ navigation }) {
 
             // Start the verification process in the background
             const verificationResponse = await verifyProvider(contactNumber)
+            console.log("verificationResponse++ " +verificationResponse)
             setVerificationStatus(verificationResponse.status)
         } catch (err) {
             console.log(err)
