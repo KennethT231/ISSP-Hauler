@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button, Image} from 'react-native';
+import { Text, View, StyleSheet, Button, ImageBackground} from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera, CameraType } from 'expo-camera';
 
@@ -29,6 +29,7 @@ export default function App() {
   const [scanned, setScanned] = useState(false);
   const [licenseInfo, setLicenseInfo] = useState(null);
   const [capturedImage, setCapturedImage] = useState(null);
+  const [previewVisible, setPreviewVisible] = useState(false);
   let camera = null;
 
   useEffect(() => {
@@ -42,27 +43,27 @@ export default function App() {
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanned(true);
-    const alphaNumericData = data
-    const dataArray = alphaNumericData.split('$').filter((item) => item !== '');
-    console.log(dataArray);
+    // const alphaNumericData = data
+    // const dataArray = alphaNumericData.split('$').filter((item) => item !== '');
+    // console.log(dataArray);
 
-    const licenseInformation = new LicenseInformation();
-    licenseInformation.firstName = dataArray[2];
-    licenseInformation.lastName = dataArray[1];
-    licenseInformation.middleName = dataArray[3];
+    // const licenseInformation = new LicenseInformation();
+    // licenseInformation.firstName = dataArray[2];
+    // licenseInformation.lastName = dataArray[1];
+    // licenseInformation.middleName = dataArray[3];
     //licenseInformation.licenseNumber = dataArray[12].substring(-1, 15);
 
-
-    setLicenseInfo(dataArray);
+    //setLicenseInfo(dataArray);
 
     const takePicture = async () => {
-        const photo = await camera.takePictureAsync({
+        let photo = await camera.takePictureAsync({
             onPictureSaved: (data) => {
                 console.log(data.uri);
             },
-            base64: true,
+            base64: false,
         });
         setCapturedImage(data);
+        setPreviewVisible(true);
     };
 
     takePicture();
@@ -78,20 +79,26 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Camera
-        type={CameraType.back}
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
-        ref={(ref) => {
-            camera = ref;
-        }}
-      />
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
-      {licenseInfo != null && <Text style={styles.text}>{licenseInfo}</Text>}
+      {previewVisible ? 
+        (
+          <ImageBackground source={{ uri: capturedImage && capturedImage.uri }} style={{ flex: 1 }}>
+            <Text onPress={() => setPreviewVisible(false)}>
+              Cancel
+            </Text>
+          </ImageBackground>
+        ):(
+          <Camera
+            type={CameraType.back}
+            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+            style={StyleSheet.absoluteFillObject}
+            ref={(ref) => {
+                camera = ref;
+            }}
+          />
+        )}
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -115,6 +122,5 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'white',
         backgroundColor: 'black',
-    
     },
 });
