@@ -107,7 +107,7 @@ const updateOneServiceProvider = async (req, res) => {
             firstName,
             lastName,
             profilePicUrl,
-            dateOfBirth,
+            //dateOfBirth,
             province,
             city,
             streetAddress,
@@ -118,7 +118,7 @@ const updateOneServiceProvider = async (req, res) => {
             $set: {
                 firstName: firstName,
                 lastName: lastName,
-                dateOfBirth: dateOfBirth,
+                //dateOfBirth: dateOfBirth,
                 province: province,
                 city: city,
                 streetAddress: streetAddress,
@@ -132,9 +132,32 @@ const updateOneServiceProvider = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 };
+//=============================== Post user profile picture  =================================================//
+const postProfilePic = async (req, res) => {
+    try {
+        const id = req.params.uid;
+        const profilePicUrl = req.file.location;
+        console.log({ profilePicUrl, id });
+
+        // Find the user document by ID
+        const user = await UserData.findById(id);
+
+        // Set the profile picture URL
+        user.profilePicUrl = profilePicUrl;
+
+        // Save the updated user document
+        await user.save();
+
+        res.status(200).send('Profile picture updated successfully!');
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+};
 
 exports.getOneServiceProvider = getOneServiceProvider;
 exports.getServiceProvider = getServiceProvider;
 exports.createServiceProvider = createServiceProvider;
 exports.deleteOneServiceProvider = deleteOneServiceProvider;
 exports.updateOneServiceProvider = updateOneServiceProvider;
+exports.postProfilePic = postProfilePic;

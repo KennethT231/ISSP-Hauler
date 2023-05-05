@@ -21,6 +21,7 @@
     "bootstrap": "^5.2.3",
     "expo": "~48.0.11",
     "expo-location": "~15.1.1",
+    "expo-image-picker": "^14.1.1",
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "expo-updates": "^0.16.4",

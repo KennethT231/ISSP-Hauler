@@ -53,7 +53,7 @@ export default function Signup({ navigation }) {
             console.log('dateOfBirth:: ', dateOfBirth);
             setDob(dateOfBirth)
             setUid(currentUid)
-            const signUp = await signUp(
+            const signUpinfo = await signUp(
                 currentUid,
                 firstName,
                 lastName,
@@ -70,7 +70,7 @@ export default function Signup({ navigation }) {
                 // driverLicenseExpiry,
                 serviceLocation,
             )
-            console.log('sign up:: ', signUp);
+            console.log('sign up:: ', signUpinfo);
             const appUrl = await Linking.getInitialURL()
             const stripeUrl = await createStripeAccount(email, appUrl,currentUid)
             console.log('stripe url', stripeUrl)
