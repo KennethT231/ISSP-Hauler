@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
 
   text: {
     color: '#000000',
-    fontSize: '20%',
+    fontSize: 20,
     marginLeft: 25,
     fontWeight: 'bold',
     marginTop: 20,
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: 'center',
     shadowColor: '#0177FC',
-    marginTop:30,
+    marginTop: 30,
     shadowOpacity: 0.8,
     shadowOffset: {
       height: 2,
