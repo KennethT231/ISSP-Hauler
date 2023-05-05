@@ -1,7 +1,8 @@
 import axios from 'axios';
 //import { NETWORK_URL } from '@env';
 
-const url = "https://hauler-backend-production.up.railway.app"
+const url = "https://hauler-backend-production-765f.up.railway.app"
+//  const url = "http://10.0.0.145:3000"
 console.log(url);
 
 //==============================To register Service Provider========================================//
@@ -9,8 +10,8 @@ export async function signUp(
   uid,
   firstName,
   lastName,
-  // profilePicUrl,
-  // dateOfBirth,
+  profilePicUrl,
+  dateOfBirth,
   province,
   city,
   streetAddress,
@@ -27,7 +28,7 @@ export async function signUp(
       firstName: firstName,
       lastName: lastName,
       profilePicUrl: "https://techcommunity.microsoft.com/t5/image/serverpage/image-id/217078i525F6A9EF292601F/image-size/large?v=v2&px=999",
-      dateOfBirth: "01/01/2000",
+      dateOfBirth: dateOfBirth,
       province: province,
       city: city,
       streetAddress: streetAddress,
@@ -46,7 +47,7 @@ export async function signUp(
       locationStatus: true
     });
 
-    console.log('user created');
+    console.log('user created: ' + JSON.stringify(res.data));
     return res
   } catch (error) {
     console.log(error)
@@ -58,7 +59,8 @@ export async function signUp(
 export async function getAllPosts() {
   try {
     const res = await axios.get(`${url}/api/posts/all`);
-    console.log("res:::" + res.data);
+    console.log("res:::getAllPosts::" + JSON.stringify(res.data));
+
     return res.data;
   } catch (err) {
     console.log(err);
@@ -144,7 +146,7 @@ export async function updateOneServiceProvider(
 export async function getPostsByServiceProviderId(uid) {
   try {
     const res = await axios.get(`${url}/api/posts/serviceprovider/${uid}`);
-    console.log("res:::" + res.data);
+    console.log("res:::getPostsByServiceProviderId:::" + JSON.stringify(res.data));
     return res.data;
   } catch (err) {
     console.log(err);

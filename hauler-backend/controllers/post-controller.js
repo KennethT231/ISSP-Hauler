@@ -333,6 +333,7 @@ const getPostsByServiceProviderId = async (req, res) => {
     try {
         const serviceProviderId = req.params.serviceProviderId;
         posts = await PostData.find({ 'response.serviceProviderId': serviceProviderId })
+        // posts = await PostData.find({ 'response.acceptedServiceProvider': serviceProviderId })
         res.status(200).json(posts)
     } catch (error) {
         res.status(404).json({ message: error.message });
