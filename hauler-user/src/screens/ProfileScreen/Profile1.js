@@ -104,7 +104,7 @@ export default function Profile1({ navigation }) {
     };
 
     const onPaymentHistoryClicked = () => {
-        navigation.navigate('VerificationForm')
+        navigation.navigate('PaymentHistory')
     }
 
     useEffect(() => {
