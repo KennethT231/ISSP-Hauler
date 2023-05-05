@@ -47,7 +47,7 @@ const BottomTabNavigation = () => {
                 component={MyJobListNavigator}
                 options={{
                     tabBarIcon: () =>
-                    <FontAwesome5 name="list-ul" size={25} color="black" />,
+                        <FontAwesome5 name="list-ul" size={25} color="black" />,
                     drawerLabel: 'My Job List',
                 }}
             />
