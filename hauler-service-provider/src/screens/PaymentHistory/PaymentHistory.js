@@ -126,7 +126,7 @@ const PaymentHistory = ({ navigation }) => {
             <View style={styles.header}>
                 {user && (
                     <Text style={styles.headerText}>
-                        {user.firstName}'s Payment Dashboard
+                        {user.firstName}'s Dashboard
                     </Text>
                 )}
             </View>
@@ -147,7 +147,7 @@ const PaymentHistory = ({ navigation }) => {
 
             {/* total spent amount */}
             <View style={{ backgroundColor: '#F5F5F5', padding: 20, borderRadius: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>Total Spent Amount</Text>
+                <Text style={{ fontSize: 16, fontWeight: 'bold', marginBottom: 10 }}>Total Amount</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 }}>
                     <Text style={{ fontSize: 14, fontWeight: 'bold', color: '#4CAF50' }}>Junk Removal:</Text>
                     <Text style={{ fontSize: 14 }}>${totalPaidJunk ? totalPaidJunk : 0}</Text>
