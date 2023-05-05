@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
 
     paymentHistoryButton: {
         backgroundColor: 'navy',
-        minWidth: '85%',
+        minWidth: '80%',
         height: 50,
         borderRadius: 5,
         alignItems: 'center',
