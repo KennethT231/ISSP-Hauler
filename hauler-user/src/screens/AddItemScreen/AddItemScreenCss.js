@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
 
   container: {
     display: 'flex',
-    minHeight: 800,
+    minHeight: 600,
     width: '100%',
     backgroundColor: '#f0f0f0',
   },
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 20,
-    backgroundColor: '#fff', 
+    backgroundColor: '#fff',
   },
 
   button: {
@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
   },
 
   imageDisplay: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 300,
     resizeMode: 'contain',
   },
 
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     marginBottom: 20,
-    backgroundColor: '#fff', 
+    backgroundColor: '#fff',
     overflow: 'hidden',
     marginTop: 30,
     marginLeft: 20,
@@ -126,11 +126,11 @@ const styles = StyleSheet.create({
   },
 
   footerContainer: {
+    backgroundColor: '#f0f0f0',
     width: '100%',
     position: 'absolute',
     bottom: 0
   },
-
 })
 
 export default styles;

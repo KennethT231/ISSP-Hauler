@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Text, View, TextInput, ScrollView, Image, Platform, TouchableOpacity } from 'react-native'
-import styles from './AddIrwmScreenCss';
+import styles from './AddItemScreenCss';
 import * as ImagePicker from 'expo-image-picker';
 import SelectWeight from '../../components/SelectWeight/SelectWeight';
 import { Ionicons } from '@expo/vector-icons';
