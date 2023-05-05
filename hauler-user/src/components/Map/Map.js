@@ -11,7 +11,7 @@ import {
 import MapView from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { Marker } from "react-native-maps";
-// import { GOOGLE_MAP_API } from "@env";
+import { GOOGLE_MAP_API } from "@env";
 import { getOnePost } from "../../../network";
 
 export default function Map({ navigation, route }) {
@@ -102,7 +102,7 @@ export default function Map({ navigation, route }) {
           />
         ))}
         <MapViewDirections
-          apikey={"AIzaSyCMvEs9takJvuKNDt0RaIm-xfZH2uCUr-s"}
+          apikey={GOOGLE_MAP_API}
           origin={coordinates[0]}
           waypoints={coordinates}
           destination={coordinates[coordinates.length - 1]}
