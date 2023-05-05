@@ -304,7 +304,6 @@ export default function Profile1({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-
     container: {
         flex: 1,
         justifyContent: 'center',
@@ -312,10 +311,8 @@ const styles = StyleSheet.create({
     },
 
     buttonContainer: {
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 25
+        flexDirection: 'row',
+        marginVertical: 10,
     },
 
     profileContainer: {
@@ -371,22 +368,22 @@ const styles = StyleSheet.create({
     },
 
     buttons: {
-        width: '48%',
         height: 48,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
+        marginRight: 8,
     },
 
     editButton: {
         backgroundColor: '#0177FC',
-        width: 200,
+        width: 170,
         marginBottom: 30
     },
 
     logOutButton: {
         backgroundColor: '#585858',
-        width: 200,
+        width: 170,
         marginBottom: 30
     },
 
@@ -410,9 +407,8 @@ const styles = StyleSheet.create({
 
     paymentHistoryButton: {
         backgroundColor: 'navy',
-        width: '90%',
+        minWidth: '85%',
         height: 50,
-        width: 200,
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
