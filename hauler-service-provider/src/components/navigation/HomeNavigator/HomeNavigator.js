@@ -9,7 +9,9 @@ import Verification from '../../../screens/Verification/Verification';
 import PaymentNavigator from '../PaymentNavigator/PaymentNavigator';
 import PaymentHistoryScreenNavigator from '../PaymentHistoryNavigator/PaymentHistoryNavigator';
 import PaymentDetail from '../../../screens/PaymentHistory/PaymentDetail';
+import VerificationForm from '../../../screens/SignUpScreen/VerificationForm';
 import { Context } from '../../../context/ContextProvider';
+
 
 const HomeStack = createStackNavigator();
 
@@ -73,6 +75,13 @@ const HomeNavigator = () => {
                         component={PaymentDetail}
                         options={{
                             headerTitle: 'Payment Detail',
+                        }}
+                    />
+                    <HomeStack.Screen
+                        name='VerificationForm'
+                        component={VerificationForm}
+                        options={{
+                            headerShown: false,
                         }}
                     />
                 </>

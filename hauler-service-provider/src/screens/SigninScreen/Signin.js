@@ -61,9 +61,9 @@ export default function Signin({ navigation }) {
                                 Register
                                 </Text>
                         </Text>
-                        <Text style={styles.email}>
+                        {/* <Text style={styles.email}>
                             Current user : {currentUser && currentUser.email}
-                        </Text>
+                        </Text> */}
                     </View>
                 </View>
             </View>

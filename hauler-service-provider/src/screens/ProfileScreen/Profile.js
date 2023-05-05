@@ -6,13 +6,14 @@ import UserInfo from '../../components/userInfo/UserInfo';
 import { Context } from '../../context/ContextProvider';
 import { getOneServiceProvider, updateOneServiceProvider } from '../../../network';
 import firebase from "../../api/firebase"
+import * as ImagePicker from 'expo-image-picker';
 
 export default function Profile({ navigation }) {
     const { signout, currentUser } = useContext(Context)
 
     const [serviceProvider, setServiceProvider] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
-    const [profilePicUrl, setProfilePicUrl] = useState(null)
+    const [profilePicUrl, setProfilePicUrl] = useState(serviceProvider.profilePicUrl);
     const [dateOfBirth, setDob] = useState()
     const [province, setProvince] = useState('')
     const [city, setCity] = useState('')
@@ -67,6 +68,18 @@ export default function Profile({ navigation }) {
     const onEditClicked = async () => {
         setModalVisible(true)
     }
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1
+        });
+        const source = { uri: result.assets[0].uri}
+        console.log(source)
+        setImage(source)
+    };
+
     const onPaymentHistoryClicked = () => {
         navigation.navigate('PaymentHistory')
     }
@@ -97,7 +110,11 @@ export default function Profile({ navigation }) {
             console.log('onEditSubmitted error:', err);
         }
     }
-
+    useEffect(() => {
+        if (image) {
+            setProfilePicUrl(image.uri);
+        }
+    }, [image]);
     useEffect(() => {
         currentUser &&
             (async () => {
@@ -122,21 +139,20 @@ export default function Profile({ navigation }) {
                     <View style={styles.profileContainer}>
                         <Text > {error && alert(error)}</Text>
                         <View style={styles.avatar}>
-                        {imageLoading || !serviceProvider.profilePicUrl ? (
-                                <ActivityIndicator size="large" color="#0000ff" />
-                            ) : (
-                                <Avatar
-                                    title='name'
-                                    size='xlarge'
-                                    source={{
-                                        uri:
-                                            serviceProvider?.profilePicUrl || 'https://www.w3schools.com/howto/img_avatar.png',
-                                    }}
-                                    containerStyle={{ borderRadius: 30, overflow: 'hidden' }}
-                                />
-                            )}
+                            {imageLoading || !serviceProvider.profilePicUrl ? (
+                                    <ActivityIndicator size="large" color="#0000ff" />
+                                ) : (
+                                    <Avatar
+                                        title='name'
+                                        size='xlarge'
+                                        source={{
+                                            uri:
+                                                serviceProvider?.profilePicUrl || 'https://www.w3schools.com/howto/img_avatar.png',
+                                        }}
+                                        containerStyle={{ borderRadius: 30, overflow: 'hidden' }}
+                                    />
+                                )}
                         </View>
-
                         <Text style={styles.user}>
                             {serviceProvider.firstName}
                         </Text>
@@ -205,6 +221,20 @@ export default function Profile({ navigation }) {
                             }}
                         >
                             <ScrollView style={styles.modalContainer}>
+                                <View style={styles.avatarView}>
+                                    {imageLoading || !serviceProvider.profilePicUrl ?(
+                                        <ActivityIndicator size="small" color="#0000ff" />
+                                    ) : (
+                                        <TouchableOpacity onPress={pickImage}>
+                                            <Avatar
+                                                size={125}
+                                                rounded
+                                                source={{ uri: serviceProvider?.profilePicUrl }}
+                                                backgroundColor='lightgrey'
+                                            />
+                                        </TouchableOpacity>
+                                    )} 
+                                </View>
                                 <UserInfo
                                     firstName={firstName}
                                     uid={currentUser?.uid}
