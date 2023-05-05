@@ -38,7 +38,8 @@ const serviceProviderProfileSchema = new Schema({
     driverAbstractUrl: { type: String, required: true },
     profileStatus: { type: Boolean, required: true },
     stripeAcc:{type:String},
-    serviceProvided: [servicesProvidedSchema]
+    serviceProvided: [servicesProvidedSchema],
+    code: { type: String, required: true },
 })
 
 module.exports = mongoose.model('Service Provider Profile', serviceProviderProfileSchema);
