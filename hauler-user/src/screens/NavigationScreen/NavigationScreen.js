@@ -1,11 +1,8 @@
-import React, { Fragment } from 'react'
-import { createDrawerNavigator, DrawerItemList, DrawerItem, DrawerContentScrollView } from '@react-navigation/drawer';
-import { DrawerActions } from '@react-navigation/native';
+import React, { useContext } from 'react'
+import { createDrawerNavigator, DrawerItemList, DrawerContentScrollView } from '@react-navigation/drawer';
 import HomeNavigator from './HomeNavigator';
 import ServiceScreenNavigator from './ServiceScreenNavigator';
 import ProfileNavigator from './ProfileNavigator';
-import SignOutButton from '../../components/SignOutButton';
-import { useContext, useState } from "react";
 import { Context } from '../../context/ContextProvider';
 
 
@@ -15,7 +12,7 @@ const Drawer = createDrawerNavigator();
 // this is for android
 export default function NavigationScreen(navigation) {
 
-    const { signin, currentUser } = useContext(Context)
+    const { currentUser } = useContext(Context)
 
     return (
         <Drawer.Navigator
@@ -24,7 +21,6 @@ export default function NavigationScreen(navigation) {
                 return (
                     <DrawerContentScrollView {...props}>
                         <DrawerItemList {...props} />
-                        {/*<SignOutButton />*/}
                     </DrawerContentScrollView>
                 )
             }}

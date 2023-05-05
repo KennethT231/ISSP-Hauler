@@ -1,4 +1,7 @@
 const UserData = require('../models/userProfile.js')
+const textflow = require("textflow.js")
+
+textflow.useKey("gNowxeefRdwq8dLFv7ddQE8AyTdVO7GJCSxUwBXrUTAobrsdtp4MO06iDZQFbU3E");
 
 //================================== To register new user =========================================//
 const createUser = async (req, res) => {
@@ -14,8 +17,15 @@ const createUser = async (req, res) => {
             streetAddress,
             unitNumber,
             email,
-            contactNumber
+            contactNumber,
+            code,
         } = req.body;
+
+        let result = await textflow.verifyCode(contactNumber, code);
+
+        if (!result.valid) {
+            return res.status(400).json({ success: false });
+        }
 
         const newUser = new UserData({
             uid,
@@ -28,15 +38,29 @@ const createUser = async (req, res) => {
             streetAddress,
             unitNumber,
             email,
-            contactNumber
+            contactNumber,
+            code,
         });
         console.log('newUser', newUser);
+        console.log('code', code);
 
         await newUser.save();
-        res.status(201).json({ userProfile: newUser });
+        res.status(201).json({ success: true, userProfile: newUser });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(404).json({ success: false, message: error.message });
     }
+}
+
+const verifyUser = async (req, res) => {
+    const { contactNumber } = req.body;
+    let result = await textflow.sendVerificationSMS(contactNumber);
+    console.log('result for sms', result);
+
+    if (result.ok) //send sms here
+        return res.status(200).json({ success: true });
+
+    return res.status(400).json({ success: false });
+
 }
 
 //==================================== Get All users ================================================//
@@ -53,7 +77,7 @@ const getUser = async (req, res) => {
 const getOneUser = async (req, res) => {
     try {
         const id = req.params.uid;
-        console.log('id', id);
+        console.log('id get one user', id);
         let user = await UserData.findOne({ uid: id });
         res.status(200).json(user)
     } catch (error) {
@@ -140,4 +164,5 @@ exports.createUser = createUser;
 exports.deleteOneUser = deleteOneUser;
 exports.updateOneUser = updateOneUser;
 exports.postProfilePic = postProfilePic;
+exports.verifyUser = verifyUser;
 

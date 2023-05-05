@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native';
 import RNPickerSelect from 'react-native-picker-select-updated';
 
 export default function SelectWeight({ selectedweight, setSelectedWeight }) {
-
     return (
         <View style={styles.search}>
             <RNPickerSelect
@@ -24,7 +23,11 @@ export default function SelectWeight({ selectedweight, setSelectedWeight }) {
                     },
                 }}
                 onValueChange={(value) => setSelectedWeight(value)}
-                placeholder={{ label: "Select Weight", value: null }}
+                placeholder={{
+                    label: "Select Weight",
+                    value: null,
+                    color: 'black'
+                }}
                 items={[
                     { label: 'Light 0-20Kgs', value: 'Light 0-20Kgs' },
                     { label: 'Medium 20-50Kgs', value: 'Medium 20-50Kgs' },
@@ -45,4 +48,3 @@ const styles = StyleSheet.create({
         marginTop: 20
     }
 })
-

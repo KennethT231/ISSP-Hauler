@@ -56,6 +56,11 @@ export default function ErrandSummary({ navigation, route }) {
         setIsLoading(true); // set isLoading to true to display the loading indicator
         try {
             const response = await uploadImage(); // upload image first and get the response
+            if (response === null) {
+                Alert.alert('Please select an image');
+                setIsLoading(false);
+                return;
+            }
             const image = await response.ref.getDownloadURL(); // then get the image url from the response
             console.log('post image url:', image);
             await postItem(
@@ -86,7 +91,8 @@ export default function ErrandSummary({ navigation, route }) {
             setIsLoading(false); // set isLoading to false to hide the loading indicator
             navigation.navigate('Confirmation', { confirm: 'Post' })
         } catch (err) {
-            Alert.alert("Please include a photo of the item you want to post")
+            Alert.alert('Error', 'Please login to post a job');
+            navigation.navigate('Signin')
             console.log('onPostJobSubmitted error:', err);
         } finally {
             setIsLoading(false); // set isLoading to false to hide the loading indicator
