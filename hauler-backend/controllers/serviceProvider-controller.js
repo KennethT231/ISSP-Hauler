@@ -66,7 +66,18 @@ const createServiceProvider = async (req, res) => {
         res.status(404).json({ message: error.message });
     }
 }
+//================================ To verify service providers =====================================//
+const verifyProvider = async (req, res) => {
+    const { contactNumber } = req.body;
+    let result = await textflow.sendVerificationSMS(contactNumber);
+    console.log('result for sms', result);
 
+    if (result.ok) //send sms here
+        return res.status(200).json({ success: true });
+
+    return res.status(400).json({ success: false });
+
+}
 //================================ To get all service providers =====================================//
 const getServiceProvider = async (req, res) => {
     try {
@@ -161,3 +172,4 @@ exports.createServiceProvider = createServiceProvider;
 exports.deleteOneServiceProvider = deleteOneServiceProvider;
 exports.updateOneServiceProvider = updateOneServiceProvider;
 exports.postProfilePic = postProfilePic;
+exports.verifyProvider = verifyProvider;
