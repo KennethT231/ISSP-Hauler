@@ -272,7 +272,7 @@ export default function Profile1({ navigation }) {
                     {/* payment history */}
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
-                            style={[styles.buttons, styles.paymentHistoryButton]}
+                            style={styles.paymentHistoryButton}
                             disabled={!!loading} // added !!
                             onPress={() => onPaymentHistoryClicked()}
                         >

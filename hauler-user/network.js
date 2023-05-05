@@ -2,9 +2,9 @@ import axios from "axios";
 //import { NETWORK_URL } from "@env";
 
 //const url = NETWORK_URL;
-//const url = "https://hauler-backend-production.up.railway.app"
+// const url = "https://hauler-backend-production.up.railway.app"
 const url = "https://hauler-backend-production-765f.up.railway.app"
-//const url = "http://192.168.1.66:3000"
+// const url = "http://192.168.1.66:3000"
 console.log("Connectimg to server");
 console.log(url);
 
