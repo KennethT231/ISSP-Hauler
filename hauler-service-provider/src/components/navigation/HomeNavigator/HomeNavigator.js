@@ -27,17 +27,17 @@ const HomeNavigator = () => {
                     <HomeStack.Screen
                         name='Signin'
                         component={Signin}
-                        // options={{ headerShown: false }}
+                    // options={{ headerShown: false }}
                     />
                     <HomeStack.Screen
                         name='SignUp'
                         component={SignUp}
-                        // options={{ headerShown: false }}
+                    // options={{ headerShown: false }}
                     />
                     <HomeStack.Screen
                         name='Verification'
                         component={Verification}
-                        // options={{ headerShown: false }}
+                    // options={{ headerShown: false }}
                     />
 
                 </>
@@ -46,27 +46,27 @@ const HomeNavigator = () => {
                     <HomeStack.Screen
                         name='Home'
                         component={Home}
-                        // options={
-                        //     Platform.OS === 'android'
-                        //         ? {
-                        //             headerRight: () => <MenuIcon />,
-                        //         }
-                        //         : {
-                        //             headerTitle: 'Home',
-                        //         }
-                        // }
+                    // options={
+                    //     Platform.OS === 'android'
+                    //         ? {
+                    //             headerRight: () => <MenuIcon />,
+                    //         }
+                    //         : {
+                    //             headerTitle: 'Home',
+                    //         }
+                    // }
                     />
-                                        <HomeStack.Screen
+                    <HomeStack.Screen
                         name='PaymentNavigator'
                         component={PaymentNavigator}
                     // options={{ headerRight: () => <MenuIcon /> }}
-                    />                    
+                    />
                     <HomeStack.Screen
                         name='PaymentHistory'
                         component={PaymentHistoryScreenNavigator}
-                        // options={{
-                        //     headerTitle: 'Payment History',
-                        // }}
+                        options={{
+                            headerTitle: 'Payment History',
+                        }}
                     />
                     <HomeStack.Screen
                         name='PaymentDetail'
