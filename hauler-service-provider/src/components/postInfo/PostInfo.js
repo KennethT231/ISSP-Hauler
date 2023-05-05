@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 16
     },
 
-    buttons:{
+    buttons: {
         backgroundColor: '#0077FC',
         marginVertical: 10,
         height: 48,
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold"
     },
-    
+
 })
 
 
