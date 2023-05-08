@@ -1,34 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button, Image} from 'react-native';
+import { Text, View, StyleSheet, Button, ImageBackground} from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera, CameraType } from 'expo-camera';
+import firebase from '../../api/firebase';
+import { set } from 'react-native-reanimated';
 
-class LicenseInformation {
-    province;
-    city;
-    address;
-    firstName;
-    lastName;
-    middleName;
-    licenseNumber;
-    dateIssued;
-    expiryDate;
-    dateOfBirth;
-    sex;
-    height;
-    weight;
-    hairColor;
-    eyeColor;
-    restrictions;
-    conditions;
-    class;
-}
-
-export default function App() {
+export default function App({navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
+  const [backImage, setBackImage] = useState(null);
+  const [frontImage, setFrontImage] = useState(null);
+  const [previewVisible, setPreviewVisible] = useState(false);
   const [licenseInfo, setLicenseInfo] = useState(null);
-  const [capturedImage, setCapturedImage] = useState(null);
+  const [uploaded, setUploaded] = useState(false);
   let camera = null;
 
   useEffect(() => {
@@ -40,35 +24,90 @@ export default function App() {
     getBarCodeScannerPermissions();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    const alphaNumericData = data
-    const dataArray = alphaNumericData.split('$').filter((item) => item !== '');
-    console.log(dataArray);
-
-    const licenseInformation = new LicenseInformation();
-    licenseInformation.firstName = dataArray[2];
-    licenseInformation.lastName = dataArray[1];
-    licenseInformation.middleName = dataArray[3];
-    //licenseInformation.licenseNumber = dataArray[12].substring(-1, 15);
-
-
-    setLicenseInfo(dataArray);
-
-    const takePicture = async () => {
-        const photo = await camera.takePictureAsync({
-            onPictureSaved: (data) => {
-                console.log(data.uri);
-            },
-            base64: true,
-        });
-        setCapturedImage(data);
-    };
-
-    takePicture();
-
+  async function uploadImage(uri) {
+    console.log('uploading images')
+    try {
+        if (!frontImage || !backImage) {
+            return null; // if no image is selected, return null
+        }
+          const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+              resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+              console.log(e);
+            reject(new TypeError('Network request failed'));
+            };
+            xhr.responseType = 'blob';
+            xhr.open('GET', uri, true);
+            xhr.send(null);
+          });
+          const ref = firebase.storage().ref().child(`license-front/${licenseInfo}${uri.substring(uri.lastIndexOf('/') + 1)}`);
+          const snapshot = await ref.put(blob);
+        return snapshot;
+    } catch (e) {
+        console.log(e.message);
+    }
   };
 
+  const SubmitLicenseImages = async () => {
+    console.log('submitting license images')
+    try {
+      const response = await uploadImage(frontImage.uri); // upload image first and get the response
+      if (response === null) {
+          Alert.alert('Please select an image');
+          return;
+      }
+      const image = await response.ref.getDownloadURL(); // then get the image url from the response
+      setFrontImage(image);
+    } catch (e) {
+      console.log(e.message);
+    }
+
+    try {
+      const response = await uploadImage(backImage.uri); // upload image first and get the response
+      if (response === null) {
+          Alert.alert('Please select an image');
+          return;
+      }
+      const image = await response.ref.getDownloadURL(); // then get the image url from the response
+      setBackImage(image);
+      setUploaded(true);
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
+  const takePicture = async (side) => {
+    console.log('taking picture')
+    console.log(side)
+    if (!camera) return;
+    let photo = await camera.takePictureAsync({
+        onPictureSaved: (data) => {
+          if (side === 'front') {
+            setFrontImage(data);
+          } else {
+            setBackImage(data);
+          }
+          setPreviewVisible(true);
+        },
+        base64: false,
+    });
+  };
+
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScanned(true);
+    const alphaNumericData = data.split('$').filter((item) => item !== '');
+    console.log(alphaNumericData);
+    setLicenseInfo(alphaNumericData[1]);
+  };
+    
+
+  async function handleButtonPress(side) {
+    await takePicture(side);
+  }
+  
   if (hasPermission === null) {
     return <Text>Requesting for camera permission</Text>;
   }
@@ -78,20 +117,55 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Camera
-        type={CameraType.back}
-        onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
-        ref={(ref) => {
-            camera = ref;
-        }}
-      />
-      {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
-      {licenseInfo != null && <Text style={styles.text}>{licenseInfo}</Text>}
+      {uploaded ? (
+        <View>
+          <Text>License images uploaded</Text>
+          <Button title='Continue' onPress={() => navigation.navigate('SignUp', {licenseInfo: licenseInfo, frontImage: frontImage, backImage: backImage})}/>
+        </View>
+      ) : (
+        previewVisible ? 
+          (backImage === null? 
+            <ImageBackground source={{ uri: frontImage && frontImage.uri }} resizeMode='cover' style={styles.absoluteFillObject}>
+            <Button title='Retake' onPress={() => {setPreviewVisible(false); setScanned(false); setFrontImage(null)}}/>
+            <Button title='Take next photo' onPress={() => {setPreviewVisible(false); setScanned(false); uploadImage()}}/>
+            </ImageBackground>
+            : 
+            <ImageBackground source={{ uri: backImage && backImage.uri }} resizeMode='cover' style={styles.absoluteFillObject}>
+              <Button title='Retake' onPress={() => {setPreviewVisible(false); setScanned(false); setBackImage(null)}}/>
+              <Button title='Submit Photos' onPress={SubmitLicenseImages}/>
+            </ImageBackground>
+          ):(
+            <Camera
+              type={CameraType.back}
+              style={StyleSheet.absoluteFillObject}
+              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+              ref={(ref) => {
+                  camera = ref;
+              }}
+            >
+            {frontImage === null ?
+            (<View style={styles.buttonContainer}>
+              <Button
+                title="Capture front of license"
+                onPress={() => handleButtonPress('front')}
+              />            
+            </View>
+            ) : (
+              !scanned ? <Text style={styles.text}>Scan the back of your license</Text> :
+              <View style={styles.buttonContainer}>          
+              <Button
+                title="Capture back of license"
+                onPress={() => handleButtonPress('back')}
+              />
+            </View>
+            )
+          }
+          </Camera>
+          )
+      )}
     </View>
   );
 }
-
 
 const styles = StyleSheet.create({
     container: {
@@ -115,6 +189,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'white',
         backgroundColor: 'black',
-    
     },
+    absoluteFillObject: {
+        flex: 1,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right:0,
+    }
 });
