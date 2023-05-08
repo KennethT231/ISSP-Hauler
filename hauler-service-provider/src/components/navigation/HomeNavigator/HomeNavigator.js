@@ -46,7 +46,7 @@ const HomeNavigator = () => {
                 :
                 <>
                     <HomeStack.Screen
-                        name='Home'
+                        name='Home1'
                         component={Home}
                     // options={
                     //     Platform.OS === 'android'
