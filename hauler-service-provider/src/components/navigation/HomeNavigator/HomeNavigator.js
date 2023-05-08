@@ -34,6 +34,7 @@ const HomeNavigator = () => {
                     <HomeStack.Screen
                         name='SignUp'
                         component={SignUp}
+                        initialParams={{licenseInfo: null, backImage: null, frontImage: null}}
                     // options={{ headerShown: false }}
                     />
                     <HomeStack.Screen

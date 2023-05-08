@@ -7,8 +7,7 @@ import RNPickerSelect from 'react-native-picker-select-updated';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ReactNativePhoneInput from 'react-native-phone-input';
 
-
-export default function Signup({ navigation }) {
+export default function Signup({ navigation, route }) {
 
     const { signup, currentUser } = useContext(Context)
 
@@ -34,8 +33,11 @@ export default function Signup({ navigation }) {
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
-    const [verificationStatus, setVerificationStatus] = useState(null)
+    const {licenseInfo, frontImage, backImage} = route.params;
 
+    console.log('license info', licenseInfo)
+    console.log('front image', frontImage)
+    console.log('back image', backImage)
 
     const printUrl = async () => {
         const appUrl = await Linking.getInitialURL()
@@ -258,10 +260,10 @@ export default function Signup({ navigation }) {
                         />
                     </View>
                     <View style={styles.buttonContainer}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={styles.buttons}>
                             <Text style={styles.buttonTitle}>Upload Void Cheque</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TouchableOpacity
                             style={styles.buttons} onPress={
                                 () => navigation.navigate('Verification')}>
