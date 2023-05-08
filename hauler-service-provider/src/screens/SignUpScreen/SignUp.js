@@ -230,95 +230,165 @@ export default function Signup({ navigation }) {
         </ScrollView>
     )
 }
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        marginVertical: '2%',
-        backgroundColor: 'white'
-    },
-    logo: {
-        width: 200,
-        height: 100,
-        alignSelf: 'center',
-    },
-    heading: {
-        textAlign: 'center',
-        fontSize: 45,
-        marginVertical: '1%',
-        color: "black",
-    },
-    input: {
-        borderBottomColor: '#BFBFBF',
-        borderBottomWidth: 1,
-        height: 40,
-        overflow: 'hidden',
-        backgroundColor: 'white',
-        marginHorizontal: '5%',
-        marginBottom: 20
-    },
-    email: {
-        color: '#73AB84',
-        textAlign: 'center'
-    },
-    buttonContainer: {
-        marginHorizontal: '2%',
-        marginVertical: '1%',
-    },
-    button: {
-        backgroundColor: '#0077FC',
-        marginLeft: '2%',
-        marginRight: '2%',
-        marginTop: 50,
-        height: 48,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '90%',
-        alignSelf: 'center'
-    },
-    buttons: {
-        backgroundColor: '#E0E0E0',
-        width: '90%',
-        height: 48,
-        borderRadius: 10,
-        alignSelf: "center",
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginVertical: 10
-    },
-    buttonTitle1: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: "bold"
-    },
-    buttonTitle: {
-        color: 'black',
-        fontSize: 16,
-        fontWeight: "bold"
-    },
-    option: {
-        flex: 1,
-        alignItems: "center",
-        marginTop: 20
-    },
-    optionText: {
-        fontSize: 16,
-        color: '#2e2e2d'
-    },
-    optionLink: {
-        color: "#A9A9A9",
-        fontWeight: "bold",
-        fontSize: 16
-    },
-    text1: {
-        color: '#BFBFBF',
-        marginLeft: '5%'
-    },
-    picker:{
-        width: '90%',
-        alignSelf: 'center'
-    }
-})
 
+
+  container: {
+      flex: 1,
+      alignItems: 'center',
+      marginVertical: '2%',
+      backgroundColor: '#f0f0f0'
+  },
+  date: {
+      marginLeft: '10%',
+      marginRight: '2%',
+      width: '80%',
+      marginTop: 20,
+  },
+
+
+  datePicker: {
+      height: 40,
+      width: '80%',
+      borderColor: '#C0C0C0',
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingHorizontal: 10,
+      paddingVertical: 8,
+      marginBottom: 20,
+      marginTop: 10,
+      marginLeft: '10%',
+      marginRight: '2%',
+  },
+  logo: {
+      width: 200,
+      height: 100,
+      alignSelf: 'center',
+  },
+
+
+  heading: {
+      textAlign: 'center',
+      fontSize: 45,
+      marginVertical: '1%',
+      color: "black",
+  },
+
+
+  input: {
+      overflow: 'hidden',
+      backgroundColor: 'white',
+      marginHorizontal: '5%',
+      marginBottom: 20,
+      height: 40,
+      borderColor: '#3d3b3b',
+      borderWidth: 1,
+      borderRadius: 20,
+      paddingHorizontal: 10,
+      marginBottom: 20,
+      backgroundColor: '#fff',
+  },
+
+
+  email: {
+      color: '#73AB84',
+      textAlign: 'center'
+  },
+
+
+  buttonContainer: {
+      marginHorizontal: '2%',
+      marginVertical: '1%',
+  },
+
+
+  button: {
+      backgroundColor: '#2196f3',
+      marginLeft: '2%',
+      marginRight: '2%',
+      marginTop: 50,
+      height: 48,
+      borderRadius: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '90%',
+      alignSelf: 'center',
+      shadowColor: '#0177FC',
+      marginTop: 30,
+      shadowOpacity: 0.8,
+      shadowOffset: {
+        height: 2,
+        width: 2,
+      },
+      elevation: 5
+  },
+
+
+  buttons: {
+      backgroundColor: '#E0E0E0',
+      width: '90%',
+      height: 48,
+      borderRadius: 10,
+      alignSelf: "center",
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginVertical: 10,
+      shadowColor: '#B3B3B3',
+      marginTop: 30,
+      shadowOpacity: 0.8,
+      shadowOffset: {
+        height: 2,
+        width: 2,
+      },
+      elevation: 5
+  },
+
+
+  buttonTitle1: {
+      color: 'white',
+      fontSize: 16,
+      fontWeight: "bold"
+  },
+
+
+  buttonTitle: {
+      color: 'black',
+      fontSize: 16,
+      fontWeight: "bold"
+  },
+
+
+  option: {
+      flex: 1,
+      alignItems: "center",
+      marginTop: 20
+  },
+
+
+  optionText: {
+      fontSize: 16,
+      color: '#2e2e2d'
+  },
+
+
+  optionLink: {
+      color: "#A9A9A9",
+      fontWeight: "bold",
+      fontSize: 16
+  },
+
+
+  text1: {
+      color: '#000000',
+      marginLeft: '5%',
+      marginBottom: 10
+  },
+
+
+  picker:{
+      width: '90%',
+      alignSelf: 'center'
+  }
+
+
+})

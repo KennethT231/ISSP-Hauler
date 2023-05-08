@@ -8,7 +8,6 @@ import { getOneServiceProvider, updateOneServiceProvider } from '../../../networ
 
 export default function Profile({ navigation }) {
     const { signout, currentUser } = useContext(Context)
-
     const [serviceProvider, setServiceProvider] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
     const [profilePicUrl, setProfilePicUrl] = useState('')
@@ -128,7 +127,19 @@ export default function Profile({ navigation }) {
                         <View style={styles.infoContainer}>
                             <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
                             <Text style={styles.userInfo}>
-                                {serviceProvider.unitNumber}, {serviceProvider.streetAddress}, {serviceProvider.city}, {serviceProvider.province}
+                                {serviceProvider.unitNumber}, {serviceProvider.streetAddress}
+                            </Text>
+                        </View>
+                        <View style={styles.infoContainer}>
+                            <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
+                            <Text style={styles.userInfo}>
+                                {serviceProvider.city}
+                            </Text>
+                        </View>
+                        <View style={styles.infoContainer}>
+                            <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
+                            <Text style={styles.userInfo}>
+                                {serviceProvider.province}
                             </Text>
                         </View>
                         <View style={styles.infoContainer}>
@@ -215,67 +226,120 @@ export default function Profile({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        paddingVertical: 20,
-        width: '100%',
-        backgroundColor: 'white'
-    },
-    profileContainer: {
-        flex: 1,
-        width: '100%',
-    },
-    headerContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-    },
-    avatar: {
-        alignItems: 'center'
-    },
-    user: {
-        textAlign: 'center',
-        fontWeight: "bold",
-        fontSize: 35,
-        color: '#5C5C5C',
-        marginBottom: 10
-    },
-    infoContainer: {
-        flexDirection: 'row'
-    },
-    infoIcon: {
-        marginHorizontal: 20,
-        marginVertical: 20,
-    },
-    userInfo: {
-        color: 'black',
-        fontSize: 20,
-        marginVertical: 20,
-    },
-    modalContainer: {
-        margin: 20
-    },
-    buttons: {
-        width: '90%',
-        height: 48,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginVertical: 10
-    },
-    editButton: {
-        backgroundColor: '#E0E0E0',
-    },
-    editTitle:{
-color: 'black'
-    },
-    logOutButton: {
-        backgroundColor: '#0077FC',
-    },
-    buttonTitle: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: "bold"
-    },
-})
 
+  container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
+  },
+
+  buttonContainer: {
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginTop: 25
+  },
+
+  profileContainer: {
+      flex: 1,
+      width: '100%',
+  },
+
+  headerContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+  },
+
+  avatar: {
+      alignItems: 'center'
+  },
+
+  user: {
+      textAlign: 'center',
+      fontWeight: "bold",
+      fontSize: 35,
+      color: '#5C5C5C',
+      marginBottom: 10
+  },
+
+  infoContainer: {
+      flexDirection: 'row',
+      borderColor: 'black',
+      borderWidth: 1,
+      height: 70,
+      borderRadius: 5,
+      overflow: 'hidden',
+      backgroundColor: 'white',
+      marginVertical: '1%',
+      width: 350,
+      paddingLeft: 16,
+      marginLeft: 20,
+      marginTop: 30,
+  },
+
+  infoIcon: {
+      marginHorizontal: 20,
+      marginVertical: 20,
+  },
+
+  userInfo: {
+      color: 'black',
+      fontSize: 20,
+      marginVertical: 20,
+  },
+
+  modalContainer: {
+      margin: 20,
+      paddingTop: 20,
+  },
+
+  buttons: {
+      width: '48%',
+      height: 48,
+      borderRadius: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
+
+  editButton: {
+      backgroundColor: '#0177FC',
+      width: 200,
+      marginBottom: 20,
+      marginTop: 20
+  },
+
+  logOutButton: {
+      backgroundColor: '#585858',
+      width: 200,
+      marginBottom: 30
+  },
+
+  buttonTitle: {
+      color: 'white',
+      fontSize: 16,
+      fontWeight: "bold"
+  },
+
+  input: {
+      borderColor: 'black',
+      borderWidth: 1,
+      height: 48,
+      borderRadius: 5,
+      overflow: 'hidden',
+      backgroundColor: 'white',
+      marginVertical: '1%',
+      marginHorizontal: '2%',
+      paddingLeft: 16,
+  },
+
+  paymentHistoryButton: {
+      backgroundColor: 'navy',
+      width: '90%',
+      height: 50,
+      width: 200,
+      borderRadius: 5,
+      alignItems: 'center',
+      justifyContent: 'center',
+  },
+
+});
