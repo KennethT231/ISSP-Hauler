@@ -141,7 +141,7 @@ const PaymentHistory = ({ navigation }) => {
                         chartConfig={chartConfig}
                         style={styles.chart}
                     />
-                ): <Text>No Payment History</Text>}
+                ) : <Text>No Payment History</Text>}
             </View>
 
             {/* total spent amount */}

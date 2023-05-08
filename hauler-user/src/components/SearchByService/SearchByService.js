@@ -1,12 +1,10 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import styles from './SearchByServiceCss';
 import RNPickerSelect from 'react-native-picker-select-updated';
 
 export default function SearchByService({ service, setService, searchService }) {
 
     return (
-        <View style={styles.container}>
           <View style={styles.search}>
             <RNPickerSelect
                 value={service}
@@ -37,7 +35,15 @@ export default function SearchByService({ service, setService, searchService }) 
                 ]}
               />
           </View>
-        </View>
     )
 }
+
+const styles = StyleSheet.create({
+    search: {
+        width: '90%',
+        borderRadius: 10,
+        backgroundColor: '#F5F5F5',
+        marginVertical: 5
+    }
+})
 

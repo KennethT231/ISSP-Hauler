@@ -35,8 +35,18 @@ allprojects {
             url(new File(['node', '--print', "require.resolve('jsc-android/package.json')"].execute(null, rootDir).text.trim(), '../dist'))
         }
 
-        google()
-        mavenCentral()
-        maven { url 'https://www.jitpack.io' }
+            google()        
+            jcenter()
+        // Scanbot SDK Maven repositories:
+            maven { url 'https://nexus.scanbot.io/nexus/content/repositories/releases/' }
+            maven { url 'https://nexus.scanbot.io/nexus/content/repositories/snapshots/' }
     }
+}
+
+android {
+  defaultConfig {
+    multiDexEnabled true
+  }
+
+  packagingOptions {      pickFirst '**/libc++_shared.so'  }
 }

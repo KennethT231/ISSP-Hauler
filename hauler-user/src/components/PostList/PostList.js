@@ -150,7 +150,7 @@ export default function PostsList({ posts, onActiveImagePress, onOffersPress, on
                                                                     (item.status === 'Complete') ?
                                                                         <View style={styles.statusButton}>
                                                                             <Button
-                                                                                buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 100 }}
+                                                                                buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 110 }}
                                                                                 disabled={true}
                                                                                 title='Completed'
                                                                             />
@@ -243,7 +243,7 @@ export default function PostsList({ posts, onActiveImagePress, onOffersPress, on
                                                                 (item.status === 'Complete') ?
                                                                     <View style={styles.statusButton}>
                                                                         <Button
-                                                                            buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 100 }}
+                                                                            buttonStyle={{ borderRadius: 10, backgroundColor: '#0077FC', width: 110 }}
                                                                             disabled={true}
                                                                             title='Completed'
                                                                         />

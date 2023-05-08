@@ -1,10 +1,8 @@
 import axios from "axios";
-//import { NETWORK_URL } from "@env";
+import { NETWORK_URL } from "@env";
 
-//const url = NETWORK_URL;
-// const url = "https://hauler-backend-production.up.railway.app"
-const url = "http://192.168.1.66:3000"
-console.log("Connectimg to server");
+const url = NETWORK_URL;
+console.log("Connectimg to server in user app");
 console.log(url);
 
 //========================================To register user ===================================================//

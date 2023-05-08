@@ -6,12 +6,12 @@ export default function UserInfo({ firstName, lastName, province, city, streetAd
     unitNumber, setCity, setStreetAddress, setUnitNumber, profilePicUrl, dateOfBirth, setDob, contactNumber, setContactNumber, setProvince, setFirstName, setLastName, setProfilePicUrl, setError }) {
     return (
         <View>
-             <Text style={styles.text1}> profilePicUrl : </Text>
+             {/* <Text style={styles.text1}> profilePicUrl : </Text>
             <TextInput
                 style={styles.input}
                 onChangeText={(profilePic) => { setError(""); setProfilePicUrl(profilePic) }}
                 value={profilePicUrl}
-            />
+            /> */}
              <Text style={styles.text1}> First Name : </Text>
             <TextInput
                 style={styles.input}
@@ -24,12 +24,12 @@ export default function UserInfo({ firstName, lastName, province, city, streetAd
                 onChangeText={(lname) => { setError(""); setLastName(lname) }}
                 value={lastName}
             />
-             <Text style={styles.text1}> Date of Birth : </Text>
+             {/* <Text style={styles.text1}> Date of Birth : </Text>
             <TextInput
                 style={styles.input}
                 onChangeText={(date) => { setError(""); setDob(date) }}
                 value={dateOfBirth}
-            />
+            /> */}
              <Text style={styles.text1}> Province : </Text>
             <TextInput
                 style={styles.input}
@@ -54,12 +54,12 @@ export default function UserInfo({ firstName, lastName, province, city, streetAd
                 onChangeText={(unitNumber) => { setError(""); setUnitNumber(unitNumber) }}
                 value={unitNumber}
             />
-             <Text style={styles.text1}> Contact Number : </Text>
+             {/* <Text style={styles.text1}> Contact Number : </Text>
             <TextInput
                 style={styles.input}
                 onChangeText={(number) => { setError(""); setContactNumber(number) }}
                 value={contactNumber}
-            />
+            /> */}
         </View>
     )
 }
