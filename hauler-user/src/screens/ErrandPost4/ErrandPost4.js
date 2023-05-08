@@ -3,6 +3,7 @@ import { Text, View, ScrollView, TextInput, SafeAreaView, Picker, StyleSheet } f
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Slider from '@react-native-community/slider';
 import {getOnePost} from '../../../network';
+import ReactNativePhoneInput from 'react-native-phone-input';
 
 export default function ErrandPost4({ navigation, route }) {
 
@@ -40,10 +41,20 @@ export default function ErrandPost4({ navigation, route }) {
             value={pickContactPerson}
           />
           <Text style={styles.text}>Phone Number</Text>
-          <TextInput style={styles.inputLine1}
+          {/*<TextInput style={styles.inputLine1}
             keyboardType='numeric' 
             onChangeText={(phoneNumber) => {setPickUpPhoneNumber(phoneNumber)}}
             value={pickUpPhoneNumber}
+          />*/}
+          <ReactNativePhoneInput
+            onChangePhoneNumber={(phoneNumber) => { setPickUpPhoneNumber(phoneNumber) }}
+            initialCountry={'ca'}
+            //initialValue="13178675309"
+            //textProps={{
+            //    placeholder: '(XXX) XXX-XXXX'
+            //}}
+            //textComponent={TextInput}
+            style={styles.inputLine1}
           />
           <Text style={styles.text}>Pick up instructions</Text>
           <TextInput style={styles.inputLine1} 
@@ -58,10 +69,20 @@ export default function ErrandPost4({ navigation, route }) {
             value={dropOffContactPerson}
           />
           <Text style={styles.text}>Contact Number</Text>
-          <TextInput style={styles.inputLine1}
+          {/*<TextInput style={styles.inputLine1}
             keyboardType='numeric' 
             onChangeText={(phoneNumber) => {setDropOffPhoneNumber(phoneNumber)}}
             value={dropOffPhoneNumber}
+          />*/}
+          <ReactNativePhoneInput
+            onChangePhoneNumber={(phoneNumber) => { setDropOffPhoneNumber(phoneNumber) }}
+            initialCountry={'ca'}
+            //initialValue="13178675309"
+            //textProps={{
+            //    placeholder: '(XXX) XXX-XXXX'
+            //}}
+            //textComponent={TextInput}
+            style={styles.inputLine1}
           />
           <Text style={styles.text}> Special Instructions : </Text>
           <TextInput style={styles.inputLine1} 
