@@ -139,7 +139,7 @@ export default function ErrandSummary({ navigation, route }) {
                                     apikey={GOOGLE_MAP_API}
                                     origin={coordinates[0]}
                                     waypoints={coordinates}
-                                    destination={coordinates[coordinates.length - 1]}
+                                    destination={coordinates && coordinates[coordinates.length - 1]}
                                     strokeWidth={3}
                                     strokeColor='#DE0303'
                                     optimizeWaypoints={true}
@@ -157,6 +157,7 @@ export default function ErrandSummary({ navigation, route }) {
                                         );
                                     }}
                                     onError={(errorMessage) => {
+                                        Alert.alert('Error', 'Please check pick up and drop off address');
                                         console.log(`Error: ${errorMessage}`);
                                     }}
                                 />
@@ -238,14 +239,21 @@ const styles = StyleSheet.create({
         resizeMode: 'contain',
     },
     button: {
-        backgroundColor: '#0177FC',
+        backgroundColor: '#1970d4',
         alignSelf: 'center',
         marginVertical: 10,
         width: '90%',
         height: 48,
         borderRadius: 10,
         alignItems: "center",
-        justifyContent: 'center'
+        justifyContent: 'center',
+        shadowColor: '#0177FC',
+        shadowOpacity: 0.8,
+        shadowOffset: {
+            height: 2,
+            width: 2,
+        },
+        elevation: 5
     },
     buttonTitle: {
         color: 'white',
