@@ -1,309 +1,201 @@
-import React, { Component } from 'react';
-import * as BlinkIDReactNative from 'blinkid-react-native';
-import {
-    AppRegistry,
-    Platform,
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    ScrollView,
-    Button
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Text, View, StyleSheet, Button, ImageBackground} from 'react-native';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import { Camera, CameraType } from 'expo-camera';
+import firebase from '../../api/firebase';
+import { set } from 'react-native-reanimated';
 
-const licenseKey = Platform.select({
-    // iOS license key for applicationID: com.microblink.sample
-    ios: 'sRwAAAEQY29tLmFwcGxlLkhhdWxlckL32/LK0J2cJe9FL+6/VgF7CK8t5C7MC2RVfXGymijCbEYzytQZiE91/mBp1W+Xi0NlqYffX7efuSVD8vMMCrRxMqW6q6hcjNYSND4WGEmrnNSDBI09ygEFE62MZFMaO97aF2sj9cLK2TQYl3hCrJnGdAfe1STYpb2eIFNCVdVt1ePv7oEuUzNdl2U7iRMfqqHl+qcxW+GhEi7Yh6YHChz9Cb+0S66aWNw=',
-    // android license key for applicationID: com.microblink.sample
-    android: 'sRwAAAAGSGF1bGVyoiAWF5fjhaO36wtNq34LbqdyIWmD3Bt3+oVhlJRym3BYX2h5QQ6eBe5vW9nIJuN7Gw+W/8V+TuQ64KfW/bsoqvwZzjmCecLts7OQ+83L/FmHfc8v5GPTwwylzcwW+zrpc9Z3rQVEIwoVoDjjS1LLSXqTN/om/Bomwwv3tkNbSOfRq9zwlndoLoHTtArkAuRhB+awoBtz7hAjPlvs/Nb3EuDLiMbYGGwt2g=='
-})
+export default function App({navigation}) {
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scanned, setScanned] = useState(false);
+  const [backImage, setBackImage] = useState(null);
+  const [frontImage, setFrontImage] = useState(null);
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [licenseInfo, setLicenseInfo] = useState(null);
+  const [uploaded, setUploaded] = useState(false);
+  let camera = null;
 
-var renderIf = function(condition, content) {
-    if (condition) {
-        return content;
-    } 
-    return null;
-}
+  useEffect(() => {
+    const getBarCodeScannerPermissions = async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    };
 
-function buildResult(result, key) {
-    if (result && result != -1) {
-        return key + ": " + result + "\n";
-    }
-    return ""
-}
+    getBarCodeScannerPermissions();
+  }, []);
 
-function buildDateResult(result, key) {
-    if (result && result.day && result.month && result.year) {
-        return key + ": " +
-            result.day + "." + result.month + "." + result.year + "."
-            + "\n";
-    }
-    return ""
-}
-
-export default class Verification extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            showFrontImageDocument: false,
-            resultFrontImageDocument: '',
-            showBackImageDocument: false,
-            resultBackImageDocument: '',
-            showImageFace: false,
-            resultImageFace: '',
-            showSuccessFrame: false,
-            successFrame: '',
-            results: '',
-            licenseKeyErrorMessage: ''
-        };
-    }
-
-    async scan() {
-        try {
-
-            // to scan any machine readable travel document (passports, visas and IDs with
-            // machine readable zone), use MrtdRecognizer
-            // var mrtdRecognizer = new BlinkIDReactNative.MrtdRecognizer();
-            // mrtdRecognizer.returnFullDocumentImage = true;
-
-            // var mrtdSuccessFrameGrabber = new BlinkIDReactNative.SuccessFrameGrabberRecognizer(mrtdRecognizer);
-
-            // BlinkIDMultiSideRecognizer automatically classifies different document types and scans the data from
-            // the supported document
-            var blinkIdMultiSideRecognizer = new BlinkIDReactNative.BlinkIdMultiSideRecognizer();
-            blinkIdMultiSideRecognizer.returnFullDocumentImage = true;
-            blinkIdMultiSideRecognizer.returnFaceImage = true;
-
-            const scanningResults = await BlinkIDReactNative.BlinkID.scanWithCamera(
-                new BlinkIDReactNative.BlinkIdOverlaySettings(),
-                new BlinkIDReactNative.RecognizerCollection([blinkIdMultiSideRecognizer/*, mrtdSuccessFrameGrabber*/]),
-                licenseKey
-            );
-
-            if (scanningResults) {
-                let newState = {
-                    showFrontImageDocument: false,
-                    resultFrontImageDocument: '',
-                    showBackImageDocument: false,
-                    resultBackImageDocument: '',
-                    showImageFace: false,
-                    resultImageFace: '',
-                    results: '',
-                    showSuccessFrame: false,
-                    successFrame: ''
-                };
-
-                for (let i = 0; i < scanningResults.length; ++i) {
-                    let localState = this.handleResult(scanningResults[i]);
-                    newState.showFrontImageDocument = newState.showFrontImageDocument || localState.showFrontImageDocument;
-                    if (localState.showFrontImageDocument) {
-                        newState.resultFrontImageDocument = localState.resultFrontImageDocument;
-                    }
-                    newState.showBackImageDocument = newState.showBackImageDocument || localState.showBackImageDocument;
-                    if (localState.showBackImageDocument) {
-                        newState.resultBackImageDocument = localState.resultBackImageDocument;
-                    }
-                    newState.showImageFace = newState.showImageFace || localState.showImageFace;
-                    if (localState.resultImageFace) {
-                        newState.resultImageFace = localState.resultImageFace;
-                    }
-                    newState.results += localState.results;
-                    newState.showSuccessFrame = newState.showSuccessFrame || localState.showSuccessFrame;
-                    if (localState.successFrame) {
-                        newState.successFrame = localState.successFrame;
-                    }
-
-                }
-                newState.results += '\n';
-                this.setState(newState);
-            }
-        } catch (error) {
-            console.log(error);
-            this.setState({ showFrontImageDocument: false, resultFrontImageDocument: '', showBackImageDocument: false, resultBackImageDocument: '', showImageFace: false, resultImageFace: '', results: 'Scanning has been cancelled', showSuccessFrame: false,
-            successFrame: ''});
+  async function uploadImage(uri) {
+    console.log('uploading images')
+    try {
+        if (!frontImage || !backImage) {
+            return null; // if no image is selected, return null
         }
+          const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+              resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+              console.log(e);
+            reject(new TypeError('Network request failed'));
+            };
+            xhr.responseType = 'blob';
+            xhr.open('GET', uri, true);
+            xhr.send(null);
+          });
+          const ref = firebase.storage().ref().child(`license-front/${licenseInfo}${uri.substring(uri.lastIndexOf('/') + 1)}`);
+          const snapshot = await ref.put(blob);
+        return snapshot;
+    } catch (e) {
+        console.log(e.message);
+    }
+  };
+
+  const SubmitLicenseImages = async () => {
+    console.log('submitting license images')
+    try {
+      const response = await uploadImage(frontImage.uri); // upload image first and get the response
+      if (response === null) {
+          Alert.alert('Please select an image');
+          return;
+      }
+      const image = await response.ref.getDownloadURL(); // then get the image url from the response
+      setFrontImage(image);
+    } catch (e) {
+      console.log(e.message);
     }
 
-    handleResult(result) {
-        var localState = {
-            showFrontImageDocument: false,
-            resultFrontImageDocument: '',
-            showBackImageDocument: false,
-            resultBackImageDocument: '',
-            resultImageFace: '',
-            results: '',
-            showSuccessFrame: false,
-            successFrame: ''
-        };
-
-        if (result instanceof BlinkIDReactNative.BlinkIdMultiSideRecognizerResult) {
-            let blinkIdResult = result;
-
-            let resultString =
-                buildResult(blinkIdResult.firstName.description, "First name") +
-                buildResult(blinkIdResult.lastName.description, "Last name") +
-                buildResult(blinkIdResult.fullName.description, "Full name") +
-                buildResult(blinkIdResult.localizedName.description, "Localized name") +
-                buildResult(blinkIdResult.additionalNameInformation.description, "Additional name info") +
-                buildResult(blinkIdResult.address.description, "Address") +
-                buildResult(blinkIdResult.additionalAddressInformation.description, "Additional address info") +
-                buildResult(blinkIdResult.documentNumber.description, "Document number") +
-                buildResult(blinkIdResult.documentAdditionalNumber.description, "Additional document number") +
-                buildResult(blinkIdResult.sex.description, "Sex") +
-                buildResult(blinkIdResult.issuingAuthority.description, "Issuing authority") +
-                buildResult(blinkIdResult.nationality.description, "Nationality") +
-                buildDateResult(blinkIdResult.dateOfBirth, "Date of birth") +
-                buildResult(blinkIdResult.age, "Age") +
-                buildDateResult(blinkIdResult.dateOfIssue, "Date of issue") +
-                buildDateResult(blinkIdResult.dateOfExpiry, "Date of expiry") +
-                buildResult(blinkIdResult.dateOfExpiryPermanent, "Date of expiry permanent") +
-                buildResult(blinkIdResult.expired, "Expired") +
-                buildResult(blinkIdResult.maritalStatus.description, "Martial status") +
-                buildResult(blinkIdResult.personalIdNumber.description, "Personal id number") +
-                buildResult(blinkIdResult.profession.description, "Profession") +
-                buildResult(blinkIdResult.race.description, "Race") +
-                buildResult(blinkIdResult.religion.description, "Religion") +
-                buildResult(blinkIdResult.residentialStatus.description, "Residential status") +
-                buildResult(blinkIdResult.processingStatus.description, "Processing status") +
-                buildResult(blinkIdResult.recognitionMode.description, "Recognition mode")
-                ;
-
-            let dataMatchResult = blinkIdResult.dataMatchResult;
-            resultString +=
-                    buildResult(dataMatchResult.stateForWholeDocument, "State for the whole document") +
-                    buildResult(dataMatchResult.states[0].state, "dateOfBirth") +
-                    buildResult(dataMatchResult.states[1].state, "dateOfExpiry") +
-                    buildResult(dataMatchResult.states[2].state, "documentNumber");
-            
-
-            let licenceInfo = blinkIdResult.driverLicenseDetailedInfo;
-            if (licenceInfo) {
-                var vehicleClassesInfoString = '';
-                if (licenceInfo.vehicleClassesInfo) {
-                  for (let i=0; i<licenceInfo.vehicleClassesInfo.length; i++) {
-                        vehicleClassesInfoString += buildResult(licenceInfo.vehicleClassesInfo[i].vehicleClass.description, 'Vehicle class') + 
-                        buildResult(licenceInfo.vehicleClassesInfo[i].licenceType.description, 'License type') + 
-                        buildDateResult(licenceInfo.vehicleClassesInfo[i].effectiveDate, 'Effective date') + 
-                        buildDateResult(licenceInfo.vehicleClassesInfo[i].expiryDate, 'Expiry date');
-                    }
-                }
-                resultString +=
-                    buildResult(licenceInfo.restrictions.description, "Restrictions") +
-                    buildResult(licenceInfo.endorsements.description, "Endorsements") +
-                    buildResult(licenceInfo.vehicleClass.description, "Vehicle class") +
-                    buildResult(licenceInfo.conditions.description, "Conditions") + vehicleClassesInfoString;
-            }
-
-            // there are other fields to extract
-            localState.results += resultString;
-
-            // Document image is returned as Base64 encoded JPEG
-            if (blinkIdResult.fullDocumentFrontImage) {
-                localState.showFrontImageDocument = true;
-                localState.resultFrontImageDocument = 'data:image/jpg;base64,' + blinkIdResult.fullDocumentFrontImage;
-            }
-            if (blinkIdResult.fullDocumentBackImage) {
-                localState.showBackImageDocument = true;
-                localState.resultBackImageDocument = 'data:image/jpg;base64,' + blinkIdResult.fullDocumentBackImage;
-            }
-            // Face image is returned as Base64 encoded JPEG
-            if (blinkIdResult.faceImage) {
-                localState.showImageFace = true;
-                localState.resultImageFace = 'data:image/jpg;base64,' + blinkIdResult.faceImage;
-            }
-        }
-        return localState;
+    try {
+      const response = await uploadImage(backImage.uri); // upload image first and get the response
+      if (response === null) {
+          Alert.alert('Please select an image');
+          return;
+      }
+      const image = await response.ref.getDownloadURL(); // then get the image url from the response
+      setBackImage(image);
+      setUploaded(true);
+    } catch (e) {
+      console.log(e.message);
     }
+  }
 
-    render() {
-        let displayFrontImageDocument = this.state.resultFrontImageDocument;
-        let displayBackImageDocument = this.state.resultBackImageDocument;
-        let displayImageFace = this.state.resultImageFace;
-        let displaySuccessFrame = this.state.successFrame;
-        let displayFields = this.state.results;
-        return (
-        <View style={styles.container}>
-            <Text style={styles.label}>BlinkID</Text>
-            <View style={styles.buttonContainer}>
-            <Button
-                onPress={this.scan.bind(this)}
-                title="Scan"
-                color="#48B2E8"
-            />
-            </View>
-            <ScrollView
-            automaticallyAdjustContentInsets={false}
-            scrollEventThrottle={200}y>
-            <Text style={styles.results}>{displayFields}</Text>
-            {renderIf(this.state.showFrontImageDocument,
-                <View style={styles.imageContainer}>
-                <Image
-                    resizeMode='contain'
-                    source={{uri: displayFrontImageDocument, scale: 3}} style={styles.imageResult}/>
-                </View>
-            )}
-            {renderIf(this.state.showBackImageDocument,
-                <View style={styles.imageContainer}>
-                <Image
-                    resizeMode='contain'
-                    source={{uri: displayBackImageDocument, scale: 3}} style={styles.imageResult}/>
-                </View>
-            )}
-            {renderIf(this.state.showImageFace,
-                <View style={styles.imageContainer}>
-                <Image
-                    resizeMode='contain'
-                    source={{uri: displayImageFace, scale: 3}} style={styles.imageResult}/>
-                </View>
-            )}
-            {renderIf(this.state.showSuccessFrame,
-                <View style={styles.imageContainer}>
-                    <Image
-                    resizeMode='contain'
-                    source={{uri: displaySuccessFrame, scale: 3}} style={styles.imageResult}/>
-                </View>
-            )}
-            </ScrollView>
+  const takePicture = async (side) => {
+    console.log('taking picture')
+    console.log(side)
+    if (!camera) return;
+    let photo = await camera.takePictureAsync({
+        onPictureSaved: (data) => {
+          if (side === 'front') {
+            setFrontImage(data);
+          } else {
+            setBackImage(data);
+          }
+          setPreviewVisible(true);
+        },
+        base64: false,
+    });
+  };
+
+  const handleBarCodeScanned = ({ type, data }) => {
+    setScanned(true);
+    const alphaNumericData = data.split('$').filter((item) => item !== '');
+    console.log(alphaNumericData);
+    setLicenseInfo(alphaNumericData[1]);
+  };
+    
+
+  async function handleButtonPress(side) {
+    await takePicture(side);
+  }
+  
+  if (hasPermission === null) {
+    return <Text>Requesting for camera permission</Text>;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
+  return (
+    <View style={styles.container}>
+      {uploaded ? (
+        <View>
+          <Text>License images uploaded</Text>
+          <Button title='Continue' onPress={() => navigation.navigate('SignUp', {licenseInfo: licenseInfo, frontImage: frontImage, backImage: backImage})}/>
         </View>
-        );
-    }
+      ) : (
+        previewVisible ? 
+          (backImage === null? 
+            <ImageBackground source={{ uri: frontImage && frontImage.uri }} resizeMode='cover' style={styles.absoluteFillObject}>
+            <Button title='Retake' onPress={() => {setPreviewVisible(false); setScanned(false); setFrontImage(null)}}/>
+            <Button title='Take next photo' onPress={() => {setPreviewVisible(false); setScanned(false); uploadImage()}}/>
+            </ImageBackground>
+            : 
+            <ImageBackground source={{ uri: backImage && backImage.uri }} resizeMode='cover' style={styles.absoluteFillObject}>
+              <Button title='Retake' onPress={() => {setPreviewVisible(false); setScanned(false); setBackImage(null)}}/>
+              <Button title='Submit Photos' onPress={SubmitLicenseImages}/>
+            </ImageBackground>
+          ):(
+            <Camera
+              type={CameraType.back}
+              style={StyleSheet.absoluteFillObject}
+              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+              ref={(ref) => {
+                  camera = ref;
+              }}
+            >
+            {frontImage === null ?
+            (<View style={styles.buttonContainer}>
+              <Button
+                title="Capture front of license"
+                onPress={() => handleButtonPress('front')}
+              />            
+            </View>
+            ) : (
+              !scanned ? <Text style={styles.text}>Scan the back of your license</Text> :
+              <View style={styles.buttonContainer}>          
+              <Button
+                title="Capture back of license"
+                onPress={() => handleButtonPress('back')}
+              />
+            </View>
+            )
+          }
+          </Camera>
+          )
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'stretch',
-    backgroundColor: '#F5FCFF'
-  },
-  label: {
-    fontSize: 30,
-    textAlign: 'center',
-    marginTop: 50
-  },
-  buttonContainer: {
-    margin: 20
-  },
-  imageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center'
-  },
-  results: {
-    fontSize: 16,
-    textAlign: 'left',
-    margin: 10,
-  },
-  imageResult: {
-    flex: 1,
-    flexShrink: 1,
-    height: 200,
-    alignItems: 'center',
-    justifyContent: 'center',
-    margin: 10
-  },
+    container: {
+        flex: 1,
+    },
+    camera: {
+        flex: 1,
+    },
+    buttonContainer: {
+        flex: 1,
+        backgroundColor: 'transparent',
+        flexDirection: 'row',
+        margin: 20,
+    },
+    button: {
+        flex: 0.1,
+        alignSelf: 'flex-end',
+        alignItems: 'center',
+    },
+    text: {
+        fontSize: 18,
+        color: 'white',
+        backgroundColor: 'black',
+    },
+    absoluteFillObject: {
+        flex: 1,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right:0,
+    }
 });
-
-AppRegistry.registerComponent('Sample', () => Sample);
-

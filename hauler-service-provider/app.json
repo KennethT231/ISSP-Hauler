@@ -19,7 +19,8 @@
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app needs access to location when open.",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "This app needs access to location when in the background.",
-        "NSLocationAlwasUsageDescription": "This app needs access to location when in the background."
+        "NSLocationAlwasUsageDescription": "This app needs access to location when in the background.",
+        "NSCameraUsageDescription": "This app needs access to camera to take photos."
       }
     },
     "android": {
@@ -34,7 +35,8 @@
         "ACCESS_BACKGROUND_LOCATION",
         "ACCESS_FOREGROUND_SERVICE",
         "CAMERA"
-      ]
+      ],
+      "hardware":"camera"
     },
     "web": {
       "favicon": "./assets/favicon.png"

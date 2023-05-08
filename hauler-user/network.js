@@ -2,7 +2,7 @@ import axios from "axios";
 import { NETWORK_URL } from "@env";
 
 const url = NETWORK_URL;
-console.log("Connectimg to server");
+console.log("Connectimg to server in user app");
 console.log(url);
 
 //========================================To register user ===================================================//
