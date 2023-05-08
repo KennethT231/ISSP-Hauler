@@ -71,79 +71,106 @@ export default function Signin({ navigation }) {
     )
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        paddingVertical: '2%',
-        backgroundColor: 'white',
-        minHeight: 600,
-        justifyContent: 'center',
-        paddingBottom: 180,
-    },
-    logo: {
-        width: 100,
-        height: 100,
-        alignSelf: 'center',
-    },
-    heading: {
-        textAlign: 'center',
-        fontSize: 45,
-        marginVertical: '1%',
-        color: '#2EBCAC',
-        fontWeight: "bold",
-    },
-    input: {
-        borderBottomColor: '#BFBFBF',
-        borderBottomWidth: 1,
-        height: 40,
-        overflow: 'hidden',
-        backgroundColor: 'white',
-        marginHorizontal: '5%',
-        marginBottom: 20
-    },
-    email: {
-        color: '#73AB84',
-        textAlign: 'center'
-    },
-    button: {
-        backgroundColor: '#0077FC',
-        marginLeft: '2%',
-        marginRight: '2%',
-        marginTop: 50,
-        height: 48,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: '90%',
-        alignSelf: 'center'
-    },
-    buttonTitle: {
-        color: 'white',
-        fontSize: 16,
-        fontWeight: "bold"
-    },
-    option: {
-        flex: 1,
-        alignItems: 'center',
-        marginTop: 20
-    },
-    optionText: {
-        fontSize: 16,
-        color: '#2e2e2d'
-    },
-    optionLink: {
-        color: '#A9A9A9',
-        fontWeight: 'bold',
-        fontSize: 16
-    },
-    logoContainer: {
-        marginTop: '10%',
-        marginBottom: '10%'
-    },
-    text1: {
-        color: '#BFBFBF',
-        marginLeft: '5%'
-    },
-})
 
+const styles = StyleSheet.create({
+
+  container: {
+      flex: 1,
+      alignItems: 'center',
+      paddingVertical: '2%',
+      backgroundColor: '#f0f0f0',
+      minHeight: 600,
+      justifyContent: 'center',
+      paddingBottom: 180,
+  },
+  
+  logo: {
+      width: 100,
+      height: 100,
+      alignSelf: 'center',
+  },
+ 
+  heading: {
+      textAlign: 'center',
+      fontSize: 45,
+      marginVertical: '1%',
+      color: '#2EBCAC',
+      fontWeight: "bold",
+  },
+ 
+  input: {
+      overflow: 'hidden',
+      backgroundColor: 'white',
+      marginHorizontal: '5%',
+      marginBottom: 20,
+      height: 40,
+      borderColor: '#3d3b3b',
+      borderWidth: 1,
+      borderRadius: 20,
+      paddingHorizontal: 10,
+      marginBottom: 20,
+      backgroundColor: '#fff',
+  },
+ 
+  email: {
+      color: '#73AB84',
+      textAlign: 'center'
+  },
+ 
+  button: {
+      backgroundColor: '#1970d4',
+      marginLeft: '2%',
+      marginRight: '2%',
+      marginTop: 50,
+      height: 48,
+      borderRadius: 10,
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '90%',
+      alignSelf: 'center',
+      shadowColor: '#0177FC',
+      marginTop: 30,
+      shadowOpacity: 0.8,
+      shadowOffset: {
+        height: 2,
+        width: 2,
+      },
+      elevation: 5
+  },
+ 
+  buttonTitle: {
+      color: 'white',
+      fontSize: 16,
+      fontWeight: "bold"
+  },
+ 
+  option: {
+      flex: 1,
+      alignItems: 'center',
+      marginTop: 20
+  },
+ 
+  optionText: {
+      fontSize: 16,
+      color: '#2e2e2d'
+  },
+ 
+  optionLink: {
+      color: '#A9A9A9',
+      fontWeight: 'bold',
+      fontSize: 16
+  },
+ 
+  logoContainer: {
+      marginTop: '10%',
+      marginBottom: '10%'
+  },
+ 
+  text1: {
+      color: '#000000',
+      marginLeft: '5%',
+      marginBottom: 10
+  },
+ 
+});
+ 
