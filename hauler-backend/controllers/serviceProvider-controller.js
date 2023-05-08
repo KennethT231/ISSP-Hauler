@@ -1,4 +1,7 @@
 const ServiceProviderData = require('../models/serviceProviderProfile')
+const textflow = require("textflow.js")
+
+textflow.useKey("JZI6ELhqXlkk40ILQx3hFueY0jZb62cfHyv65kWEBqL6uLVV5XhOVr1zO3by7McY");
 
 //===================================== To register service provider =================================//
 const createServiceProvider = async (req, res) => {
@@ -16,6 +19,7 @@ const createServiceProvider = async (req, res) => {
             unitNumber,
             email,
             contactNumber,
+            code,
             chequeDepositFormUrl,
             vehicle,
             driverLicenseUrl,
@@ -25,8 +29,14 @@ const createServiceProvider = async (req, res) => {
             serviceProvided,
             serviceStatus,
             serviceLocation,
-            locationStatus
+            locationStatus,
         } = req.body;
+
+        let result = await textflow.verifyCode(contactNumber, code);
+
+        if (!result.valid) {
+            return res.status(400).json({ success: false });
+        }
 
         const newServiceProvider = new ServiceProviderData({
             uid,
@@ -40,6 +50,7 @@ const createServiceProvider = async (req, res) => {
             unitNumber,
             email,
             contactNumber,
+            code,
             chequeDepositFormUrl,
             vehicleType: {
                 vehicle
@@ -57,16 +68,26 @@ const createServiceProvider = async (req, res) => {
                 }
             },
         });
-
-        let check = await newServiceProvider.save();
-        console.log(check);
-        res.status(201).json({ serviceProviderProfile: newServiceProvider });
+        console.log('code', code);
+        await newServiceProvider.save();
+        res.status(201).json({ success: true, serviceProviderProfile: newServiceProvider });
     } catch (error) {
         console.log(error)
-        res.status(404).json({ message: error.message });
+        res.status(404).json({ success: false, message: error.message });
     }
 }
+//================================ To verify service providers =====================================//
+const verifyProvider = async (req, res) => {
+    const { contactNumber } = req.body;
+    let result = await textflow.sendVerificationSMS(contactNumber);
+    console.log('result for sms', result);
 
+    if (result.ok) //send sms here
+        return res.status(200).json({ success: true });
+
+    return res.status(400).json({ success: false });
+
+}
 //================================ To get all service providers =====================================//
 const getServiceProvider = async (req, res) => {
     try {
@@ -161,3 +182,4 @@ exports.createServiceProvider = createServiceProvider;
 exports.deleteOneServiceProvider = deleteOneServiceProvider;
 exports.updateOneServiceProvider = updateOneServiceProvider;
 exports.postProfilePic = postProfilePic;
+exports.verifyProvider = verifyProvider;

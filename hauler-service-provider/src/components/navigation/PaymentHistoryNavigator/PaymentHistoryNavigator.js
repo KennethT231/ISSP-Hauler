@@ -9,7 +9,7 @@ export default function PaymentHistoryScreenNavigator() {
             headerShown: true,
             title: 'PaymentHistory',
         }}>
-            <PaymentHistoryScreenStack.Screen name='PaymentHistory' component={PaymentHistory} options={{
+            <PaymentHistoryScreenStack.Screen name='PaymentHistory1' component={PaymentHistory} options={{
                 headerTitle: '',
                 headerShown: false
             }} />

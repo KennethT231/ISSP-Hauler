@@ -159,53 +159,59 @@ export default function Profile1({ navigation }) {
                             <FontAwesome name='star' size={20} color='#FCC742' />
                             <FontAwesome name='star' size={20} color='#FCC742' />
                         </View>
-                        <View style={styles.infoContainer}>
-                            <FontAwesome style={styles.infoIcon} name='user' size={24} color='black' />
-                            <Text style={styles.userInfo}>
-                                {userInformation.firstName} {userInformation.lastName}
-                            </Text>
-                        </View>
-                        <View style={styles.infoContainer}>
-                            <FontAwesome style={styles.infoIcon} name='birthday-cake' size={24} color='black' />
-                            <Text style={styles.userInfo}>
-                                {userInformation.dateOfBirth}
-                            </Text>
-                        </View>
-                        <View style={styles.infoContainer}>
-                            <FontAwesome style={styles.infoIcon} name='envelope' size={24} color='black' />
-                            <Text style={styles.userInfo}>
-                                {currentUser && currentUser.email}
-                            </Text>
-                        </View>
-                        <View style={styles.infoContainer}>
-                            <FontAwesome style={styles.infoIcon} name='phone' size={24} color='black' />
-                            <Text style={styles.userInfo}>
-                                {userInformation.contactNumber}
-                            </Text>
-                        </View>
-                        <View style={styles.infoContainer}>
-                            <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
-                            <Text style={styles.userInfo}>
-                                {userInformation.unitNumber}, {userInformation.streetAddress}
-                            </Text>
-                        </View>
-                        <View style={styles.infoContainer}>
-                            <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
-                            <Text style={styles.userInfo}>
-                                {userInformation.city}
-                            </Text>
-                        </View>
-                        <View style={styles.infoContainer}>
-                            <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
-                            <Text style={styles.userInfo}>
-                                {userInformation.province}
-                            </Text>
-                        </View>
-                        <View style={styles.infoContainer}>
-                            <FontAwesome style={styles.infoIcon} name='credit-card' size={24} color='black' />
-                            <Text style={styles.userInfo}>
-                                {userInformation.cardNumber} {userInformation.expiryDate}
-                            </Text>
+                        <View
+                            style={{
+                                width: '100%',
+                            }}
+                        >
+                            <View style={styles.infoContainer}>
+                                <FontAwesome style={styles.infoIcon} name='user' size={24} color='black' />
+                                <Text style={styles.userInfo}>
+                                    {userInformation.firstName} {userInformation.lastName}
+                                </Text>
+                            </View>
+                            <View style={styles.infoContainer}>
+                                <FontAwesome style={styles.infoIcon} name='birthday-cake' size={24} color='black' />
+                                <Text style={styles.userInfo}>
+                                    {userInformation.dateOfBirth}
+                                </Text>
+                            </View>
+                            <View style={styles.infoContainer}>
+                                <FontAwesome style={styles.infoIcon} name='envelope' size={24} color='black' />
+                                <Text style={styles.userInfo}>
+                                    {currentUser && currentUser.email}
+                                </Text>
+                            </View>
+                            <View style={styles.infoContainer}>
+                                <FontAwesome style={styles.infoIcon} name='phone' size={24} color='black' />
+                                <Text style={styles.userInfo}>
+                                    {userInformation.contactNumber}
+                                </Text>
+                            </View>
+                            <View style={styles.infoContainer}>
+                                <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
+                                <Text style={styles.userInfo}>
+                                    {userInformation.unitNumber}, {userInformation.streetAddress}
+                                </Text>
+                            </View>
+                            <View style={styles.infoContainer}>
+                                <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
+                                <Text style={styles.userInfo}>
+                                    {userInformation.city}
+                                </Text>
+                            </View>
+                            <View style={styles.infoContainer}>
+                                <FontAwesome style={styles.infoIcon} name='address-card' size={24} color='black' />
+                                <Text style={styles.userInfo}>
+                                    {userInformation.province}
+                                </Text>
+                            </View>
+                            <View style={styles.infoContainer}>
+                                <FontAwesome style={styles.infoIcon} name='credit-card' size={24} color='black' />
+                                <Text style={styles.userInfo}>
+                                    {userInformation.cardNumber} {userInformation.expiryDate}
+                                </Text>
+                            </View>
                         </View>
 
                         <Modal
@@ -281,17 +287,19 @@ export default function Profile1({ navigation }) {
                             </Text>
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.buttonContainer}>
+                    <View style={[styles.buttonContainer, { flex: 1 }]}>
                         <TouchableOpacity
                             style={[styles.buttons, styles.editButton]}
                             disabled={!!loading} // added !!
-                            onPress={() => onEditClicked()}>
+                            onPress={() => onEditClicked()}
+                        >
                             <Text style={styles.buttonTitle}>Edit</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.buttons, styles.logOutButton]}
                             disabled={!!loading} // added !!
-                            onPress={() => onSignOutClicked()}>
+                            onPress={() => onSignOutClicked()}
+                        >
                             <Text style={styles.buttonTitle}>Log Out</Text>
                         </TouchableOpacity>
                     </View>
@@ -313,6 +321,8 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection: 'row',
         marginVertical: 10,
+        justifyContent: 'space-between',
+        width: '90%',
     },
 
     profileContainer: {
@@ -343,13 +353,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         height: 70,
         borderRadius: 5,
-        overflow: 'hidden',
         backgroundColor: 'white',
         marginVertical: '1%',
-        width: 350,
         paddingLeft: 16,
-        marginLeft: 30,
         marginTop: 30,
+        width: '90%',
+        marginLeft: '5%',
     },
 
     infoIcon: {
@@ -372,19 +381,18 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 8,
+        // Removed marginRight: 8
     },
-
     editButton: {
         backgroundColor: '#0177FC',
         width: 170,
-        marginBottom: 30
+        // Removed marginBottom: 30
     },
 
     logOutButton: {
         backgroundColor: '#585858',
         width: 170,
-        marginBottom: 30
+        // Removed marginBottom: 30
     },
 
     buttonTitle: {
@@ -407,7 +415,7 @@ const styles = StyleSheet.create({
 
     paymentHistoryButton: {
         backgroundColor: 'navy',
-        minWidth: '80%',
+        minWidth: '90%',
         height: 50,
         borderRadius: 5,
         alignItems: 'center',
