@@ -62,17 +62,19 @@ const PaymentDetail = () => {
                 <Text style={styles.label}>Status:</Text>
                 <Text style={styles.text}>{post.status}</Text>
             </View>
-            <View style={styles.section}>
-                <Text style={styles.heading}>Service Provider Details</Text>
-                <Text style={styles.label}>First Name:</Text>
-                <Text style={styles.text}>{serviceProvider.firstName}</Text>
-                <Text style={styles.label}>Last Name:</Text>
-                <Text style={styles.text}>{serviceProvider.lastName}</Text>
-                <Text style={styles.label}>Email:</Text>
-                <Text style={styles.text}>{serviceProvider.email}</Text>
-                <Text style={styles.label}>Contact Number:</Text>
-                <Text style={styles.text}>{serviceProvider.contactNumber}</Text>
-            </View>
+            {serviceProvider && (
+                <View style={styles.section}>
+                    <Text style={styles.heading}>Service Provider Details</Text>
+                    <Text style={styles.label}>First Name:</Text>
+                    <Text style={styles.text}>{serviceProvider.firstName}</Text>
+                    <Text style={styles.label}>Last Name:</Text>
+                    <Text style={styles.text}>{serviceProvider.lastName}</Text>
+                    <Text style={styles.label}>Email:</Text>
+                    <Text style={styles.text}>{serviceProvider.email}</Text>
+                    <Text style={styles.label}>Contact Number:</Text>
+                    <Text style={styles.text}>{serviceProvider.contactNumber}</Text>
+                </View>
+            )}
             <View style={styles.section}>
                 {post.loadImages.map((image) => (
                     <Image key={image._id} style={styles.image} source={{ uri: image.imageUrl }} />
@@ -91,7 +93,7 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: "#F5F5F5",
     },
-  
+
     section: {
         marginBottom: 20,
         backgroundColor: "#FFFFFF",
@@ -106,31 +108,31 @@ const styles = StyleSheet.create({
         shadowRadius: 5,
         elevation: 3,
     },
-  
+
     heading: {
         fontSize: 18,
         fontWeight: "bold",
         marginBottom: 20,
         textTransform: "uppercase",
     },
-  
+
     label: {
         fontSize: 16,
         fontWeight: "bold",
         marginBottom: 10,
     },
-  
+
     text: {
         fontSize: 14,
         marginBottom: 20,
         lineHeight: 26,
     },
-  
+
     image: {
         width: "100%",
         height: 200,
         marginBottom: 20,
         borderRadius: 10,
     },
-    
-  });
+
+});

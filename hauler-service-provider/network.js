@@ -38,6 +38,7 @@ export async function signUp(
       email: email,
       contactNumber: contactNumber,
       code: code,
+      chequeDepositFormUrl: "https://i.pinimg.com/474x/40/f3/1d/40f31dd88a4ec213f8b21d1444242969.jpg",
       vehicle: vehicleType,
       serviceLocation: serviceLocation,
       driverLicenseExpiry: "01/01/2023",

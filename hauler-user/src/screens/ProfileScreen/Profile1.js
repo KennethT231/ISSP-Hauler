@@ -385,13 +385,13 @@ const styles = StyleSheet.create({
     },
     editButton: {
         backgroundColor: '#0177FC',
-        width: 170,
+        width: 150,
         // Removed marginBottom: 30
     },
 
     logOutButton: {
         backgroundColor: '#585858',
-        width: 170,
+        width: 150,
         // Removed marginBottom: 30
     },
 

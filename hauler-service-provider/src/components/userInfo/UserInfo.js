@@ -65,32 +65,44 @@ export default function UserInfo({ firstName, lastName, province, city, streetAd
 }
 
 const styles = StyleSheet.create({
-    input: {
-        borderBottomColor: '#BFBFBF',
-        borderBottomWidth: 1,
-        height: 40,
-        overflow: 'hidden',
-        backgroundColor: 'white',
-        marginHorizontal: '5%',
-        marginBottom: 20
-    },
-    text1: {
-        color: '#BFBFBF',
-        marginLeft: '5%'
-    },
-    text: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        marginVertical: 10,
-    },
-        datePicker: {
-        height: 40,
-        borderColor: '#C0C0C0',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-        marginBottom: 20,
-        marginTop: 20
-    },
+
+
+  input: {
+    overflow: 'hidden',
+    backgroundColor: 'white',
+    marginHorizontal: '5%',
+    marginBottom: 20,
+    height: 40,
+    borderColor: '#3d3b3b',
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    marginBottom: 20,
+    backgroundColor: '#fff',
+  },
+
+
+  text1: {
+      color: '#000000',
+      marginLeft: '5%',
+      marginBottom: 10
+  },
+
+  text: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginVertical: 10,
+  },
+      datePicker: {
+      height: 40,
+      borderColor: '#C0C0C0',
+      borderWidth: 1,
+      borderRadius: 5,
+      paddingHorizontal: 10,
+      marginBottom: 20,
+      marginTop: 20
+  },
+
 })
+
 
