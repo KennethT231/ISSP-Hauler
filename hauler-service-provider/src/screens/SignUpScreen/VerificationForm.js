@@ -1,16 +1,24 @@
-import { useState } from "react";
-import React from "react";
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from "react-native";
-import { signUp } from '../../../network';
+import React, { useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Alert, Linking } from "react-native";
+import { signUp, createStripeAccount } from '../../../network';
+import OTPInputView from "@twotalltotems/react-native-otp-input";
 
 export default function VerificationForm({ navigation, route }) {
-    const [code, setCode] = useState("")
+    const [code, setCode] = useState('');
 
     const onSignUpPressWithVerification = async () => {
         try {
-            const response = await signUp(route.params.currentUid, route.params.firstName, route.params.lastName, route.params.image, route.params.dateOfBirth, route.params.province, route.params.city, route.params.streetAddress, route.params.unitNumber, route.params.email, route.params.vehicleType, route.params.serviceLocation, route.params.contactNumber, code)
+            const response = await signUp(route.params.currentUid, route.params.firstName, route.params.lastName, route.params.image, route.params.dateOfBirth, route.params.province, route.params.city, route.params.streetAddress, route.params.unitNumber, route.params.email, route.params.contactNumber, code, route.params.vehicleType, route.params.serviceLocation)
+
+            console.log("data: ", route.params.currentUid, route.params.firstName, route.params.lastName, route.params.image, route.params.dateOfBirth, route.params.province, route.params.city, route.params.streetAddress, route.params.unitNumber, route.params.email, route.params.contactNumber, code, route.params.vehicleType, route.params.serviceLocation);
             console.log("response in verification: ", response);
+            console.log("code in verification: ", code);
             if (response.status === 201) {
+                const appUrl = await Linking.getInitialURL()
+                const stripeUrl = await createStripeAccount(email, appUrl, currentUid)
+                console.log('stripe url', stripeUrl)
+                await Linking.openURL(stripeUrl)
+
                 navigation.navigate("Home");
                 Alert.alert("You have successfully signed up!");
             } else {
@@ -18,6 +26,7 @@ export default function VerificationForm({ navigation, route }) {
             }
         } catch (error) {
             console.log("error in verification: ", error);
+            Alert.alert(error.message);
         }
     }
 
@@ -27,20 +36,19 @@ export default function VerificationForm({ navigation, route }) {
                 2-Step Verification
             </Text>
 
-            <View style={styles.codeInputContainer}>
-                {[1, 2, 3, 4, 5, 6].map((index) => (
-                    <TextInput
-                        key={index}
-                        style={styles.codeInput}
-                        maxLength={1}
-                        keyboardType="number-pad"
-                        onChangeText={(value) => {
-                            let newCode = code + value;
-                            setCode(newCode);
-                        }}
-                        value={code[index - 1]}
-                    />
-                ))}
+            <View style={styles.container}>
+                <OTPInputView
+                    style={{ width: "100%", height: 200 }}
+                    pinCount={6}
+                    code={code}
+                    onCodeChanged={code => setCode(code)}
+                    autoFocusOnLoad
+                    codeInputFieldStyle={styles.underlineStyleBase}
+                    codeInputHighlightStyle={styles.underlineStyleHighLighted}
+                    onCodeFilled={(code => {
+                        console.log(`Code is ${code}, you are good to go!`)
+                    })}
+                />
             </View>
 
             <Text style={styles.codeText}>Please enter the 6-digit code sent to you:</Text>
@@ -61,6 +69,17 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
         paddingLeft: 60,
         paddingRight: 60,
+    },
+    underlineStyleBase: {
+        width: 30,
+        height: 45,
+        borderWidth: 0,
+        borderBottomWidth: 1,
+        color: "black",
+        fontSize: 20,
+    },
+    underlineStyleHighLighted: {
+        borderColor: "#03DAC6",
     },
     regform: {
         alignSelf: "stretch",

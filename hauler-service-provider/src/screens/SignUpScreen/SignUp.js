@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TextInput, TouchableOpacity, View, Image, Button, ScrollView, Picker, Linking } from 'react-native';
 import UserInfo from '../../../src/components/userInfo/UserInfo';
 import { Context } from '../../../src/context/ContextProvider';
-import { signUp, createStripeAccount, verifyProvider } from '../../../network';
+import { verifyProvider } from '../../../network';
 import RNPickerSelect from 'react-native-picker-select-updated';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ReactNativePhoneInput from 'react-native-phone-input';
@@ -33,11 +33,23 @@ export default function Signup({ navigation, route }) {
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    const [verificationStatus, setVerificationStatus] = useState(null)
+
     const {licenseInfo, frontImage, backImage} = route.params;
 
-    console.log('license info', licenseInfo)
-    console.log('front image', frontImage)
-    console.log('back image', backImage)
+    // console.log('license info', licenseInfo)
+    // console.log('front image', frontImage)
+    // console.log('back image', backImage)
+    // useEffect(() => {
+    //     (async () => {
+    //         if (Platform.OS !== 'web') {
+    //             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    //             if (status !== 'granted') {
+    //                 alert('Sorry!! We need camera roll permission to make this work.');
+    //             }
+    //         }
+    //     })();
+    // }, []);
 
     const printUrl = async () => {
         const appUrl = await Linking.getInitialURL()
@@ -61,7 +73,6 @@ export default function Signup({ navigation, route }) {
                 currentUid,
                 firstName,
                 lastName,
-                // profilePicUrl,
                 image,
                 dateOfBirth,
                 province,
@@ -71,17 +82,12 @@ export default function Signup({ navigation, route }) {
                 email,
                 contactNumber,
                 vehicleType,
-                // driverLicenseExpiry,
-                serviceLocation,
+                serviceLocation
             })
-            const appUrl = await Linking.getInitialURL()
-            const stripeUrl = await createStripeAccount(email, appUrl, currentUid)
-            console.log('stripe url', stripeUrl)
-            await Linking.openURL(stripeUrl)
 
             // Start the verification process in the background
             const verificationResponse = await verifyProvider(contactNumber)
-            console.log("verificationResponse++ " +verificationResponse)
+            console.log("verificationResponse++ " +JSON.stringify(verificationResponse))
             setVerificationStatus(verificationResponse.status)
         } catch (err) {
             console.log(err)
@@ -95,16 +101,6 @@ export default function Signup({ navigation, route }) {
         setShow(false);
         setDate(currentDate);
     };
-    // useEffect(() => {
-    //     (async () => {
-    //         if (Platform.OS !== 'web') {
-    //             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    //             if (status !== 'granted') {
-    //                 alert('Sorry!! We need camera roll permission to make this work.');
-    //             }
-    //         }
-    //     })();
-    // }, []);
 
     return (
         <ScrollView>
@@ -113,6 +109,7 @@ export default function Signup({ navigation, route }) {
                     style={{ flex: 1, width: '100%' }}>
                     <Text style={styles.heading}>Register</Text>
                     <Text > {error && alert(error)}</Text>
+                    <Text > {verificationStatus === 400 && alert("Verification failed")}</Text>
                     <Text style={styles.text1}> Email : </Text>
                     <TextInput
                         style={styles.input}
@@ -134,22 +131,10 @@ export default function Signup({ navigation, route }) {
                         value={confirmPassword}
                     />
                     <Text style={styles.text1}> Phone Number : </Text>
-                    {/*<TextInput
-                        style={styles.input}
-                        placeholder='(XXX) XXX-XXXX'
-                        placeholderTextColor="#C0C0C0"
-                        onChangeText={(contactNumber) => { setError(""); setContactNumber(contactNumber) }}
-                        value={contactNumber}
-                    />*/}
 
                     <ReactNativePhoneInput
                         onChangePhoneNumber={(value) => { setError(""); setContactNumber(value) }}
                         initialCountry={'ca'}
-                        //initialValue="13178675309"
-                        //textProps={{
-                        //    placeholder: '(XXX) XXX-XXXX'
-                        //}}
-                        //textComponent={TextInput}
                         style={styles.input}
                     />
                     <UserInfo
@@ -160,15 +145,11 @@ export default function Signup({ navigation, route }) {
                         contactNumber={contactNumber}
                         firstName={firstName}
                         lastName={lastName}
-                        // profilePicUrl={profilePicUrl}
                         setProvince={setProvince}
                         setCity={setCity}
                         setStreetAddress={setStreetAddress}
                         setUnitNumber={setUnitNumber}
-                        //setProfilePicUrl={setProfilePicUrl}
                         setLastName={setLastName}
-                        //setDob={setDob}
-                        //setContactNumber={setContactNumber}
                         setFirstName={setFirstName}
                         setError={setError}
                     />
@@ -260,10 +241,6 @@ export default function Signup({ navigation, route }) {
                         />
                     </View>
                     <View style={styles.buttonContainer}>
-                        {/* <TouchableOpacity
-                            style={styles.buttons}>
-                            <Text style={styles.buttonTitle}>Upload Void Cheque</Text>
-                        </TouchableOpacity> */}
                         <TouchableOpacity
                             style={styles.buttons} onPress={
                                 () => navigation.navigate('Verification')}>

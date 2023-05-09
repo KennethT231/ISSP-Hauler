@@ -1,8 +1,8 @@
 import axios from 'axios';
 //import { NETWORK_URL } from '@env';
 
-const url = "https://hauler-backend-production-765f.up.railway.app"
-//  const url = "http://10.0.0.145:3000"
+//const url = "https://hauler-backend-production-765f.up.railway.app"
+  const url = "http://10.0.0.145:3000"
 console.log(url);
 
 //==============================To register Service Provider========================================//
@@ -18,10 +18,12 @@ export async function signUp(
   unitNumber,
   email,
   contactNumber,
+  code,
   vehicleType,
   // driverLicenseExpiry,
   serviceLocation
 ) {
+  console.log('user created network: ' + uid,firstName,lastName,profilePicUrl,dateOfBirth, province, city, streetAddress, unitNumber, email, contactNumber, code, vehicleType, serviceLocation);
   try {
     const res = await axios.post(`${url}/api/service-providers`, {
       uid: uid,
@@ -35,10 +37,10 @@ export async function signUp(
       unitNumber: unitNumber,
       email: email,
       contactNumber: contactNumber,
-      chequeDepositFormUrl: "https://i.pinimg.com/474x/40/f3/1d/40f31dd88a4ec213f8b21d1444242969.jpg",
+      code: code,
       vehicle: vehicleType,
-      driverLicenseExpiry: "01/01/2023",
       serviceLocation: serviceLocation,
+      driverLicenseExpiry: "01/01/2023",
       driverLicenseUrl: "https://i.pinimg.com/474x/40/f3/1d/40f31dd88a4ec213f8b21d1444242969.jpg",
       driverAbstractUrl: "https://i.pinimg.com/474x/40/f3/1d/40f31dd88a4ec213f8b21d1444242969.jpg",
       profileStatus: true,

@@ -6,7 +6,6 @@ import Signin from '../../../screens/SigninScreen/Signin';
 import SignUp from '../../../screens/SignUpScreen/SignUp';
 import Home from '../../../screens/HomeScreen/Home';
 import Verification from '../../../screens/Verification/Verification';
-import PaymentNavigator from '../PaymentNavigator/PaymentNavigator';
 import PaymentHistoryScreenNavigator from '../PaymentHistoryNavigator/PaymentHistoryNavigator';
 import PaymentDetail from '../../../screens/PaymentHistory/PaymentDetail';
 import VerificationForm from '../../../screens/SignUpScreen/VerificationForm';
@@ -58,11 +57,6 @@ const HomeNavigator = () => {
                     //             headerTitle: 'Home',
                     //         }
                     // }
-                    />
-                    <HomeStack.Screen
-                        name='PaymentNavigator'
-                        component={PaymentNavigator}
-                    // options={{ headerRight: () => <MenuIcon /> }}
                     />
                     <HomeStack.Screen
                         name='PaymentHistory'
