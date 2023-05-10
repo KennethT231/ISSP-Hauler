@@ -286,6 +286,20 @@ export default function Profile({ navigation }) {
                             </ScrollView>
                         </Modal>
                     </View>
+                    <View style={styles.buttonContainer}>
+                                            {/* payment history */}
+                        <TouchableOpacity
+                            style={styles.paymentHistoryButton}
+                            disabled={!!loading} // added !!
+                            onPress={() => onPaymentHistoryClicked()}
+                        >
+                            <Text style={styles.buttonTitle}>
+                                Payment History
+                            </Text>
+                        </TouchableOpacity>
+                    </View>                    
+
+                    <View style={[styles.buttonContainer, {flex: 1}]}>
                         <TouchableOpacity
                             style={[styles.buttons, styles.editButton]}
                             disabled={!!loading}
@@ -298,16 +312,7 @@ export default function Profile({ navigation }) {
                             onPress={() => onSignOutClicked()}>
                             <Text style={styles.buttonTitle}>Log Out</Text>
                         </TouchableOpacity>
-                    {/* payment history */}
-                        <TouchableOpacity
-                            style={styles.paymentHistoryButton}
-                            disabled={!!loading} // added !!
-                            onPress={() => onPaymentHistoryClicked()}
-                        >
-                            <Text style={styles.buttonTitle}>
-                                Payment History
-                            </Text>
-                        </TouchableOpacity>
+                    </View>
                 </View>
                 : <View></View>}
         </ScrollView>
@@ -315,120 +320,114 @@ export default function Profile({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 
-  container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center'
-  },
+    buttonContainer: {
+        flexDirection: 'row',
+        marginVertical: 10,
+        justifyContent: 'space-between',
+        width: '90%',
+    },
 
-  buttonContainer: {
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 25
-  },
+    profileContainer: {
+        flex: 1,
+        width: '100%',
+    },
 
-  profileContainer: {
-      flex: 1,
-      width: '100%',
-  },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+    },
 
-  headerContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-  },
+    avatar: {
+        alignItems: 'center'
+    },
 
-  avatar: {
-      alignItems: 'center'
-  },
+    user: {
+        textAlign: 'center',
+        fontWeight: "bold",
+        fontSize: 35,
+        color: '#5C5C5C',
+        marginBottom: 10
+    },
 
-  user: {
-      textAlign: 'center',
-      fontWeight: "bold",
-      fontSize: 35,
-      color: '#5C5C5C',
-      marginBottom: 10
-  },
+    infoContainer: {
+        flexDirection: 'row',
+        borderColor: 'black',
+        borderWidth: 1,
+        height: 70,
+        borderRadius: 5,
+        backgroundColor: 'white',
+        marginVertical: '1%',
+        paddingLeft: 16,
+        marginTop: 30,
+        width: '90%',
+        marginLeft: '5%',
+    },
 
-  infoContainer: {
-      flexDirection: 'row',
-      borderColor: 'black',
-      borderWidth: 1,
-      height: 70,
-      borderRadius: 5,
-      overflow: 'hidden',
-      backgroundColor: 'white',
-      marginVertical: '1%',
-      width: 350,
-      paddingLeft: 16,
-      marginLeft: 20,
-      marginTop: 30,
-  },
+    infoIcon: {
+        marginHorizontal: 20,
+        marginVertical: 20,
+    },
 
-  infoIcon: {
-      marginHorizontal: 20,
-      marginVertical: 20,
-  },
+    userInfo: {
+        color: 'black',
+        fontSize: 20,
+        marginVertical: 20,
+    },
 
-  userInfo: {
-      color: 'black',
-      fontSize: 20,
-      marginVertical: 20,
-  },
+    modalContainer: {
+        margin: 20
+    },
 
-  modalContainer: {
-      margin: 20,
-      paddingTop: 20,
-  },
+    buttons: {
+        height: 48,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+        // Removed marginRight: 8
+    },
+    editButton: {
+        backgroundColor: '#0177FC',
+        width: 150,
+        // Removed marginBottom: 30
+    },
 
-  buttons: {
-      width: '48%',
-      height: 48,
-      borderRadius: 5,
-      alignItems: 'center',
-      justifyContent: 'center',
-  },
+    logOutButton: {
+        backgroundColor: '#585858',
+        width: 150,
+        // Removed marginBottom: 30
+    },
 
-  editButton: {
-      backgroundColor: '#0177FC',
-      width: 200,
-      marginBottom: 20,
-      marginTop: 20
-  },
+    buttonTitle: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: "bold"
+    },
 
-  logOutButton: {
-      backgroundColor: '#585858',
-      width: 200,
-      marginBottom: 30
-  },
+    input: {
+        borderColor: 'black',
+        borderWidth: 1,
+        height: 48,
+        borderRadius: 5,
+        overflow: 'hidden',
+        backgroundColor: 'white',
+        marginVertical: '1%',
+        marginHorizontal: '2%',
+        paddingLeft: 16,
+    },
 
-  buttonTitle: {
-      color: 'white',
-      fontSize: 16,
-      fontWeight: "bold"
-  },
-
-  input: {
-      borderColor: 'black',
-      borderWidth: 1,
-      height: 48,
-      borderRadius: 5,
-      overflow: 'hidden',
-      backgroundColor: 'white',
-      marginVertical: '1%',
-      marginHorizontal: '2%',
-      paddingLeft: 16,
-  },
-
-  paymentHistoryButton: {
-      backgroundColor: 'navy',
-      width: '90%',
-      height: 50,
-      width: 200,
-      borderRadius: 5,
-      alignItems: 'center',
-      justifyContent: 'center',
-  },
+    paymentHistoryButton: {
+        backgroundColor: 'navy',
+        minWidth: '90%',
+        height: 50,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 
 });
