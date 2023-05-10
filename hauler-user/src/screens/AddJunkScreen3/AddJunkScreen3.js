@@ -3,6 +3,7 @@ import { Text, View, ScrollView, TextInput, SafeAreaView, Picker, StyleSheet } f
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Slider from '@react-native-community/slider';
 import { getOnePost } from '../../../network'
+import ReactNativePhoneInput from 'react-native-phone-input';
 
 // Post A Job Screen 3 - Third page of the post a job process
 export default function AddJunkScreen3({ navigation, route }) {
@@ -36,10 +37,20 @@ export default function AddJunkScreen3({ navigation, route }) {
                 />
 
                 <Text style={styles.text}>Pick up contact number</Text>
-                <TextInput style={styles.inputLine1}
+                {/*<TextInput style={styles.inputLine1}
                     keyboardType='numeric'
                     onChangeText={(phoneNumber) => { setPickUpPhoneNumber(phoneNumber) }}
                     value={pickUpPhoneNumber}
+                />*/}
+                <ReactNativePhoneInput
+                    onChangePhoneNumber={(phoneNumber) => { setPickUpPhoneNumber(phoneNumber) }}
+                    initialCountry={'ca'}
+                    //initialValue="13178675309"
+                    //textProps={{
+                    //     placeholder: '(XXX) XXX-XXXX'
+                    //}}
+                    //textComponent={TextInput}
+                    style={styles.inputLine1}
                 />
 
                 <Text style={styles.text}>Pick up instructions</Text>
