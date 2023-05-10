@@ -4,6 +4,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Camera, CameraType } from 'expo-camera';
 import firebase from '../../api/firebase';
 import { set } from 'react-native-reanimated';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export default function App({navigation}) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -120,22 +121,33 @@ export default function App({navigation}) {
       {uploaded ? (
         <View>
           <Text>License images uploaded</Text>
-          <Button title='Continue' onPress={() => navigation.navigate('SignUp', {licenseInfo: licenseInfo, frontImage: frontImage, backImage: backImage})}/>
+          <TouchableOpacity onPress={() => navigation.navigate('SignUp', {licenseInfo: licenseInfo, frontImage: frontImage, backImage: backImage})}>
+              <Text style={styles.button}>Continue</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         previewVisible ? 
           (backImage === null? 
             <ImageBackground source={{ uri: frontImage && frontImage.uri }} resizeMode='cover' style={styles.absoluteFillObject}>
-            <Button title='Retake' onPress={() => {setPreviewVisible(false); setScanned(false); setFrontImage(null)}}/>
-            <Button title='Take next photo' onPress={() => {setPreviewVisible(false); setScanned(false); uploadImage()}}/>
+            <TouchableOpacity onPress={() => {setPreviewVisible(false); setScanned(false); setFrontImage(null)}}>
+              <Text style={styles.button}>Retake</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => {setPreviewVisible(false); setScanned(false); uploadImage()}}>
+              <Text style={styles.button}>Take next photo</Text>
+            </TouchableOpacity>
             </ImageBackground>
             : 
             <ImageBackground source={{ uri: backImage && backImage.uri }} resizeMode='cover' style={styles.absoluteFillObject}>
-              <Button title='Retake' onPress={() => {setPreviewVisible(false); setScanned(false); setBackImage(null)}}/>
-              <Button title='Submit Photos' onPress={SubmitLicenseImages}/>
+              <TouchableOpacity onPress={() => {setPreviewVisible(false); setScanned(false); setBackImage(null)}}>
+                <Text style={styles.button}>Retake</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={SubmitLicenseImages}>
+                <Text style={styles.button}>Submit Photos</Text>
+              </TouchableOpacity>
             </ImageBackground>
           ):(
             <Camera
+             key={scanned ? 1 : 2}
               type={CameraType.back}
               style={StyleSheet.absoluteFillObject}
               onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
@@ -144,20 +156,15 @@ export default function App({navigation}) {
               }}
             >
             {frontImage === null ?
-            (<View style={styles.buttonContainer}>
-              <Button
-                title="Capture front of license"
+            (
+              <TouchableOpacity
                 onPress={() => handleButtonPress('front')}
-              />            
-            </View>
+              ><Text style={styles.button}>Capture front of license</Text></TouchableOpacity>            
             ) : (
-              !scanned ? <Text style={styles.text}>Scan the back of your license</Text> :
-              <View style={styles.buttonContainer}>          
-              <Button
-                title="Capture back of license"
+              !scanned ? <Text style={styles.text}>Scan the back of your license</Text> :   
+              <TouchableOpacity
                 onPress={() => handleButtonPress('back')}
-              />
-            </View>
+              ><Text style={styles.button}>Capture back of license</Text></TouchableOpacity>
             )
           }
           </Camera>
@@ -181,14 +188,19 @@ const styles = StyleSheet.create({
         margin: 20,
     },
     button: {
-        flex: 0.1,
-        alignSelf: 'flex-end',
-        alignItems: 'center',
+      backgroundColor: 'blue',
+      color: 'white',
+      fontSize: 20,
+      padding: 10,
+      margin: 10,
+      borderRadius: 100,
+      textAlign: 'center',
     },
     text: {
         fontSize: 18,
         color: 'white',
         backgroundColor: 'black',
+        padding: 20,
     },
     absoluteFillObject: {
         flex: 1,
