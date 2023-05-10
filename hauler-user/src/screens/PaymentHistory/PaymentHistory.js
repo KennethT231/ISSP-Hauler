@@ -15,6 +15,11 @@ const PaymentHistory = ({ navigation }) => {
     const { currentUser } = useContext(Context);
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
+    const [range, setRange] = useState("week"); 
+
+    const handlePress = (value) => {
+      setRange(value);
+    };
 
     useEffect(() => {
         const getUser = async () => {
@@ -32,9 +37,46 @@ const PaymentHistory = ({ navigation }) => {
         getPosts();
     }, []);
 
+    const filterByRange = (range) => {
+        const now = new Date();
+        const cutoffDate = new Date();
+        let start;
+        switch (range) {
+          case "week":
+            cutoffDate.setDate(now.getDate() - 7);
+            break;
+          case "month":
+            cutoffDate.setMonth(now.getMonth() - 1);
+            break;
+          case "quarter":
+            cutoffDate.setMonth(now.getMonth() - 3);
+            break;
+          case "year":
+            cutoffDate.setFullYear(now.getFullYear() - 1);
+            break;
+        default:
+            throw new Error(`Invalid time range: ${range}`);
+        }
+        console.log("cutoffDate:::: "+cutoffDate)
+        const year = cutoffDate.getFullYear();
+        const month = String(cutoffDate.getMonth() + 1).padStart(2, '0');
+        const day = String(cutoffDate.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        const formattedToday = now.toISOString().substr(0, 10);
+        console.log("formattedDate:::: "+formattedDate)
+        console.log("formattedToday:::: "+formattedToday)
+        return posts.filter(
+            (post) =>
+            (post.status === "Paid" || post.status === "Complete") &&
+            post.timeStamp.substr(0, 10) >= formattedDate &&
+            post.timeStamp.substr(0, 10) <= formattedToday
+        );
+    };
+
     console.log({ posts });
     // filter paid posts
-    const isPaid = posts.filter((post) => post.status === "Paid");
+    //const isPaid = posts.filter((post) => post.status === "Paid");
+    const isPaid = filterByRange(range);
     // console.log(isPaid);
 
     // total amount paid
@@ -122,6 +164,18 @@ const PaymentHistory = ({ navigation }) => {
         );
     };
 
+    const renderButton = (text, value) => (
+        <TouchableOpacity
+        style={[
+            styles.button,
+            range === value && styles.activeButton 
+        ]}
+        onPress={() => handlePress(value)}
+        >
+        <Text style={styles.buttonText}>{text}</Text>
+        </TouchableOpacity>
+    );
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -130,6 +184,12 @@ const PaymentHistory = ({ navigation }) => {
                         {user.firstName}'s Payment Dashboard
                     </Text>
                 )}
+            </View>
+            <View style={styles.buttonContainer}>
+                {renderButton("Week", "week")}
+                {renderButton("Month", "month")}
+                {renderButton("Quarter", "quarter")}
+                {renderButton("Year", "year")}
             </View>
             <View style={styles.chartContainer}>
                 {isPaid.length > 0 ? (
@@ -194,6 +254,24 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         padding: 20,
+    },
+    buttonContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 20
+    },
+    button: {
+      backgroundColor: "#ccc",
+      paddingHorizontal: 10,
+      paddingVertical: 5,
+      marginHorizontal: 5,
+      borderRadius: 5
+    },
+    activeButton: {
+      backgroundColor: "blue"
+    },
+    buttonText: {
+      color: "#fff"
     },
     header: {
         alignItems: "center",
