@@ -247,10 +247,10 @@ export default function Signup({ navigation, route }) {
 
                             <Text style={styles.buttonTitle}>Upload Driver License</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={styles.buttons}>
                             <Text style={styles.buttonTitle}>Driver Abstract</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
                     <Text style={styles.text1}> Driver Licence Expiry : </Text>
                     <TextInput
