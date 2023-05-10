@@ -33,6 +33,8 @@ const BottomTabNavigation = () => {
                         <FontAwesome name="home" size={25} color="black" />,
                 }}
             />
+            {currentUser ?
+            <>
             <BottomTab.Screen
                 name='SearchJobsNavigator'
                 component={SearchJobsNavigator}
@@ -51,7 +53,7 @@ const BottomTabNavigation = () => {
                     drawerLabel: 'My Job List',
                 }}
             />
-            {currentUser ? <BottomTab.Screen
+             <BottomTab.Screen
                 name='Profile'
                 component={Profile}
                 options={{
@@ -59,7 +61,7 @@ const BottomTabNavigation = () => {
                         <FontAwesome name="user" size={25} color="black" />,
                     drawerLabel: 'Account',
                 }}
-            /> : null}
+            /> </>: null}
         </BottomTab.Navigator>
     );
 };

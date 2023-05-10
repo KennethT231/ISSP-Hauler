@@ -18,6 +18,8 @@ export default function DrawerNavigation() {
         component={HomeNavigator}
       // options={{ headerTitle: 'Home', headerRight: () => <MenuIcon /> }}
       />
+      {currentUser ? 
+      <>
       <Drawer.Screen
         name="SearchJobsNavigator"
         component={SearchJobsNavigator}
@@ -36,14 +38,14 @@ export default function DrawerNavigation() {
           // , headerRight: () => <MenuIcon /> 
         }}
       />
-      {currentUser ? <Drawer.Screen
+      <Drawer.Screen
         name="Profile"
         component={ProfileNavigator}
         options={{
           drawerLabel: 'Account',
           //headerTitle: 'Profile', headerRight: () => <MenuIcon /> 
         }}
-      /> : null}
+      /></> : null}
     </Drawer.Navigator>
   );
 }

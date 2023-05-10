@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         backgroundColor: "#fff",
-        paddingLeft: 60,
-        paddingRight: 60,
+        paddingLeft: 30,
+        paddingRight: 30,
     },
     underlineStyleBase: {
         width: 30,
@@ -93,25 +93,12 @@ const styles = StyleSheet.create({
         borderBottomColor: "#199187",
         borderBottomWidth: 1,
     },
-    codeInputContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 10,
-    },
-    codeInput: {
-        backgroundColor: '#f5f5f5',
-        width: 45,
-        height: 45,
-        borderRadius: 10,
-        fontSize: 24,
-        fontWeight: 'bold',
-        textAlign: 'center',
-    },
     codeText: {
         color: '#333',
         fontSize: 16,
         marginBottom: 20,
         textAlign: 'center',
+        marginTop: 50,
     },
     button: {
         alignSelf: "stretch",
