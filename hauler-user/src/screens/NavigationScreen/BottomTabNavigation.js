@@ -34,7 +34,7 @@ const BottomTabNavigation = () => {
                     ),
                 }}
             />
-            <BottomTab.Screen
+            {currentUser ? <><BottomTab.Screen
                 name="Post A Job"
                 component={ServiceScreenNavigator}
                 options={{
@@ -48,7 +48,7 @@ const BottomTabNavigation = () => {
                     // headerRight: () => <MenuIcon />,
                 }}
             />
-            {currentUser ? <BottomTab.Screen
+            <BottomTab.Screen
                 name='Profile'
                 component={ProfileNavigator}
                 options={{
@@ -57,7 +57,7 @@ const BottomTabNavigation = () => {
                     ),
                     // headerRight: () => <MenuIcon />,
                 }}
-            /> : null}
+            /></> : null}
         </BottomTab.Navigator>
     );
 };

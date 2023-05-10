@@ -29,14 +29,14 @@ export default function NavigationScreen(navigation) {
                 name="Home"
                 component={HomeNavigator}
             />
-            <Drawer.Screen
+            {currentUser ? <><Drawer.Screen
                 name="Post A Job"
                 component={ServiceScreenNavigator}
             />
-            {currentUser ? <Drawer.Screen
+            <Drawer.Screen
                 name="Profile"
                 component={ProfileNavigator}
-            /> : null}
+            /></> : null}
         </Drawer.Navigator>
     )
 }
