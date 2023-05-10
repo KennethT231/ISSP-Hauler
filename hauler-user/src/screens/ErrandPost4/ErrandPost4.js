@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Text, View, ScrollView, TextInput, SafeAreaView, Picker, StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Slider from '@react-native-community/slider';
-import { getOnePost } from '../../../network';
+import {getOnePost} from '../../../network';
+import ReactNativePhoneInput from 'react-native-phone-input';
 
 export default function ErrandPost4({ navigation, route }) {
 
@@ -35,61 +36,81 @@ export default function ErrandPost4({ navigation, route }) {
       <View style={styles.container}>
         <Text style={styles.pickup}>Pick Up Details</Text>
         <Text style={styles.text}>Contact Person</Text>
-        <TextInput style={styles.inputLine1}
-          onChangeText={(contactPerson) => { setPickContactPerson(contactPerson) }}
-          value={pickContactPerson}
-        />
-        <Text style={styles.text}>Phone Number</Text>
-        <TextInput style={styles.inputLine1}
-          keyboardType='numeric'
-          onChangeText={(phoneNumber) => { setPickUpPhoneNumber(phoneNumber) }}
-          value={pickUpPhoneNumber}
-        />
-        <Text style={styles.text}>Pick up instructions</Text>
-        <TextInput style={styles.inputLine1}
+          <TextInput style={styles.inputLine1} 
+            onChangeText={(contactPerson) => {setPickContactPerson(contactPerson)}}
+            value={pickContactPerson}
+          />
+          <Text style={styles.text}>Phone Number</Text>
+          {/*<TextInput style={styles.inputLine1}
+            keyboardType='numeric' 
+            onChangeText={(phoneNumber) => {setPickUpPhoneNumber(phoneNumber)}}
+            value={pickUpPhoneNumber}
+          />*/}
+          <ReactNativePhoneInput
+            onChangePhoneNumber={(phoneNumber) => { setPickUpPhoneNumber(phoneNumber) }}
+            initialCountry={'ca'}
+            //initialValue="13178675309"
+            //textProps={{
+            //    placeholder: '(XXX) XXX-XXXX'
+            //}}
+            //textComponent={TextInput}
+            style={styles.inputLine1}
+          />
+          <Text style={styles.text}>Pick up instructions</Text>
+          <TextInput style={styles.inputLine1} 
           multiline
-          onChangeText={(specialInstructions) => setPickUpSpecialInstructions(specialInstructions)}
-          value={pickUpSpecialInstructions}
-        />
-        <Text style={styles.dropOff}> Drop Off Details </Text>
-        <Text style={styles.text}>Contact Person</Text>
-        <TextInput style={styles.inputLine1}
-          onChangeText={(contactPerson) => { setDropOffContactPerson(contactPerson) }}
-          value={dropOffContactPerson}
-        />
-        <Text style={styles.text}>Contact Number</Text>
-        <TextInput style={styles.inputLine1}
-          keyboardType='numeric'
-          onChangeText={(phoneNumber) => { setDropOffPhoneNumber(phoneNumber) }}
-          value={dropOffPhoneNumber}
-        />
-        <Text style={styles.text}> Special Instructions : </Text>
-        <TextInput style={styles.inputLine1}
-          multiline
-          onChangeText={(specialInstructions) => setDropOffSpecialInstructions(specialInstructions)}
-          value={dropOffSpecialInstructions}
-        />
-        <SafeAreaView style={{ flex: 1 }}>
-          <View style={styles.containerSlider}>
-            {/*Text to show slider value*/}
-            <Text style={{ color: 'black' }}>
-              Your Price Value : $ {sliderValue}
-            </Text>
-            {/*Slider with max, min, step and initial value*/}
-            <Slider
-              maximumValue={1000}
-              minimumValue={50}
-              minimumTrackTintColor="#307ecc"
-              maximumTrackTintColor="#000000"
-              step={1}
-              value={sliderValue}
-              onValueChange={
-                (sliderValue) => setSliderValue(sliderValue)
-              }
-            />
-          </View>
-        </SafeAreaView>
-        <View style={styles.btnContainer}>
+            onChangeText={(specialInstructions) => setPickUpSpecialInstructions(specialInstructions)}
+            value={pickUpSpecialInstructions}
+          />
+          <Text style={styles.dropOff}> Drop Off Details </Text>
+          <Text style={styles.text}>Contact Person</Text>
+          <TextInput style={styles.inputLine1} 
+            onChangeText={(contactPerson) => {setDropOffContactPerson(contactPerson)}}
+            value={dropOffContactPerson}
+          />
+          <Text style={styles.text}>Contact Number</Text>
+          {/*<TextInput style={styles.inputLine1}
+            keyboardType='numeric' 
+            onChangeText={(phoneNumber) => {setDropOffPhoneNumber(phoneNumber)}}
+            value={dropOffPhoneNumber}
+          />*/}
+          <ReactNativePhoneInput
+            onChangePhoneNumber={(phoneNumber) => { setDropOffPhoneNumber(phoneNumber) }}
+            initialCountry={'ca'}
+            //initialValue="13178675309"
+            //textProps={{
+            //    placeholder: '(XXX) XXX-XXXX'
+            //}}
+            //textComponent={TextInput}
+            style={styles.inputLine1}
+          />
+          <Text style={styles.text}> Special Instructions : </Text>
+          <TextInput style={styles.inputLine1} 
+          multiline 
+            onChangeText={(specialInstructions) => setDropOffSpecialInstructions(specialInstructions)}
+            value={dropOffSpecialInstructions}
+          />
+          <SafeAreaView style={{flex: 1}}>
+            <View style={styles.containerSlider}>
+                {/*Text to show slider value*/}
+                <Text style={{color: 'black'}}>
+                    Your Price Value : $ {sliderValue}
+                </Text>
+                {/*Slider with max, min, step and initial value*/}
+                <Slider
+                maximumValue={1000}
+                minimumValue={50}
+                minimumTrackTintColor="#307ecc"
+                maximumTrackTintColor="#000000"
+                step={1}
+                value={sliderValue}
+                onValueChange={
+                    (sliderValue) => setSliderValue(sliderValue)
+                }
+                />
+            </View>
+          </SafeAreaView>
+         <View style={styles.btnContainer}>
           <TouchableOpacity onPress={() => navigation.navigate('ErrandSummary', {
             image: image,
             selectedweight: selectedweight,

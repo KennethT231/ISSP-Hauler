@@ -71,35 +71,35 @@ const PaymentHistory = ({ navigation }) => {
             post.timeStamp.substr(0, 10) >= formattedDate &&
             post.timeStamp.substr(0, 10) <= formattedToday
         );
-      };
+    };
     
-      const isPaid = filterByRange(range);
+    const isPaid = filterByRange(range);
     
-      // total amount paid for all services
-      const totalPaid = isPaid.reduce((acc, curr) => {
-        return acc + curr.acceptedPrice;
-      }, 0);
+    // total amount paid for all services
+    const totalPaid = isPaid.reduce((acc, curr) => {
+    return acc + curr.acceptedPrice;
+    }, 0);
     
-      // total amount paid for Junk Removal
-      const totalPaidJunk = isPaid
+    // total amount paid for Junk Removal
+    const totalPaidJunk = isPaid
         .filter((post) => post.service === "Junk")
         .reduce((acc, curr) => {
           return acc + curr.acceptedPrice;
-        }, 0);
+    }, 0);
     
-      // total amount paid for Moving
-      const totalPaidMoving = isPaid
+    // total amount paid for Moving
+    const totalPaidMoving = isPaid
         .filter((post) => post.service === "Moving")
         .reduce((acc, curr) => {
           return acc + curr.acceptedPrice;
-        }, 0);
+    }, 0);
     
-      // total amount paid for Errand
-      const totalPaidErrand = isPaid
+    // total amount paid for Errand
+    const totalPaidErrand = isPaid
         .filter((post) => post.service === "Errand")
         .reduce((acc, curr) => {
           return acc + curr.acceptedPrice;
-        }, 0);
+    }, 0);
 
     const chartData = {
         labels: isPaid.map((post) => post.service),
