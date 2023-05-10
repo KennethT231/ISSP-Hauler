@@ -18,6 +18,7 @@ export async function signUp(
   unitNumber,
   email,
   contactNumber,
+  code,
   vehicleType,
   // driverLicenseExpiry,
   serviceLocation
@@ -35,6 +36,7 @@ export async function signUp(
       unitNumber: unitNumber,
       email: email,
       contactNumber: contactNumber,
+      code: code,
       chequeDepositFormUrl: "https://i.pinimg.com/474x/40/f3/1d/40f31dd88a4ec213f8b21d1444242969.jpg",
       vehicle: vehicleType,
       driverLicenseExpiry: "01/01/2023",

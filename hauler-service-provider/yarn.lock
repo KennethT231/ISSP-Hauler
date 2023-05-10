@@ -5528,6 +5528,11 @@ fs-monkey@^1.0.3:
   resolved "https://registry.npmjs.org/fs-monkey/-/fs-monkey-1.0.3.tgz"
   integrity sha512-cybjIfiiE+pTWicSCLFHSrXZ6EilF30oh91FDP9S2B051prEa7QWfrVTQm10/dDpswBDXZugPa1Ogu8Yh+HV0Q==
 
+fs-monkey@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.npmjs.org/fs-monkey/-/fs-monkey-1.0.3.tgz"
+  integrity sha512-cybjIfiiE+pTWicSCLFHSrXZ6EilF30oh91FDP9S2B051prEa7QWfrVTQm10/dDpswBDXZugPa1Ogu8Yh+HV0Q==
+
 fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
@@ -5547,6 +5552,11 @@ geo-lib@^0.4.0:
   version "0.4.0"
   resolved "https://registry.npmjs.org/geo-lib/-/geo-lib-0.4.0.tgz"
   integrity sha512-2rA3ehPK5BCd4J4e8WcgRLhTMYULhH441L+JK7w71HcGIw9yt8nGZPaBCXhQiguEFxFdCeS+u2gM1P1czyW4AQ==
+
+geolib@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.npmjs.org/geolib/-/geolib-3.3.3.tgz"
+  integrity sha512-YO704pzdB/8QQekQuDmFD5uv5RAwAf4rOUPdcMhdEOz+HoPWD0sC7Qqdwb+LAvwIjXVRawx0QgZlocKYh8PFOQ==
 
 geolib@^3.3.3:
   version "3.3.3"
@@ -7312,10 +7322,10 @@ minipass@^3.0.0, minipass@^3.1.1, minipass@3.1.6:
   dependencies:
     yallist "^4.0.0"
 
-minipass@^4.0.0:
-  version "4.2.8"
-  resolved "https://registry.npmjs.org/minipass/-/minipass-4.2.8.tgz"
-  integrity sha512-fNzuVyifolSLFL4NzpF+wEF4qrgqaaKX0haXPQEdQ7NKAN+WecoKMHV09YcuL/DHxrUsYQOK3MiuDf7Ip2OXfQ==
+minipass@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/minipass/-/minipass-5.0.0.tgz"
+  integrity sha512-3FnjYuehv9k6ovOEbyOswadCDPX1piCfhV8ncmYtHOjuPwylVWsghTLo7rabjC3Rx5xD4HDx8Wm1xnMF7S5qFQ==
 
 minizlib@^2.1.1:
   version "2.1.2"
@@ -9771,13 +9781,13 @@ tapable@^2.0.0, tapable@^2.1.1, tapable@^2.2.0:
   integrity sha512-GNzQvQTOIP6RyTfE2Qxb8ZVlNmw0n88vp1szwWRimP02mnTsx3Wtn5qRdqY9w2XduFNUgvOwhNnQsjwCp+kqaQ==
 
 tar@^6.0.2, tar@^6.0.5:
-  version "6.1.13"
-  resolved "https://registry.npmjs.org/tar/-/tar-6.1.13.tgz"
-  integrity sha512-jdIBIN6LTIe2jqzay/2vtYLlBHa3JF42ot3h1dW8Q0PaAG4v8rm0cvpVePtau5C6OKXGGcgO9q2AMNSWxiLqKw==
+  version "6.1.14"
+  resolved "https://registry.npmjs.org/tar/-/tar-6.1.14.tgz"
+  integrity sha512-piERznXu0U7/pW7cdSn7hjqySIVTYT6F76icmFk7ptU7dDYlXTm5r9A6K04R2vU3olYgoKeo1Cg3eeu5nhftAw==
   dependencies:
     chownr "^2.0.0"
     fs-minipass "^2.0.0"
-    minipass "^4.0.0"
+    minipass "^5.0.0"
     minizlib "^2.1.1"
     mkdirp "^1.0.3"
     yallist "^4.0.0"

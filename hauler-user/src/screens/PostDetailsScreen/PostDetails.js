@@ -209,13 +209,19 @@ const styles = StyleSheet.create({
         marginLeft: '6%'
     },
     listButton: {
-        backgroundColor: '#0077FC',
-        marginVertical: 10,
+        backgroundColor: '#1970d4',
+        alignSelf: 'center',
+        width: '90%',
         height: 48,
         borderRadius: 10,
+        marginVertical: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        width: '90%',
-        marginHorizontal: '5%',
+        shadowColor: '#0177FC',
+        shadowOpacity: 0.8,
+        shadowOffset: {
+            height: 2,
+            width: 2,
+        },
     }
 })
