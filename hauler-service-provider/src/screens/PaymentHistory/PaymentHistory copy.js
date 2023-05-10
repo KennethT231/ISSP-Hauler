@@ -15,12 +15,7 @@ const PaymentHistory = ({ navigation }) => {
     const { currentUser } = useContext(Context);
     const [user, setUser] = useState(null);
     const [posts, setPosts] = useState([]);
-    const [range, setRange] = useState("week"); 
 
-    const handlePress = (value) => {
-      setRange(value);
-    };
-    
     useEffect(() => {
         const getUser = async () => {
             const user = await getOneServiceProvider(currentUser.uid);
@@ -37,69 +32,38 @@ const PaymentHistory = ({ navigation }) => {
         getPosts();
     }, []);
 
-    const filterByRange = (range) => {
-        const now = new Date();
-        const cutoffDate = new Date();
-        let start;
-        switch (range) {
-          case "week":
-            cutoffDate.setDate(now.getDate() - 7);
-            break;
-          case "month":
-            cutoffDate.setMonth(now.getMonth() - 1);
-            break;
-          case "quarter":
-            cutoffDate.setMonth(now.getMonth() - 3);
-            break;
-          case "year":
-            cutoffDate.setFullYear(now.getFullYear() - 1);
-            break;
-        default:
-            throw new Error(`Invalid time range: ${range}`);
-        }
-        console.log("cutoffDate:::: "+cutoffDate)
-        const year = cutoffDate.getFullYear();
-        const month = String(cutoffDate.getMonth() + 1).padStart(2, '0');
-        const day = String(cutoffDate.getDate()).padStart(2, '0');
-        const formattedDate = `${year}-${month}-${day}`;
-        const formattedToday = now.toISOString().substr(0, 10);
-        console.log("formattedDate:::: "+formattedDate)
-        console.log("formattedToday:::: "+formattedToday)
-        return posts.filter(
-            (post) =>
-            (post.status === "Paid" || post.status === "Complete") &&
-            post.timeStamp.substr(0, 10) >= formattedDate &&
-            post.timeStamp.substr(0, 10) <= formattedToday
-        );
-      };
-    
-      const isPaid = filterByRange(range);
-    
-      // total amount paid for all services
-      const totalPaid = isPaid.reduce((acc, curr) => {
+    // filter paid posts
+    const isPaid = posts.filter((post) => post.status === "Paid" || post.status == "Complete");
+    console.log(isPaid);
+
+    // total amount paid
+    const totalPaid = isPaid.reduce((acc, curr) => {
         return acc + curr.acceptedPrice;
-      }, 0);
-    
-      // total amount paid for Junk Removal
-      const totalPaidJunk = isPaid
-        .filter((post) => post.service === "Junk")
-        .reduce((acc, curr) => {
-          return acc + curr.acceptedPrice;
-        }, 0);
-    
-      // total amount paid for Moving
-      const totalPaidMoving = isPaid
-        .filter((post) => post.service === "Moving")
-        .reduce((acc, curr) => {
-          return acc + curr.acceptedPrice;
-        }, 0);
-    
-      // total amount paid for Errand
-      const totalPaidErrand = isPaid
-        .filter((post) => post.service === "Errand")
-        .reduce((acc, curr) => {
-          return acc + curr.acceptedPrice;
-        }, 0);
+    }, 0);
+
+    // filter paid Junk Removal posts
+    const isPaidJunk = isPaid.filter((post) => post.service === "Junk");
+
+    // total amount paid for Junk Removal
+    const totalPaidJunk = isPaidJunk.reduce((acc, curr) => {
+        return acc + curr.acceptedPrice;
+    }, 0);
+
+    // filter paid Moving posts
+    const isPaidMoving = isPaid.filter((post) => post.service === "Moving");
+
+    // total amount paid for Moving
+    const totalPaidMoving = isPaidMoving.reduce((acc, curr) => {
+        return acc + curr.acceptedPrice;
+    }, 0);
+
+    // filter paid Delivery posts
+    const isPaidErrand = isPaid.filter((post) => post.service === "Errand");
+
+    // total amount paid for Errand
+    const totalPaidErrand = isPaidErrand.reduce((acc, curr) => {
+        return acc + curr.acceptedPrice;
+    }, 0);
 
     const chartData = {
         labels: isPaid.map((post) => post.service),
@@ -126,7 +90,7 @@ const PaymentHistory = ({ navigation }) => {
         )
         const paymentStatus = (item.status === "Paid" || item.status === "Complete") && (
             <View style={{ backgroundColor: "#27AE60", padding: 5, borderRadius: 5 }}>
-                <Text style={{ color: "#fff" }}>{item.status}</Text>
+                <Text style={{ color: "#fff" }}>Paid</Text>
             </View>
         )
 
@@ -134,12 +98,14 @@ const PaymentHistory = ({ navigation }) => {
             <Text>${item.acceptedPrice}</Text>
         )
 
+
         return (
             <View style={styles.bodyContent}>
                 <Text style={styles.bodyContentText}>{paymentDate}</Text>
                 <Text style={[styles.bodyContentText, { marginRight: 15 }]}>
                     {paidPrice}</Text>
                 <View style={styles.bodyContentText}>{paymentStatus}</View>
+                {/* detail check mark */}
                 <TouchableOpacity
                     onPress={() => {
                         navigation.navigate("PaymentDetail", {
@@ -154,32 +120,15 @@ const PaymentHistory = ({ navigation }) => {
             </View>
         );
     };
-    
-    const renderButton = (text, value) => (
-        <TouchableOpacity
-        style={[
-            styles.button,
-            range === value && styles.activeButton 
-        ]}
-        onPress={() => handlePress(value)}
-        >
-        <Text style={styles.buttonText}>{text}</Text>
-        </TouchableOpacity>
-    );
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 {user && (
                     <Text style={styles.headerText}>
-                        {user.firstName}'s Dashboard for {range}
+                        {user.firstName}'s Dashboard
                     </Text>
                 )}
-            </View>
-            <View style={styles.buttonContainer}>
-                {renderButton("Week", "week")}
-                {renderButton("Month", "month")}
-                {renderButton("Quarter", "quarter")}
-                {renderButton("Year", "year")}
             </View>
             <View style={styles.chartContainer}>
             {isPaid.length > 0 ? (
@@ -246,24 +195,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: "#fff",
         padding: 20,
-    },
-    buttonContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginBottom: 20
-    },
-    button: {
-      backgroundColor: "#ccc",
-      paddingHorizontal: 10,
-      paddingVertical: 5,
-      marginHorizontal: 5,
-      borderRadius: 5
-    },
-    activeButton: {
-      backgroundColor: "blue"
-    },
-    buttonText: {
-      color: "#fff"
     },
     header: {
         alignItems: "center",

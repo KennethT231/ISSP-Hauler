@@ -14,13 +14,14 @@ export default function VerificationForm({ navigation, route }) {
             console.log("response in verification: ", response);
             console.log("code in verification: ", code);
             if (response.status === 201) {
+                navigation.navigate("Home1");
+                Alert.alert("You have successfully signed up!");
+                
                 const appUrl = await Linking.getInitialURL()
-                const stripeUrl = await createStripeAccount(email, appUrl, currentUid)
+                const stripeUrl = await createStripeAccount(route.params.email, appUrl, route.params.currentUid)
                 console.log('stripe url', stripeUrl)
                 await Linking.openURL(stripeUrl)
 
-                navigation.navigate("Home");
-                Alert.alert("You have successfully signed up!");
             } else {
                 Alert.alert("Please enter the correct code");
             }
