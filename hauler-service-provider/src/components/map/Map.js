@@ -114,7 +114,7 @@ export default function Map({ navigation,route }) {
             }
           );
 
-          if (distance < 50) {
+          if (distance < 150) {
             //send a notification to the backend that the driver has arrived
             console.log("driver has arrived");
             markDriverArrival(post._id);
