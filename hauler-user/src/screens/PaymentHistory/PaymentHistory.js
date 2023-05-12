@@ -128,16 +128,16 @@ const PaymentHistory = ({ navigation }) => {
     };
 
     const renderItem = ({ item }) => {
-        const paymentDate = item.status === "Paid" && (
+        const paymentDate = (item.status === "Paid" || item.status === "Complete") && (
             new Date(item.timeStamp).toLocaleDateString()
         )
-        const paymentStatus = item.status === "Paid" && (
+        const paymentStatus = (item.status === "Paid" || item.status === "Complete") && (
             <View style={{ backgroundColor: "#27AE60", padding: 5, borderRadius: 5 }}>
-                <Text style={{ color: "#fff" }}>Paid</Text>
+                <Text style={{ color: "#fff" }}>{item.status}</Text>
             </View>
         )
 
-        const paidPrice = item.status === "Paid" && (
+        const paidPrice = (item.status === "Paid" || item.status === "Complete") && (
             <Text>${item.acceptedPrice}</Text>
         )
 
