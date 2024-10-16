@@ -1,4 +1,5 @@
-const ServiceProviderData = require('../models/serviceProviderProfile')
+const admin = require('firebase-admin');
+const firestore = admin.firestore();
 const textflow = require("textflow.js")
 
 textflow.useKey("JZI6ELhqXlkk40ILQx3hFueY0jZb62cfHyv65kWEBqL6uLVV5XhOVr1zO3by7McY");
@@ -38,7 +39,7 @@ const createServiceProvider = async (req, res) => {
             return res.status(400).json({ success: false });
         }
 
-        const newServiceProvider = new ServiceProviderData({
+        const newServiceProvider = {
             uid,
             firstName,
             lastName,
@@ -67,9 +68,9 @@ const createServiceProvider = async (req, res) => {
                     locationStatus,
                 }
             },
-        });
+        };
         console.log('code', code);
-        await newServiceProvider.save();
+        await firestore.collection('serviceProviders').doc(uid).set(newServiceProvider);
         res.status(201).json({ success: true, serviceProviderProfile: newServiceProvider });
     } catch (error) {
         console.log(error)
@@ -91,7 +92,8 @@ const verifyProvider = async (req, res) => {
 //================================ To get all service providers =====================================//
 const getServiceProvider = async (req, res) => {
     try {
-        const serviceProviders = await ServiceProviderData.find();
+        const snapshot = await firestore.collection('serviceProviders').get();
+        const serviceProviders = snapshot.docs.map(doc => doc.data());
         res.status(200).json(serviceProviders)
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -102,23 +104,31 @@ const getServiceProvider = async (req, res) => {
 const getOneServiceProvider = async (req, res) => {
     try {
         const id = req.params.uid;
-        let serviceProvider = await ServiceProviderData.findOne({ uid: id });
-        res.status(200).json(serviceProvider)
+        const serviceProviderRef = firestore.collection('serviceProviders').doc(id);
+        const serviceProviderDoc = await serviceProviderRef.get();
+
+        if (!serviceProviderDoc.exists) {
+            return res.status(404).json({ message: "Service Provider not found" });
+        }
+
+        res.status(200).json(serviceProviderDoc.data());
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 //================================= To delete service provider ======================================//
 const deleteOneServiceProvider = async (req, res) => {
     try {
         const id = req.params.uid;
-        await ServiceProviderData.deleteOne({ _id: id });
-        res.status(200).json('Service Proviser Deleted')
+        const serviceProviderRef = firestore.collection('serviceProviders').doc(id);
+
+        await serviceProviderRef.delete();
+        res.status(200).json('Service Provider deleted');
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 //================================ To edit servise provider profile =================================//
 const updateOneServiceProvider = async (req, res) => {
@@ -128,29 +138,29 @@ const updateOneServiceProvider = async (req, res) => {
             firstName,
             lastName,
             profilePicUrl,
-            //dateOfBirth,
             province,
             city,
             streetAddress,
             unitNumber,
             contactNumber,
         } = req.body;
-        await ServiceProviderData.findOneAndUpdate({ uid: id }, {
-            $set: {
-                firstName: firstName,
-                lastName: lastName,
-                //dateOfBirth: dateOfBirth,
-                province: province,
-                city: city,
-                streetAddress: streetAddress,
-                unitNumber: unitNumber,
-                contactNumber: contactNumber,
-                profilePicUrl: profilePicUrl
-            }
+
+        const serviceProviderRef = firestore.collection('serviceProviders').doc(id);
+
+        await serviceProviderRef.update({
+            firstName,
+            lastName,
+            profilePicUrl,
+            province,
+            city,
+            streetAddress,
+            unitNumber,
+            contactNumber
         });
-        res.status(200).json('User Info updated')
+
+        res.status(200).json('Service Provider profile updated');
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 //=============================== Post user profile picture  =================================================//
@@ -160,14 +170,13 @@ const postProfilePic = async (req, res) => {
         const profilePicUrl = req.file.location;
         console.log({ profilePicUrl, id });
 
-        // Find the user document by ID
-        const user = await UserData.findById(id);
+        // Find the service provider document by ID
+        const serviceProviderRef = firestore.collection('serviceProviders').doc(id);
 
-        // Set the profile picture URL
-        user.profilePicUrl = profilePicUrl;
-
-        // Save the updated user document
-        await user.save();
+        // Update the profile picture URL
+        await serviceProviderRef.update({
+            profilePicUrl
+        });
 
         res.status(200).send('Profile picture updated successfully!');
     } catch (err) {

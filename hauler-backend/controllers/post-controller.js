@@ -1,6 +1,5 @@
-const PostData = require('../models/posts')
-const mongoose = require("mongoose");
-const ObjectId = mongoose.Types.ObjectId;
+const admin = require('firebase-admin');
+const firestore = admin.firestore();
 
 //================================ Create new post on user app =====================================//
 const createPost = async (req, res) => {
@@ -17,20 +16,14 @@ const createPost = async (req, res) => {
             totalOffers,
             status,
             pickUpAddress,
-            // pickUpProvince,
             pickUpCity,
-            // pickUpStreetAddress,
-            // pickUpZipCode,
             pickUpAddressLat,
             pickUpAddressLng,
             pickUpContactPerson,
             pickUpContactNumber,
             pickUpSpecialInstruction,
-            // dropOffProvince,
             dropOffAddress,
             dropOffCity,
-            // dropOffStreetAddress,
-            // dropOffZipCode,
             dropOffAddressLat,
             dropOffAddressLng,
             dropOffContactPerson,
@@ -49,7 +42,7 @@ const createPost = async (req, res) => {
             userResponsePrice,
         } = req.body;
 
-        const newPost = new PostData({
+        const postData = {
             userId,
             service,
             postHeading,
@@ -62,25 +55,19 @@ const createPost = async (req, res) => {
             price,
             totalOffers,
             status,
-            pickUpAddress,
-            // pickUpProvince,
-            pickUpCity,
-            // pickUpStreetAddress,
-            // pickUpZipCode,
-            pickUpAddressLat,
-            pickUpAddressLng,
-            pickUpContactPerson,
-            pickUpContactNumber,
+            pickUpAddress,           
+            pickUpCity,              
+            pickUpAddressLat,        
+            pickUpAddressLng,        
+            pickUpContactPerson,     
+            pickUpContactNumber,     
             pickUpSpecialInstruction,
-            // dropOffProvince,
-            dropOffAddress,
-            dropOffCity,
-            // dropOffStreetAddress,
-            // dropOffZipCode,
-            dropOffAddressLat,
-            dropOffAddressLng,
-            dropOffContactPerson,
-            dropOffContactNumber,
+            dropOffAddress,          
+            dropOffCity,             
+            dropOffAddressLat,       
+            dropOffAddressLng,       
+            dropOffContactPerson,    
+            dropOffContactNumber,    
             dropOffSpecialInstruction,
             distance,
             response: [{
@@ -98,20 +85,25 @@ const createPost = async (req, res) => {
                     userResponse,
                     userResponsePrice
                 }]
-            }]
-        });
-        await newPost.save();
-        res.status(201).json({ posts: newPost });
+            }],
+            createdAt: admin.firestore.FieldValue.serverTimestamp()  // Store the timestamp
+        };
+        
+        const newPostRef = await firestore.collection('posts').add(postData);
+        
+        res.status(201).json({ success: true, postId: newPostRef.id, post: postData });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
 }
 
 //=============================get all posts for testing ===========================================//
 const getAll = async (req, res) => {
     try {
-        const posts = await PostData.find();
-        res.status(200).json(posts)
+        const snapshot = await firestore.collection('posts').get();
+        const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // Map over the documents to include their IDs
+
+        res.status(200).json(posts);
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -120,7 +112,21 @@ const getAll = async (req, res) => {
 //=============================delete all posts for testing ===========================================//
 const deleteAll = async (req, res) => {
     try {
-        const posts = await PostData.deleteMany();
+        const postsSnapshot = await firestore.collection('posts').get();
+        // Check if the collection is empty
+        if (postsSnapshot.empty) {
+            return res.status(404).json({ message: 'No posts found to delete' });
+        }
+
+        // Create a batch to delete all documents
+        const batch = firestore.batch();
+
+        postsSnapshot.forEach((doc) => {
+            batch.delete(doc.ref); // Add each delete operation to the batch
+        });
+
+        await batch.commit();
+
         res.status(200).json('all posts deleted')
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -129,12 +135,24 @@ const deleteAll = async (req, res) => {
 
 //=========================== To get all posts posted by user on user app ==========================//
 const getPostsByUid = async (req, res) => {
-    const id = req.params.uid;
+    const id = req.params.uid; // Get the user ID from the request parameters
     try {
-        const posts = await PostData.find({ userId: id });
-        res.status(200).json(posts)
+        const postsSnapshot = await firestore.collection('posts').where('userId', '==', id).get(); // Query Firestore for posts
+
+        // Check if the snapshot is empty
+        if (postsSnapshot.empty) {
+            return res.status(404).json({ message: 'No posts found for this user.' });
+        }
+
+        // Map the documents to an array
+        const posts = postsSnapshot.docs.map(doc => ({
+            id: doc.id, // Include the document ID
+            ...doc.data() // Spread the document data
+        }));
+
+        res.status(200).json(posts); // Send the posts in the response
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message }); // Handle errors
     }
 };
 
@@ -142,11 +160,29 @@ const getPostsByUid = async (req, res) => {
 const getPostsByIdAndLocation = async (req, res) => {
     const id = req.params.uid;
     const location = req.params.location;
+
     try {
-        const posts = await PostData.find({ userId: id, pickUpCity: location });
-        res.status(200).json(posts)
+        // Query Firestore to get posts for the specified user and location
+        const postsSnapshot = await firestore.collection('posts')
+            .where('userId', '==', id)
+            .where('pickUpCity', '==', location)
+            .get();
+
+        // Check if any posts were found
+        if (postsSnapshot.empty) {
+            return res.status(404).json({ message: 'No posts found for this user and location.' });
+        }
+
+        // Map the posts to include their IDs and data
+        const posts = postsSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+
+        // Send the response back to the client
+        res.status(200).json(posts);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -154,44 +190,84 @@ const getPostsByIdAndLocation = async (req, res) => {
 const getPostsByIdAndService = async (req, res) => {
     const id = req.params.uid;
     const service = req.params.service;
+
     try {
-        const posts = await PostData.find({ userId: id, service: service });
-        res.status(200).json(posts)
+        // Query Firestore to get posts for the specified user and service
+        const postsSnapshot = await firestore.collection('posts')
+            .where('userId', '==', id)
+            .where('service', '==', service)
+            .get();
+
+        // Check if any posts were found
+        if (postsSnapshot.empty) {
+            return res.status(404).json({ message: 'No posts found for this user and service.' });
+        }
+
+        // Map the posts to include their IDs and data
+        const posts = postsSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+        }));
+
+        // Send the response back to the client
+        res.status(200).json(posts);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 //================================= Delete post on user app =========================================// 
 const deleteOnePost = async (req, res) => {
+    const id = req.params.postId;
+    console.log('delete post id', id);
+
     try {
-        const id = req.params.postId;
-        console.log('delete post id', id)
-        let activePost = await PostData.findOne({ _id: id, status: { $in: ['Available', 'Negotiating'] } })
-        if (!!activePost) {
-            await PostData.deleteOne({ _id: id });
-            res.status(200).json("Post deleted")
+        // Get the post from Firestore
+        const postRef = firestore.collection('posts').doc(id);
+        const postDoc = await postRef.get();
+
+        // Check if the post exists
+        if (!postDoc.exists) {
+            return res.status(404).json({ message: 'Post not found.' });
+        }
+
+        const postData = postDoc.data();
+
+        // Check if the post is in an active status
+        if (['Available', 'Negotiating'].includes(postData.status)) {
+            await postRef.delete(); // Delete the post
+            res.status(200).json("Post deleted");
         } else {
-            res.status(200).json("This post is already accepted. You cannot delete it!")
+            res.status(200).json("This post is already accepted. You cannot delete it!");
         }
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
+
 //==================================== Edit post on user app ========================================//
 const updateOnePost = async (req, res) => {
+    const id = req.params.postId;
+
     try {
-        const id = req.params.postId;
-        let activePost = await PostData.findOne({ _id: id, status: { $in: ['Available', 'Negotiating'] } })
-        if (!!activePost) {
+        const postRef = firestore.collection('posts').doc(id);
+        const postDoc = await postRef.get();
+
+        // Check if the post exists
+        if (!postDoc.exists) {
+            return res.status(404).json({ message: 'Post not found.' });
+        }
+
+        const postData = postDoc.data();
+
+        // Check if the post is in an active status
+        if (['Available', 'Negotiating'].includes(postData.status)) {
             const {
-                // service,
                 postHeading,
                 postDescription,
                 loadWeight,
                 numberOfItems,
-                // imageUrl,
                 price,
                 pickUpAddress,
                 pickUpCity,
@@ -209,100 +285,135 @@ const updateOnePost = async (req, res) => {
                 dropOffSpecialInstruction,
                 distance
             } = req.body;
-            await PostData.findOneAndUpdate({ _id: id },
-                {
-                    $set: {
-                        // service: service,
-                        postHeading: postHeading,
-                        postDescription: postDescription,
-                        loadWeight: loadWeight,
-                        numberOfItems: numberOfItems,
-                        // imageUrl: imageUrl,
-                        price: price,
-                        pickUpAddress: pickUpAddress,
-                        pickUpCity: pickUpCity,
-                        pickUpAddressLat: pickUpAddressLat,
-                        pickUpAddressLng: pickUpAddressLng,
-                        pickUpContactPerson: pickUpContactPerson,
-                        pickUpContactNumber: pickUpContactNumber,
-                        pickUpSpecialInstruction: pickUpSpecialInstruction,
-                        dropOffAddress: dropOffAddress,
-                        dropOffCity: dropOffCity,
-                        dropOffAddressLat: dropOffAddressLat,
-                        dropOffAddressLng: dropOffAddressLng,
-                        dropOffContactPerson: dropOffContactPerson,
-                        dropOffContactNumber: dropOffContactNumber,
-                        dropOffSpecialInstruction: dropOffSpecialInstruction,
-                        distance: distance
-                    }
-                });
-            res.status(200).json('Post updated')
+
+            // Update the post in Firestore
+            await postRef.update({
+                postHeading,
+                postDescription,
+                loadWeight,
+                numberOfItems,
+                price,
+                pickUpAddress,
+                pickUpCity,
+                pickUpAddressLat,
+                pickUpAddressLng,
+                pickUpContactPerson,
+                pickUpContactNumber,
+                pickUpSpecialInstruction,
+                dropOffAddress,
+                dropOffCity,
+                dropOffAddressLat,
+                dropOffAddressLng,
+                dropOffContactPerson,
+                dropOffContactNumber,
+                dropOffSpecialInstruction,
+                distance
+            });
+
+            res.status(200).json('Post updated');
         } else {
-            res.status(200).json("This post is already accepted. You cannot edit it!")
+            res.status(403).json("This post is already accepted. You cannot edit it!");
         }
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 //SK - to change job status to "in progress" once driver is en route
 const changeJobStatusToDriving = async (req, res) => {
+    const id = req.params.postId;
+
     try {
-        const id = req.params.postId;
-        await PostData.findOneAndUpdate({ _id: id },
-            {
-                $set: {
-                    status: "In Progress"
-                }
-            });
-        res.status(200).json('Status updated to driving')
+        const postRef = firestore.collection('posts').doc(id);
+        const postDoc = await postRef.get();
+
+        // Check if the post exists
+        if (!postDoc.exists) {
+            return res.status(404).json({ message: 'Post not found.' });
+        }
+
+        // Update the status to "In Progress"
+        await postRef.update({
+            status: "In Progress"
+        });
+
+        res.status(200).json('Status updated to driving');
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 //================================ To change post visibilty on both apps =============================//
 // generate accepted price and service provider id
 const updatePostVisibility = async (req, res) => {
+    const id = req.params.postId;
+    const {
+        price,
+        serviceProviderId
+    } = req.body;
+
     try {
-        const id = req.params.postId;
-        const {
-            price,
-            serviceProviderId
-        } = req.body;
-        await PostData.findOneAndUpdate({ _id: id },
-            {
-                $set: {
-                    show: false,
-                    status: "Awaiting Payment",
-                    acceptedPrice: price,
-                    acceptedServiceProvider: serviceProviderId
-                }
-            });
-        res.status(200).json('Visibility updated')
+        const postRef = firestore.collection('posts').doc(id);
+        const postDoc = await postRef.get();
+
+        // Check if the post exists
+        if (!postDoc.exists) {
+            return res.status(404).json({ message: 'Post not found.' });
+        }
+
+        // Update the post visibility
+        await postRef.update({
+            show: false,
+            status: "Awaiting Payment",
+            acceptedPrice: price,
+            acceptedServiceProvider: serviceProviderId
+        });
+
+        res.status(200).json('Visibility updated');
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 //============================= To get single post by post Id on both apps ==========================//
 const getOnePost = async (req, res) => {
     const postId = req.params.postId;
+
     try {
-        const post = await PostData.findOne({ _id: postId });
-        res.status(200).json(post)
+        const postRef = firestore.collection('posts').doc(postId);
+        const postDoc = await postRef.get();
+
+        // Check if the post exists
+        if (!postDoc.exists) {
+            return res.status(404).json({ message: 'Post not found.' });
+        }
+
+        // Return the post data
+        res.status(200).json({ id: postDoc.id, ...postDoc.data() });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
 //======================== To get all Active posts on service provider app ==========================//
 const getAllPosts = async (req, res) => {
     try {
-        const posts = await PostData.find({ show: true });
-        res.status(200).json(posts)
+        const postsSnapshot = await firestore.collection('posts').where('show', '==', true).get();
+
+        // Check if there are any posts
+        if (postsSnapshot.empty) {
+            return res.status(404).json({ message: 'No posts found.' });
+        }
+
+        // Map the posts data to an array
+        const posts = postsSnapshot.docs.map(doc => ({
+            id: doc.id, 
+            ...doc.data() 
+        }));
+
+        res.status(200).json(posts);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -310,10 +421,25 @@ const getAllPosts = async (req, res) => {
 const getPostsByLocation = async (req, res) => {
     const location = req.params.location;
     try {
-        const posts = await PostData.find({ show: true, pickUpCity: location });
-        res.status(200).json(posts)
+        // Reference to the 'posts' collection in Firestore
+        const postsRef = firestore.collection('posts');
+
+        // Query to get posts where 'show' is true and 'pickUpCity' matches the location
+        const snapshot = await postsRef.where('show', '==', true).where('pickUpCity', '==', location).get();
+
+        // Check if there are any posts and create an array of the results
+        if (snapshot.empty) {
+            return res.status(404).json({ message: 'No posts found' });
+        }
+
+        const posts = snapshot.docs.map(doc => ({
+            id: doc.id, // Include the document ID
+            ...doc.data(), // Spread the document data
+        }));
+
+        res.status(200).json(posts);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -321,48 +447,110 @@ const getPostsByLocation = async (req, res) => {
 const getPostsByService = async (req, res) => {
     const service = req.params.service;
     try {
-        const posts = await PostData.find({ show: true, service: service });
-        res.status(200).json(posts)
+        // Reference to the 'posts' collection in Firestore
+        const postsRef = firestore.collection('posts');
+
+        // Query to get posts where 'show' is true and 'service' matches the provided service
+        const snapshot = await postsRef.where('show', '==', true).where('service', '==', service).get();
+
+        // Check if there are any posts and create an array of the results
+        if (snapshot.empty) {
+            return res.status(404).json({ message: 'No posts found' });
+        }
+
+        const posts = snapshot.docs.map(doc => ({
+            id: doc.id, // Include the document ID
+            ...doc.data(), // Spread the document data
+        }));
+
+        res.status(200).json(posts);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
-
 //=========================== To get all post by serviceProviderId ===================================//
 const getPostsByServiceProviderId = async (req, res) => {
     try {
         const serviceProviderId = req.params.serviceProviderId;
-        posts = await PostData.find({ 'response.serviceProviderId': serviceProviderId })
-        // posts = await PostData.find({ 'response.acceptedServiceProvider': serviceProviderId })
-        res.status(200).json(posts)
+        const postsRef = firestore.collection('posts');
+
+        // Query to get posts where 'response.serviceProviderId' matches the provided ID
+        const snapshot = await postsRef.where('response.serviceProviderId', '==', serviceProviderId).get();
+
+        // Check if there are any posts and create an array of the results
+        if (snapshot.empty) {
+            return res.status(404).json({ message: 'No posts found for this service provider' });
+        }
+
+        const posts = snapshot.docs.map(doc => ({
+            id: doc.id, // Include the document ID
+            ...doc.data(), // Spread the document data
+        }));
+
+        res.status(200).json(posts);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 //=================== To get all post by serviceProviderId and service ==============================//
 const getPostsByServiceProviderAndService = async (req, res) => {
     try {
-        const service = req.params.service
+        const service = req.params.service;
         const serviceProviderId = req.params.serviceProviderId;
-        posts = await PostData.find({ 'response.serviceProviderId': serviceProviderId, service: service })
-        res.status(200).json(posts)
+        const postsRef = firestore.collection('posts');
+
+        // Query to get posts where 'response.serviceProviderId' matches the provided ID and service matches the provided service
+        const snapshot = await postsRef
+            .where('response.serviceProviderId', '==', serviceProviderId)
+            .where('service', '==', service)
+            .get();
+
+        // Check if there are any posts and create an array of the results
+        if (snapshot.empty) {
+            return res.status(404).json({ message: 'No posts found for this service provider and service' });
+        }
+
+        const posts = snapshot.docs.map(doc => ({
+            id: doc.id, // Include the document ID
+            ...doc.data(), // Spread the document data
+        }));
+
+        res.status(200).json(posts);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 //=================== To get all post by serviceProviderId and location ==============================//
 const getPostsByServiceProviderIdAndLocation = async (req, res) => {
     try {
-        const location = req.params.location
+        const location = req.params.location;
         const serviceProviderId = req.params.serviceProviderId;
-        posts = await PostData.find({ 'response.serviceProviderId': serviceProviderId, pickUpCity: location })
-        res.status(200).json(posts)
+        const postsRef = firestore.collection('posts');
+
+        // Query to get posts where 'response.serviceProviderId' matches the provided ID and 'pickUpCity' matches the location
+        const snapshot = await postsRef
+            .where('response.serviceProviderId', '==', serviceProviderId)
+            .where('pickUpCity', '==', location)
+            .get();
+
+        // Check if there are any posts and create an array of the results
+        if (snapshot.empty) {
+            return res.status(404).json({ message: 'No posts found for this service provider in the specified location' });
+        }
+
+        const posts = snapshot.docs.map(doc => ({
+            id: doc.id, 
+            ...doc.data(), 
+        }));
+
+        res.status(200).json(posts);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
-}
+};
+
 
 //==================== To add service provider response on service provider app ======================//
 
@@ -457,7 +645,6 @@ const addServiceProviserResponse = async (req, res) => {
         res.status(200).json("This post is not available")
     }
 };
-
 //================================= To add user response on user app ================================//
 const addUserResponse = async (req, res) => {
     const {

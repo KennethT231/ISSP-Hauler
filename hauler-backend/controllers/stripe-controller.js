@@ -1,9 +1,13 @@
 const stripe = require('stripe')('sk_test_51M23WVAZXbnAuaLLJktMTrL2oSSQKCpqvjDDHkAK1PaYlJMFtLevnKFM9qUTjl6PjS9O3F4jGv7LsX9Yp1XUcRbR00G8JLajvz');
-const ServiceProviderData = require('../models/serviceProviderProfile')
-const PostData = require('../models/posts')
+// const ServiceProviderData = require('../models/serviceProviderProfile')
+// const PostData = require('../models/posts')
+const admin = require('firebase-admin');
+const firestore = admin.firestore();
+
 
 const createStripeAccount = async (req, res) => {
   const serviceProviderID = req.body.serviceProviderID;
+  
   try {
     const account = await stripe.accounts.create({
       type: 'express',
@@ -15,17 +19,23 @@ const createStripeAccount = async (req, res) => {
       // requested_capabilities: ['card_payment', 'transfers'],
     });
 
-    const updateWithStripe = await ServiceProviderData.findOneAndUpdate({ uid: serviceProviderID }, { stripeAcc: account.id });
-
+    // const updateWithStripe = await ServiceProviderData.findOneAndUpdate({ uid: serviceProviderID }, { stripeAcc: account.id });
+    const serviceProviderRef = firestore.collection('serviceProviders').doc(serviceProviderID);
+    await serviceProviderRef.update({
+      stripeAcc: account.id,
+    });
+    
     const accountLink = await stripe.accountLinks.create({
       account: account.id,
       refresh_url: `http://${req.body.appUrl}`,
       return_url: `http://${req.body.appUrl}`,
       type: 'account_onboarding',
     });
+
     res.send(accountLink.url)
   } catch (err) {
     console.log(err)
+    
   }
 
 }
@@ -44,39 +54,43 @@ const createStripeAccountLink = async (req, res) => {
   }
 }
 
-// generate payment intent
+// Generate a Stripe payment intent
 const createPaymentIntent = async (req, res) => {
-  console.log(req.body)
-  const amount = req.body.amount * 100;
-  const applicationFee = amount * 0.13;
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: amount,
-    currency: 'cad',
-    automatic_payment_methods: {
-      enabled: true,
-    },
-    capture_method: 'manual',
-    application_fee_amount: applicationFee,
-    transfer_data: {
-      destination: req.body.serviceProviderAccount,
-    },
-  });
+  try {
+      console.log(req.body);
+      const amount = req.body.amount * 100;  // Amount in cents
+      const applicationFee = amount * 0.13;
 
-  console.log(paymentIntent.client_secret)
+      // Create a new payment intent
+      const paymentIntent = await stripe.paymentIntents.create({
+          amount: amount,
+          currency: 'cad',
+          automatic_payment_methods: {
+              enabled: true,
+          },
+          capture_method: 'manual',
+          application_fee_amount: applicationFee,
+          transfer_data: {
+              destination: req.body.serviceProviderAccount,
+          },
+      });
 
-  await PostData.findOneAndUpdate({ _id: req.body.postId },
-    {
-      $set: {
-        paymentIntent: paymentIntent.id
-      }
-    },
-    { useFindAndModify: false }
-  );
+      console.log(paymentIntent.client_secret);
 
-  res.json({
-    paymentIntent: paymentIntent.client_secret,
-    publishableKey: 'pk_test_51M23WVAZXbnAuaLLQ0DTyBlLUIlAiEfXDMG08JJnObkdAfPcWosN99cklgD4fmgsnfqAt8ZDFYzCpjAyXwxwRid00007njU21F'
-  });
+      // Update the post record in Firestore with the payment intent ID
+      const postRef = firestore.collection('posts').doc(req.body.postId);
+      await postRef.update({
+          paymentIntent: paymentIntent.id,
+      });
+
+      res.json({
+          paymentIntent: paymentIntent.client_secret,
+          publishableKey: 'pk_test_51M23WVAZXbnAuaLLQ0DTyBlLUIlAiEfXDMG08JJnObkdAfPcWosN99cklgD4fmgsnfqAt8ZDFYzCpjAyXwxwRid00007njU21F'
+      });
+  } catch (err) {
+      console.log(err);
+      res.status(500).json({ success: false, error: err.message });
+  }
 };
 
 exports.createStripeAccount = createStripeAccount;

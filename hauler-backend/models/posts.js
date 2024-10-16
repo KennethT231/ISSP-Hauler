@@ -1,7 +1,6 @@
 const admin = require('firebase-admin');
 const firestore = admin.firestore();
 
-// Function to add a post to Firestore
 async function addPost(postData) {
   const postRef = firestore.collection('posts').doc();  // Generates a new document with a random ID
 
@@ -17,9 +16,8 @@ async function addPost(postData) {
         imageUrl: image.imageUrl || 'https://st4.depositphotos.com/14953852/24787/v/600/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg'
       })),
       price: postData.price || 50,
-      timeStamp: admin.firestore.FieldValue.serverTimestamp(), // Automatically set the timestamp
       totalOffers: postData.totalOffers || 0,
-      show: postData.show || true,
+      show: postData.show !== undefined ? postData.show : true,
       status: postData.status || 'Available',
       acceptedPrice: postData.acceptedPrice || null,
       acceptedServiceProvider: postData.acceptedServiceProvider || null,
@@ -30,20 +28,14 @@ async function addPost(postData) {
       pickUpContactPerson: postData.pickUpContactPerson || '',
       pickUpContactNumber: postData.pickUpContactNumber,
       pickUpSpecialInstruction: postData.pickUpSpecialInstruction || '',
-      dropOffProvince: postData.dropOffProvince || '',
       dropOffAddress: postData.dropOffAddress || '',
       dropOffCity: postData.dropOffCity || '',
-      dropOffStreetAddress: postData.dropOffStreetAddress || '',
-      dropOffZipCode: postData.dropOffZipCode || '',
       dropOffAddressLat: postData.dropOffAddressLat || null,
       dropOffAddressLng: postData.dropOffAddressLng || null,
       dropOffContactPerson: postData.dropOffContactPerson || '',
       dropOffContactNumber: postData.dropOffContactNumber || '',
       dropOffSpecialInstruction: postData.dropOffSpecialInstruction || '',
       distance: postData.distance || null,
-      driverLat: postData.driverLat || 49.198913,
-      driverLong: postData.driverLong || -122.865984,
-      paymentIntent: postData.paymentIntent || null,
       response: postData.response.map(response => ({
         serviceProviderId: response.serviceProviderId || '',
         responseStatus: response.responseStatus || '',
@@ -61,11 +53,17 @@ async function addPost(postData) {
           userResponsePrice: resp.userResponsePrice || 0,
           timeStamp: admin.firestore.FieldValue.serverTimestamp()
         }))
-      }))
+      })),
+      driverLat: postData.driverLat || 49.198913,
+      driverLong: postData.driverLong || -122.865984,
+      paymentIntent: postData.paymentIntent || null
     });
+    
     console.log('Post successfully added to Firestore');
+    return { success: true, postId: postRef.id };  // Return post ID
   } catch (error) {
     console.error('Error adding post:', error);
+    return { success: false, message: error.message };  // Return error message
   }
 }
 

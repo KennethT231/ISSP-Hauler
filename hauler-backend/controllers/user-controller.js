@@ -26,10 +26,10 @@ const createUser = async (req, res) => {
         let result = await textflow.verifyCode(contactNumber, code);
 
         if (!result.valid) {
-            return res.status(400).json({ success: false });
+            return res.status(400).json({ success: false, message: "Invalid code." });
         }
 
-        const newUser = new UserData({
+        const newUser = {
             uid,
             firstName,
             lastName,
@@ -42,18 +42,17 @@ const createUser = async (req, res) => {
             email,
             contactNumber,
             code,
-        });
-        console.log('newUser', newUser);
-        console.log('code', code);
+            timeStamp: admin.firestore.FieldValue.serverTimestamp()
+        };
 
-        // await newUser.save();
         await firestore.collection('users').doc(uid).set(newUser);
+        console.log('newUser', newUser);
 
         res.status(201).json({ success: true, userProfile: newUser });
     } catch (error) {
-        res.status(404).json({ success: false, message: error.message });
+        res.status(500).json({ success: false, message: error.message });
     }
-}
+};
 
 //================================== To register new service provider ================================//
 const verifyUser = async (req, res) => {

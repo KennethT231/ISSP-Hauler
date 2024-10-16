@@ -3,7 +3,7 @@ const firestore = admin.firestore();
 
 // Function to add a new service provider profile
 async function addServiceProviderProfile(serviceProviderData) {
-  const serviceProviderRef = firestore.collection('serviceProviderProfiles').doc(serviceProviderData.uid);
+  const serviceProviderRef = firestore.collection('serviceProviders').doc(serviceProviderData.uid);
 
   try {
     await serviceProviderRef.set({
