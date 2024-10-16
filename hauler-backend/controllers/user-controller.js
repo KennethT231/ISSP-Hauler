@@ -1,4 +1,6 @@
-const UserData = require('../models/userProfile.js')
+const admin = require('firebase-admin');
+const firestore = admin.firestore();
+
 const textflow = require("textflow.js")
 
 textflow.useKey("JZI6ELhqXlkk40ILQx3hFueY0jZb62cfHyv65kWEBqL6uLVV5XhOVr1zO3by7McY");
@@ -44,15 +46,19 @@ const createUser = async (req, res) => {
         console.log('newUser', newUser);
         console.log('code', code);
 
-        await newUser.save();
+        // await newUser.save();
+        await firestore.collection('users').doc(uid).set(newUser);
+
         res.status(201).json({ success: true, userProfile: newUser });
     } catch (error) {
         res.status(404).json({ success: false, message: error.message });
     }
 }
 
+//================================== To register new service provider ================================//
 const verifyUser = async (req, res) => {
     const { contactNumber } = req.body;
+
     let result = await textflow.sendVerificationSMS(contactNumber);
     console.log('result for sms', result);
 
@@ -66,7 +72,9 @@ const verifyUser = async (req, res) => {
 //==================================== Get All users ================================================//
 const getUser = async (req, res) => {
     try {
-        const users = await UserData.find();
+        const snapshot = await firestore.collection('users').get();
+        const users = snapshot.docs.map(doc => doc.data());
+
         res.status(200).json(users)
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -78,8 +86,14 @@ const getOneUser = async (req, res) => {
     try {
         const id = req.params.uid;
         console.log('id get one user', id);
-        let user = await UserData.findOne({ uid: id });
-        res.status(200).json(user)
+
+        const userDoc = await firestore.collection('users').doc(id).get();
+
+        if (!userDoc.exists) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        // let user = await UserData.findOne({ uid: id });
+        res.status(200).json(userDoc.data())
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
@@ -89,7 +103,8 @@ const getOneUser = async (req, res) => {
 const deleteOneUser = async (req, res) => {
     try {
         const id = req.params.uid;
-        await UserData.deleteOne({ uid: id });
+        await firestore.collection('users').doc(id).delete();
+
         res.status(200).json("user deleted")
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -111,23 +126,18 @@ const updateOneUser = async (req, res) => {
             unitNumber,
             contactNumber
         } = req.body;
-        await UserData.findOneAndUpdate(
-            { uid: id },
-            {
-                $set: {
-                    firstName,
-                    lastName,
-                    profilePicUrl,
-                    dateOfBirth,
-                    province,
-                    city,
-                    streetAddress,
-                    unitNumber,
-                    contactNumber
-                }
-            },
-            { useFindAndModify: false } // Add this option to prevent deprecation warning
-        );
+
+        await firestore.collection('users').doc(id).update({
+            firstName,
+            lastName,
+            profilePicUrl,
+            dateOfBirth,
+            province,
+            city,
+            streetAddress,
+            unitNumber,
+            contactNumber
+        });
         res.status(200).json("User Info updated")
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -141,14 +151,10 @@ const postProfilePic = async (req, res) => {
         const profilePicUrl = req.file.location;
         console.log({ profilePicUrl, id });
 
-        // Find the user document by ID
-        const user = await UserData.findById(id);
-
-        // Set the profile picture URL
-        user.profilePicUrl = profilePicUrl;
-
-        // Save the updated user document
-        await user.save();
+        // Update the user's profile picture in Firestore
+        await firestore.collection('users').doc(id).update({
+            profilePicUrl
+        });
 
         res.status(200).send('Profile picture updated successfully!');
     } catch (err) {
