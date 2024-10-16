@@ -1,81 +1,74 @@
-const mongoose = require("mongoose");
+const admin = require('firebase-admin');
+const firestore = admin.firestore();
 
-const Schema = mongoose.Schema;
+// Function to add a post to Firestore
+async function addPost(postData) {
+  const postRef = firestore.collection('posts').doc();  // Generates a new document with a random ID
 
-const imageSchema = new Schema({
-  imageUrl: {
-    type: String,
-    required: true,
-    default:
-      "https://st4.depositphotos.com/14953852/24787/v/600/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg",
-  },
-});
+  try {
+    await postRef.set({
+      userId: postData.userId,
+      service: postData.service,
+      postHeading: postData.postHeading,
+      postDescription: postData.postDescription || '',
+      loadWeight: postData.loadWeight || '',
+      numberOfItems: postData.numberOfItems || 0,
+      loadImages: postData.loadImages.map(image => ({
+        imageUrl: image.imageUrl || 'https://st4.depositphotos.com/14953852/24787/v/600/depositphotos_247872612-stock-illustration-no-image-available-icon-vector.jpg'
+      })),
+      price: postData.price || 50,
+      timeStamp: admin.firestore.FieldValue.serverTimestamp(), // Automatically set the timestamp
+      totalOffers: postData.totalOffers || 0,
+      show: postData.show || true,
+      status: postData.status || 'Available',
+      acceptedPrice: postData.acceptedPrice || null,
+      acceptedServiceProvider: postData.acceptedServiceProvider || null,
+      pickUpAddress: postData.pickUpAddress,
+      pickUpCity: postData.pickUpCity,
+      pickUpAddressLat: postData.pickUpAddressLat,
+      pickUpAddressLng: postData.pickUpAddressLng,
+      pickUpContactPerson: postData.pickUpContactPerson || '',
+      pickUpContactNumber: postData.pickUpContactNumber,
+      pickUpSpecialInstruction: postData.pickUpSpecialInstruction || '',
+      dropOffProvince: postData.dropOffProvince || '',
+      dropOffAddress: postData.dropOffAddress || '',
+      dropOffCity: postData.dropOffCity || '',
+      dropOffStreetAddress: postData.dropOffStreetAddress || '',
+      dropOffZipCode: postData.dropOffZipCode || '',
+      dropOffAddressLat: postData.dropOffAddressLat || null,
+      dropOffAddressLng: postData.dropOffAddressLng || null,
+      dropOffContactPerson: postData.dropOffContactPerson || '',
+      dropOffContactNumber: postData.dropOffContactNumber || '',
+      dropOffSpecialInstruction: postData.dropOffSpecialInstruction || '',
+      distance: postData.distance || null,
+      driverLat: postData.driverLat || 49.198913,
+      driverLong: postData.driverLong || -122.865984,
+      paymentIntent: postData.paymentIntent || null,
+      response: postData.response.map(response => ({
+        serviceProviderId: response.serviceProviderId || '',
+        responseStatus: response.responseStatus || '',
+        notificationOnServiceProvider: response.notificationOnServiceProvider || 'none',
+        notificationOnUser: response.notificationOnUser || 'none',
+        serviceProviderActionButtons: response.serviceProviderActionButtons || false,
+        userActionButtons: response.userActionButtons || false,
+        serviceProviderResponseSchema: response.serviceProviderResponseSchema.map(resp => ({
+          serviceProviderResponse: resp.serviceProviderResponse || '',
+          serviceProviderActionPrice: resp.serviceProviderActionPrice || 0,
+          timeStamp: admin.firestore.FieldValue.serverTimestamp()
+        })),
+        userResponseSchema: response.userResponseSchema.map(resp => ({
+          userResponse: resp.userResponse || '',
+          userResponsePrice: resp.userResponsePrice || 0,
+          timeStamp: admin.firestore.FieldValue.serverTimestamp()
+        }))
+      }))
+    });
+    console.log('Post successfully added to Firestore');
+  } catch (error) {
+    console.error('Error adding post:', error);
+  }
+}
 
-const serviceProviderResponseSchema = new Schema({
-  serviceProviderResponse: { type: String },
-  serviceProviderActionPrice: { type: Number },
-  timeStamp: { type: Date, required: true, default: Date.now },
-});
-
-const userResponseSchema = new Schema({
-  userResponse: { type: String },
-  userResponsePrice: { type: Number },
-  timeStamp: { type: Date, default: Date.now },
-});
-
-const responseSchema = new Schema({
-  serviceProviderId: { type: String },
-  responseStatus: { type: String },
-  notificationOnServiceProvider: { type: String, default: "none" },
-  notificationOnUser: { type: String, default: "none" },
-  serviceProviderActionButtons: { type: Boolean, default: false },
-  userActionButtons: { type: Boolean, default: false },
-  serviceProviderResponseSchema: [serviceProviderResponseSchema],
-  userResponseSchema: [userResponseSchema],
-});
-
-const postSchema = new Schema([
-  {
-    userId: { type: String, required: true },
-    service: { type: String, required: true },
-    postHeading: { type: String, required: true },
-    postDescription: { type: String },
-    loadWeight: { type: String },
-    numberOfItems: { type: Number },
-    loadImages: [imageSchema],
-    price: { type: Number, default: 50 },
-    timeStamp: { type: Date, required: true, default: Date.now },
-    totalOffers: { type: Number, default: 0 },
-    show: { type: Boolean, default: true },
-    status: { type: String, default: "Available" },
-    acceptedPrice: { type: Number },
-    acceptedServiceProvider: { type: String },
-    pickUpAddress: { type: String, required: true },
-    // pickUpProvince: { type: String, required: true },
-    pickUpCity: { type: String, required: true },
-    // pickUpStreetAddress: { type: String, required: true },
-    // pickUpZipCode: { type: String, required: true },
-    pickUpAddressLat: { type: Number, required: true },
-    pickUpAddressLng: { type: Number, required: true },
-    pickUpContactPerson: { type: String },
-    pickUpContactNumber: { type: String, required: true },
-    pickUpSpecialInstruction: { type: String },
-    dropOffProvince: { type: String },
-    dropOffAddress: { type: String },
-    dropOffCity: { type: String },
-    dropOffStreetAddress: { type: String },
-    dropOffZipCode: { type: String },
-    dropOffAddressLat: { type: Number },
-    dropOffAddressLng: { type: Number },
-    dropOffContactPerson: { type: String },
-    dropOffContactNumber: { type: String },
-    dropOffSpecialInstruction: { type: String },
-    distance: { type: Number },
-    response: [responseSchema],
-    driverLat:{type:Number,default: 49.198913},
-    driverLong:{type:Number,default:-122.865984},
-    paymentIntent:{type:String}
-  },
-]);
-
-module.exports = mongoose.model("Post", postSchema);
+module.exports = {
+  addPost
+};
