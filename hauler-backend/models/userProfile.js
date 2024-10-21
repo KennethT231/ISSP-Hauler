@@ -21,6 +21,7 @@ async function addUserProfile(userProfileData) {
       email: userProfileData.email,
       contactNumber: userProfileData.contactNumber,
       code: userProfileData.code,
+      userType: userProfileData.userType // 'customer', 'driver', or 'admin' 
     });
     console.log('User profile successfully added to Firestore');
   } catch (error) {

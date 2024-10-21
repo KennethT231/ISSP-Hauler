@@ -21,6 +21,7 @@ const createUser = async (req, res) => {
             email,
             contactNumber,
             code,
+            userType
         } = req.body;
 
         let result = await textflow.verifyCode(contactNumber, code);
@@ -42,6 +43,7 @@ const createUser = async (req, res) => {
             email,
             contactNumber,
             code,
+            userType,
             timeStamp: admin.firestore.FieldValue.serverTimestamp()
         };
 
@@ -162,6 +164,18 @@ const postProfilePic = async (req, res) => {
     }
 };
 
+//=============================== Get users by type =================================================//
+async function getUsersByType(req, res) {
+    const userType = req.params.userType;
+    try {
+      const usersSnapshot = await firestore.collection('users').where('userType', '==', userType).get();
+      const users = usersSnapshot.docs.map(doc => doc.data());
+      res.status(200).json({ success: true, users });
+    } catch (error) {
+      res.status(500).json({ success: false, message: 'Error fetching users by type', error });
+    }
+}
+
 
 exports.getOneUser = getOneUser;
 exports.getUser = getUser;
@@ -170,4 +184,5 @@ exports.deleteOneUser = deleteOneUser;
 exports.updateOneUser = updateOneUser;
 exports.postProfilePic = postProfilePic;
 exports.verifyUser = verifyUser;
+exports.getUsersByType = getUsersByType;
 
