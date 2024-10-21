@@ -1,6 +1,7 @@
 const admin = require('firebase-admin');
 const firestore = admin.firestore();
 const textflow = require("textflow.js")
+const { setCustomClaims } = require('../utils/auth');
 
 textflow.useKey("JZI6ELhqXlkk40ILQx3hFueY0jZb62cfHyv65kWEBqL6uLVV5XhOVr1zO3by7McY");
 
@@ -71,6 +72,9 @@ const createServiceProvider = async (req, res) => {
         };
         console.log('code', code);
         await firestore.collection('serviceProviders').doc(uid).set(newServiceProvider);
+
+        await setCustomClaims(uid, { role: 'serviceProvider' });
+        
         res.status(201).json({ success: true, serviceProviderProfile: newServiceProvider });
     } catch (error) {
         console.log(error)

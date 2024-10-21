@@ -3,6 +3,9 @@ const firestore = admin.firestore();
 
 const textflow = require("textflow.js")
 
+// controllers/user-controller.js
+const { setCustomClaims } = require('../utils/auth');
+
 textflow.useKey("JZI6ELhqXlkk40ILQx3hFueY0jZb62cfHyv65kWEBqL6uLVV5XhOVr1zO3by7McY");
 
 //================================== To register new user =========================================//
@@ -49,6 +52,9 @@ const createUser = async (req, res) => {
 
         await firestore.collection('users').doc(uid).set(newUser);
         console.log('newUser', newUser);
+
+        //set custom claims for new user
+        await setCustomClaims(uid, { role: 'user' });
 
         res.status(201).json({ success: true, userProfile: newUser });
     } catch (error) {
@@ -164,18 +170,6 @@ const postProfilePic = async (req, res) => {
     }
 };
 
-//=============================== Get users by type =================================================//
-async function getUsersByType(req, res) {
-    const userType = req.params.userType;
-    try {
-      const usersSnapshot = await firestore.collection('users').where('userType', '==', userType).get();
-      const users = usersSnapshot.docs.map(doc => doc.data());
-      res.status(200).json({ success: true, users });
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Error fetching users by type', error });
-    }
-}
-
 
 exports.getOneUser = getOneUser;
 exports.getUser = getUser;
@@ -184,5 +178,4 @@ exports.deleteOneUser = deleteOneUser;
 exports.updateOneUser = updateOneUser;
 exports.postProfilePic = postProfilePic;
 exports.verifyUser = verifyUser;
-exports.getUsersByType = getUsersByType;
 
