@@ -1,6 +1,10 @@
+// const admin = require('firebase-admin');
+// const firestore = admin.firestore();
 const admin = require('firebase-admin');
-const firestore = admin.firestore();
-
+admin.initializeApp({
+  credential: admin.credential.applicationDefault(), 
+  databaseURL: "https://<database-url>"  // the database URL
+});
 //================================ Create new post on user app =====================================//
 const createPost = async (req, res) => {
     try {
@@ -101,37 +105,56 @@ const createPost = async (req, res) => {
 const getAll = async (req, res) => {
     try {
         const snapshot = await firestore.collection('posts').get();
-        const posts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); // Map over the documents to include their IDs
+        const posts = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
 
         res.status(200).json(posts);
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
+
 
 //=============================delete all posts for testing ===========================================//
 const deleteAll = async (req, res) => {
     try {
-        const postsSnapshot = await firestore.collection('posts').get();
-        // Check if the collection is empty
-        if (postsSnapshot.empty) {
+        const batch = firestore.batch();
+        const snapshot = await firestore.collection('posts').get();
+
+        if (snapshot.empty) {
             return res.status(404).json({ message: 'No posts found to delete' });
         }
 
-        // Create a batch to delete all documents
-        const batch = firestore.batch();
+        // Firestore limits batch size to 500 writes
+        let count = 0;
+        let batchCount = 0;
 
-        postsSnapshot.forEach((doc) => {
-            batch.delete(doc.ref); // Add each delete operation to the batch
+        snapshot.docs.forEach(doc => {
+            batch.delete(doc.ref);
+            count++;
+
+            // Commit the batch every 500 deletes
+            if (count % 500 === 0) {
+                batch.commit();  // Commit current batch
+                batchCount++;
+                batch = firestore.batch(); // Create new batch
+            }
         });
 
-        await batch.commit();
+        // Commit any remaining documents in the batch
+        if (count % 500 !== 0) {
+            await batch.commit();
+        }
 
-        res.status(200).json('all posts deleted')
+        res.status(200).json({ message: `All posts deleted successfully in ${batchCount + 1} batches` });
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        console.error(error);
+        res.status(500).json({ message: error.message });
     }
 };
+
 
 //=========================== To get all posts posted by user on user app ==========================//
 const getPostsByUid = async (req, res) => {
@@ -555,96 +578,70 @@ const getPostsByServiceProviderIdAndLocation = async (req, res) => {
 //==================== To add service provider response on service provider app ======================//
 
 const addServiceProviserResponse = async (req, res) => {
-
     const {
         status,
         postId,
         serviceProviderId,
         responseStatus,
-        // notificationOnServiceProvider,
-        // notificationOnUser,
         serviceProviderActionButtons,
         serviceProviderResponse,
         serviceProviderActionPrice,
         userActionButtons
     } = req.body;
 
+    const postRef = firestore.collection('posts').doc(postId);
+    const postDoc = await postRef.get();
 
-    let activePost = await PostData.findOne({ _id: postId, status: { $in: ['Available', 'Negotiating'] } })
-    if (!!activePost) {//finds offers this service provider has already made on this post
-        let existedResponse = await PostData.aggregate([
-            { $match: { _id: ObjectId(postId), } },
-            { $unwind: "$response" },
-            { $replaceRoot: { newRoot: "$response" } },
-            { $match: { serviceProviderId: serviceProviderId } },
-        ]);
-        const incrementValue = status === 'Declined' ? -1 : existedResponse.length > 0 ? 0 : 1
-        //if this service provider has alread made an offer on this post
+    let activePost = postDoc.exists && ['Available', 'Negotiating'].includes(postDoc.data().status);
+
+    if (activePost) {
+        const existedResponse = postDoc.data().response.filter(r => r.serviceProviderId === serviceProviderId);
+        const incrementValue = status === 'Declined' ? -1 : existedResponse.length > 0 ? 0 : 1;
+
         if (existedResponse.length > 0) {
             try {
-                const updatedResponse = await PostData.updateOne(
-                    { _id: postId, 'response.serviceProviderId': serviceProviderId }, {
-                    $push: {
-                        'response.$.serviceProviderResponseSchema': [{
-                            serviceProviderResponse,
-                            serviceProviderActionPrice
-                        }
-                        ]
-                    },
-                    $set: {
-                        'status': status,
-                        'response.$.responseStatus': responseStatus,
-                        'response.$.serviceProviderActionButtons': serviceProviderActionButtons,
-                        'response.$.notificationOnServiceProvider': 'none',
-                        'response.$.notificationOnUser': 'flex',
-                        'response.$.userActionButtons': userActionButtons
-                    },
-                    $inc: {
-                        totalOffers: incrementValue
-                    }
-                }
-                )
+                await postRef.update({
+                    'response': admin.firestore.FieldValue.arrayUnion({
+                        serviceProviderId,
+                        serviceProviderResponseSchema: [{ serviceProviderResponse, serviceProviderActionPrice }],
+                        responseStatus,
+                        serviceProviderActionButtons,
+                        notificationOnServiceProvider: 'none',
+                        notificationOnUser: 'flex',
+                        userActionButtons
+                    }),
+                    status: status,
+                    totalOffers: admin.firestore.FieldValue.increment(incrementValue)
+                });
+                res.status(200).json("Response sent");
+            } catch (error) {
+                res.status(404).json({ message: error.message });
+            }
+        } else {
+            try {
+                await postRef.update({
+                    'response': admin.firestore.FieldValue.arrayUnion({
+                        serviceProviderId,
+                        responseStatus,
+                        notificationOnServiceProvider: 'none',
+                        notificationOnUser: 'flex',
+                        serviceProviderActionButtons,
+                        userActionButtons,
+                        serviceProviderResponseSchema: [{ serviceProviderResponse, serviceProviderActionPrice }],
+                    }),
+                    totalOffers: admin.firestore.FieldValue.increment(incrementValue),
+                    status: status
+                });
                 res.status(200).json("Response sent");
             } catch (error) {
                 res.status(404).json({ message: error.message });
             }
         }
-        //iff service provider has not made an offer on this post before
-        else {
-            try {
-                const newResponse = await PostData.updateOne({ _id: postId },
-                    {
-                        $push: {
-                            response:
-                                [{
-                                    serviceProviderId: serviceProviderId,
-                                    responseStatus: responseStatus,
-                                    notificationOnServiceProvider: 'none',
-                                    notificationOnUser: 'flex',
-                                    serviceProviderActionButtons: serviceProviderActionButtons,
-                                    userActionButtons: userActionButtons,
-                                    serviceProviderResponseSchema: [{
-                                        serviceProviderResponse: serviceProviderResponse,
-                                        serviceProviderActionPrice: serviceProviderActionPrice,
-                                    }],
-                                }]
-                        },
-                        $inc: {
-                            totalOffers: incrementValue
-                        },
-                        $set: {
-                            'status': status
-                        }
-                    })
-                res.status(200).json("Response sent")
-            } catch (error) {
-                res.status(404).json({ message: error.message });
-            }
-        }
     } else {
-        res.status(200).json("This post is not available")
+        res.status(200).json("This post is not available");
     }
 };
+
 //================================= To add user response on user app ================================//
 const addUserResponse = async (req, res) => {
     const {
@@ -661,32 +658,31 @@ const addUserResponse = async (req, res) => {
     } = req.body
     //only need to change number of offers for user if they are declining a service provider offer - users cannot initiate offers
     const incrementValue = status === 'Declined' ? -1 : 0
-    let activePost = await PostData.findOne({ _id: postId, status: { $in: ['Available', 'Negotiating'] } })
+    const postRef = firestore.collection('posts').doc(postId);
+    const postDoc = await postRef.get();
+
+    let activePost = postDoc.exists && ['Available', 'Negotiating'].includes(postDoc.data().status);
+
     if (!!activePost) {
         try {
-            const updatedResponse = await PostData.updateOne(
-                { _id: postId, 'response.serviceProviderId': serviceProviderId }, {
-                $push: {
-                    'response.$.userResponseSchema': [{
-                        userResponse,
-                        userResponsePrice
-                    }
-                    ]
-                },
-                $set: {
-                    'status': status,
-                    'response.$.responseStatus': responseStatus,
-                    'response.$.serviceProviderActionButtons': serviceProviderActionButtons,
-                    'response.$.notificationOnServiceProvider': 'flex',
-                    'response.$.notificationOnUser': 'none',
-                    'response.$.userActionButtons': userActionButtons
-                },
-                $inc: {
-                    totalOffers: incrementValue
-                }
-            }
-            )
-            res.status(200).json(updatedResponse);
+            await postRef.update({
+                'response': admin.firestore.FieldValue.arrayUnion({
+                    serviceProviderId,
+                    responseStatus,
+                    serviceProviderResponseSchema: [{
+                        serviceProviderResponse,
+                        serviceProviderActionPrice
+                    }],
+                    serviceProviderActionButtons,
+                    notificationOnServiceProvider: 'none',
+                    notificationOnUser: 'flex',
+                    userActionButtons
+                }),
+                status: status,
+                totalOffers: admin.firestore.FieldValue.increment(incrementValue)
+            });
+            
+            res.status(200).json({ message: 'User response added' });
         } catch (error) {
             res.status(404).json({ message: error.message });
         }
@@ -695,33 +691,61 @@ const addUserResponse = async (req, res) => {
     }
 }
 
-//=================== To get respone by serviceProviderId on serviceProvider App =====================//
-const getResponseByServiseProviderId = async (req, res) => {
+//=================== To get response by serviceProviderId on serviceProvider App =====================//
+const getResponseByServiceProviderId = async (req, res) => {
     try {
-        const id = req.params.postId;
+        const postId = req.params.postId;
         const serviceProviderId = req.params.serviceProviderId;
-        let newResponse = await PostData.aggregate([
-            { $match: { _id: ObjectId(id), } },
-            { $unwind: "$response" },
-            { $replaceRoot: { newRoot: "$response" } },
-            { $match: { serviceProviderId: serviceProviderId } },
-        ]);
-        res.status(200).json(newResponse)
+        
+        // Get the post from Firestore
+        const postRef = firestore.collection('posts').doc(postId);
+        const postDoc = await postRef.get();
+
+        // Check if the post exists
+        if (!postDoc.exists) {
+            return res.status(404).json({ message: 'Post not found.' });
+        }
+
+        const postData = postDoc.data();
+        const response = postData.response.find(r => r.serviceProviderId === serviceProviderId);
+
+        // Check if the response exists
+        if (!response) {
+            return res.status(404).json({ message: 'No response found for this service provider.' });
+        }
+
+        // Return the found response
+        res.status(200).json(response);
+
     } catch (error) {
-        res.status(404).json({ message: error.message });
+        console.error(error);  // Log the error for debugging
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 //================================= To Delete Response on both apps====================================//
-const deleteResponse = async (req, res, next) => {
+const deleteResponse = async (req, res) => {
+    const { postId, responseId } = req.params;
+
     try {
-        const responseId = req.params.responseId;
-        await PostData.update({}, { $pull: { response: { _id: ObjectId(responseId) } } }, { multi: true })
-        res.status(201).json({ "item deleted": 1 })
+        const postRef = firestore.collection('posts').doc(postId);
+        const postDoc = await postRef.get();
+
+        if (!postDoc.exists) {
+            return res.status(404).json({ message: 'Post not found.' });
+        }
+
+        const postData = postDoc.data();
+        const updatedResponse = postData.response.filter(r => r._id !== responseId);
+
+        await postRef.update({ response: updatedResponse });
+
+        res.status(200).json({ message: "Response deleted" });
     } catch (error) {
         res.status(404).json({ message: error.message });
     }
 };
+
 
 //Neeraj  - send live gps cordinates to database
 const postGpsCordinates = async (req, res) => {
@@ -731,12 +755,14 @@ const postGpsCordinates = async (req, res) => {
 
         console.log("called the server")
         console.log(req.body)
-        await PostData.findOneAndUpdate({ _id: id },
-            {
-                driverLat: latitude,
-                driverLong: longitude
-            }
-        ), { upsert: true };
+        const postRef = firestore.collection('posts').doc(id);
+await postRef.update({
+    driverLat: latitude,
+    driverLong: longitude
+});
+
+res.status(200).json('GPS Data Posted Successfully');
+
         res.status(200).json('Gps Data Posted Sucessfully')
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -749,12 +775,13 @@ const markDriverArrival = async (req, res) => {
     try {
         const id = req.params.postId;
 
-        await PostData.findOneAndUpdate({ _id: id },
-            {
-                $set: {
-                    status: "Driver Arrived"
-                }
-            });
+        const postRef = firestore.collection('posts').doc(id);
+await postRef.update({
+    status: "Driver Arrived"
+});
+
+res.status(200).json('Status Updated Successfully');
+
         res.status(200).json('Status Updated Sucesssfully')
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -765,12 +792,11 @@ const markJobPaid = async (req, res) => {
     try {
         const id = req.params.postId;
 
-        await PostData.findOneAndUpdate({ _id: id },
-            {
-                $set: {
-                    status: "Paid"
-                }
-            });
+        const postRef = firestore.collection('posts').doc(id);
+        await postRef.update({
+            status: "Paid"
+        });
+
         res.status(200).json('Status Updated Sucesssfully')
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -783,12 +809,11 @@ const markJobComplete = async (req, res) => {
     try {
         const id = req.params.postId;
 
-        await PostData.findOneAndUpdate({ _id: id },
-            {
-                $set: {
-                    status: "Complete"
-                }
-            });
+        const postRef = firestore.collection('posts').doc(id);
+        await postRef.update({
+            status: "Complete"
+        });
+
         res.status(200).json('Status Updated Sucesssfully')
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -809,7 +834,7 @@ exports.getPostsByIdAndService = getPostsByIdAndService;
 exports.getPostsByIdAndLocation = getPostsByIdAndLocation;
 exports.addServiceProviserResponse = addServiceProviserResponse;
 exports.addUserResponse = addUserResponse;
-exports.getResponseByServiseProviderId = getResponseByServiseProviderId;
+exports.getResponseByServiceProviderId = getResponseByServiceProviderId;
 exports.deleteResponse = deleteResponse;
 exports.getPostsByServiceProviderId = getPostsByServiceProviderId;
 exports.getPostsByServiceProviderAndService = getPostsByServiceProviderAndService;
