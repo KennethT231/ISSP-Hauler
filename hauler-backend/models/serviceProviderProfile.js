@@ -1,11 +1,14 @@
+// Importing Firebase Admin SDK and Firestore
 const admin = require('firebase-admin');
 const firestore = admin.firestore();
 
 // Function to add a new service provider profile
 async function addServiceProviderProfile(serviceProviderData) {
+// Creates a document reference in Firestore using the `uid` as the document ID
   const serviceProviderRef = firestore.collection('serviceProviders').doc(serviceProviderData.uid);
 
   try {
+// Setting the document data for the new service provider profile
     await serviceProviderRef.set({
       uid: serviceProviderData.uid,
       firstName: serviceProviderData.firstName,
@@ -21,6 +24,7 @@ async function addServiceProviderProfile(serviceProviderData) {
       email: serviceProviderData.email,
       contactNumber: serviceProviderData.contactNumber,
       chequeDepositFormUrl: serviceProviderData.chequeDepositFormUrl,
+// Maps array of `vehicleType` objects, transforming each for Firestore format
       vehicleType: serviceProviderData.vehicleType.map(vehicle => ({
         vehicle: vehicle.vehicle
       })),
@@ -29,6 +33,7 @@ async function addServiceProviderProfile(serviceProviderData) {
       driverAbstractUrl: serviceProviderData.driverAbstractUrl,
       profileStatus: serviceProviderData.profileStatus,
       stripeAcc: serviceProviderData.stripeAcc,
+// Service details, mapping nested arrays `serviceProvided` and `serviceLocations` to Firestore format
       serviceProvided: serviceProviderData.serviceProvided.map(service => ({
         serviceProvided: service.serviceProvided,
         serviceStatus: service.serviceStatus,
@@ -37,8 +42,9 @@ async function addServiceProviderProfile(serviceProviderData) {
           locationStatus: location.locationStatus
         }))
       })),
-      code: serviceProviderData.code
+      code: serviceProviderData.code // Verification code
     });
+// Logging any errors during the write process
     console.log('Service provider profile successfully added to Firestore');
   } catch (error) {
     console.error('Error adding service provider profile:', error);

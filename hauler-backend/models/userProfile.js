@@ -1,10 +1,11 @@
-const admin = require('firebase-admin');
-const firestore = admin.firestore();
+const admin = require('firebase-admin');  // Firebase admin SDK for Firestore functions
+const firestore = admin.firestore();      // Firestore initialization
 
 // Function to add a new user profile
 async function addUserProfile(userProfileData) {
-  const userProfileRef = firestore.collection('users').doc(userProfileData.uid);
+  const userProfileRef = firestore.collection('users').doc(userProfileData.uid);  // Setting document reference using `uid` as the document ID in the 'users' collection
 
+// Setting document fields with Firestore-compatible data and defaults
   try {
     await userProfileRef.set({
       uid: userProfileData.uid,
@@ -22,9 +23,9 @@ async function addUserProfile(userProfileData) {
       contactNumber: userProfileData.contactNumber,
       code: userProfileData.code,
     });
-    console.log('User profile successfully added to Firestore');
+    console.log('User profile successfully added to Firestore'); // Log success message
   } catch (error) {
-    console.error('Error adding user profile:', error);
+    console.error('Error adding user profile:', error); // Log error if the user profile addition fails
   }
 }
 

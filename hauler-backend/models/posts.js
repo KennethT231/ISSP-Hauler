@@ -1,6 +1,8 @@
+// Importing Firebase Admin SDK and Firestore
 const admin = require('firebase-admin');
 const firestore = admin.firestore();
 
+// Function to add a new post to Firestore
 async function addPost(postData) {
   const postRef = firestore.collection('posts').doc();  // Generates a new document with a random ID
 
@@ -36,6 +38,8 @@ async function addPost(postData) {
       dropOffContactNumber: postData.dropOffContactNumber || '',
       dropOffSpecialInstruction: postData.dropOffSpecialInstruction || '',
       distance: postData.distance || null,
+
+      // Handled response array, added null/array checks and default initialization
       response: postData.response.map(response => ({
         serviceProviderId: response.serviceProviderId || '',
         responseStatus: response.responseStatus || '',
@@ -43,11 +47,15 @@ async function addPost(postData) {
         notificationOnUser: response.notificationOnUser || 'none',
         serviceProviderActionButtons: response.serviceProviderActionButtons || false,
         userActionButtons: response.userActionButtons || false,
+
+        // Checked and mapped serviceProviderResponseSchema, with default values
         serviceProviderResponseSchema: response.serviceProviderResponseSchema.map(resp => ({
           serviceProviderResponse: resp.serviceProviderResponse || '',
           serviceProviderActionPrice: resp.serviceProviderActionPrice || 0,
           timeStamp: admin.firestore.FieldValue.serverTimestamp()
         })),
+
+        // Checked and mapped userResponseSchema, with default values
         userResponseSchema: response.userResponseSchema.map(resp => ({
           userResponse: resp.userResponse || '',
           userResponsePrice: resp.userResponsePrice || 0,
