@@ -71,8 +71,11 @@ const createServiceProvider = async (req, res) => {
             },
         };
         console.log('code', code);
+
+        // Storing new service provider profile in Firestore (using collection and document structure)
         await firestore.collection('serviceProviders').doc(uid).set(newServiceProvider);
 
+        // Setting custom claims in Firebase Auth to assign 'serviceProvider' role
         await setCustomClaims(uid, { role: 'serviceProvider' });
         
         res.status(201).json({ success: true, serviceProviderProfile: newServiceProvider });
@@ -96,8 +99,12 @@ const verifyProvider = async (req, res) => {
 //================================ To get all service providers =====================================//
 const getServiceProvider = async (req, res) => {
     try {
+        // Fetching all service provider documents from Firestore
         const snapshot = await firestore.collection('serviceProviders').get();
-        const serviceProviders = snapshot.docs.map(doc => doc.data());
+
+        // Mapping documents to an array of data
+        const serviceProviders = snapshot.docs.map(doc => doc.data()); 
+
         res.status(200).json(serviceProviders)
     } catch (error) {
         res.status(404).json({ message: error.message });
@@ -108,16 +115,17 @@ const getServiceProvider = async (req, res) => {
 const getOneServiceProvider = async (req, res) => {
     try {
         const id = req.params.uid;
+        // Fetching a single service provider document by UID
         const serviceProviderRef = firestore.collection('serviceProviders').doc(id);
         const serviceProviderDoc = await serviceProviderRef.get();
 
         if (!serviceProviderDoc.exists) {
-            return res.status(404).json({ message: "Service Provider not found" });
+            return res.status(404).json({ message: "Service Provider not found" }); // Added response if not found
         }
 
-        res.status(200).json(serviceProviderDoc.data());
+        res.status(200).json(serviceProviderDoc.data()); // Sending service provider data if found
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: error.message }); // Improved error handling for internal server errors
     }
 };
 
@@ -125,9 +133,10 @@ const getOneServiceProvider = async (req, res) => {
 const deleteOneServiceProvider = async (req, res) => {
     try {
         const id = req.params.uid;
+        // Deleting the service provider document by UID
         const serviceProviderRef = firestore.collection('serviceProviders').doc(id);
-
         await serviceProviderRef.delete();
+
         res.status(200).json('Service Provider deleted');
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -149,6 +158,7 @@ const updateOneServiceProvider = async (req, res) => {
             contactNumber,
         } = req.body;
 
+        // Fetching the document reference and updating fields in Firestore
         const serviceProviderRef = firestore.collection('serviceProviders').doc(id);
 
         await serviceProviderRef.update({

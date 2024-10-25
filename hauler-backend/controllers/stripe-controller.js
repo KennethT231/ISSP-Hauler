@@ -1,10 +1,9 @@
 const stripe = require('stripe')('sk_test_51M23WVAZXbnAuaLLJktMTrL2oSSQKCpqvjDDHkAK1PaYlJMFtLevnKFM9qUTjl6PjS9O3F4jGv7LsX9Yp1XUcRbR00G8JLajvz');
-// const ServiceProviderData = require('../models/serviceProviderProfile')
-// const PostData = require('../models/posts')
+// Importing Firebase Admin SDK and Firestore
 const admin = require('firebase-admin');
 const firestore = admin.firestore();
 
-
+//===================================== Create Stripe Account =================================//
 const createStripeAccount = async (req, res) => {
   const serviceProviderID = req.body.serviceProviderID;
   
@@ -19,7 +18,7 @@ const createStripeAccount = async (req, res) => {
       // requested_capabilities: ['card_payment', 'transfers'],
     });
 
-    // const updateWithStripe = await ServiceProviderData.findOneAndUpdate({ uid: serviceProviderID }, { stripeAcc: account.id });
+    // Updated to use Firestore instead of MongoDB
     const serviceProviderRef = firestore.collection('serviceProviders').doc(serviceProviderID);
     await serviceProviderRef.update({
       stripeAcc: account.id,
@@ -40,6 +39,7 @@ const createStripeAccount = async (req, res) => {
 
 }
 
+//===================================== Create Stripe Account Link =================================//
 const createStripeAccountLink = async (req, res) => {
   try {
     const accountLink = await stripe.accountLinks.create({
@@ -54,7 +54,7 @@ const createStripeAccountLink = async (req, res) => {
   }
 }
 
-// Generate a Stripe payment intent
+//===================================== Create Payment Intent =================================//
 const createPaymentIntent = async (req, res) => {
   try {
       console.log(req.body);
@@ -77,7 +77,7 @@ const createPaymentIntent = async (req, res) => {
 
       console.log(paymentIntent.client_secret);
 
-      // Update the post record in Firestore with the payment intent ID
+      // Updated the post record in Firestore with the payment intent ID
       const postRef = firestore.collection('posts').doc(req.body.postId);
       await postRef.update({
           paymentIntent: paymentIntent.id,
@@ -88,7 +88,7 @@ const createPaymentIntent = async (req, res) => {
           publishableKey: 'pk_test_51M23WVAZXbnAuaLLQ0DTyBlLUIlAiEfXDMG08JJnObkdAfPcWosN99cklgD4fmgsnfqAt8ZDFYzCpjAyXwxwRid00007njU21F'
       });
   } catch (err) {
-      console.log(err);
+      console.log(err); // Logging any errors that occur
       res.status(500).json({ success: false, error: err.message });
   }
 };
