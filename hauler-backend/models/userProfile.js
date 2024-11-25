@@ -1,22 +1,34 @@
-const mongoose = require('mongoose')
+const admin = require('firebase-admin');  // Firebase admin SDK for Firestore functions
+const firestore = admin.firestore();      // Firestore initialization
 
-const Schema = mongoose.Schema;
+// Function to add a new user profile
+async function addUserProfile(userProfileData) {
+  const userProfileRef = firestore.collection('users').doc(userProfileData.uid);  // Setting document reference using `uid` as the document ID in the 'users' collection
 
-const userProfileSchema = new Schema({
-    uid: { type: String, required: true },
-    approved: { type: Boolean, required: true, default: false },
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    profilePicUrl: { type: String, required: true },
-    dateOfBirth: { type: String, required: true },
-    timeStamp: { type: Date, required: true, default: Date.now },
-    province: { type: String, required: true },
-    city: { type: String, required: true },
-    streetAddress: { type: String, required: true },
-    unitNumber: { type: String, required: true },
-    email: { type: String, required: true },
-    contactNumber: { type: String, required: true },
-    code: { type: String, required: true },
-}, { collection: 'userregistrations' })
+// Setting document fields with Firestore-compatible data and defaults
+  try {
+    await userProfileRef.set({
+      uid: userProfileData.uid,
+      approved: userProfileData.approved || false,
+      firstName: userProfileData.firstName,
+      lastName: userProfileData.lastName,
+      profilePicUrl: userProfileData.profilePicUrl,
+      dateOfBirth: userProfileData.dateOfBirth,
+      timeStamp: admin.firestore.FieldValue.serverTimestamp(), // Firebase timestamp
+      province: userProfileData.province,
+      city: userProfileData.city,
+      streetAddress: userProfileData.streetAddress,
+      unitNumber: userProfileData.unitNumber,
+      email: userProfileData.email,
+      contactNumber: userProfileData.contactNumber,
+      code: userProfileData.code,
+    });
+    console.log('User profile successfully added to Firestore'); // Log success message
+  } catch (error) {
+    console.error('Error adding user profile:', error); // Log error if the user profile addition fails
+  }
+}
 
-module.exports = mongoose.model('UserRegistration', userProfileSchema);
+module.exports = {
+  addUserProfile
+};

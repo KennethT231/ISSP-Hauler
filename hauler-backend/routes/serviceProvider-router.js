@@ -1,13 +1,14 @@
 const express = require('express');
 const serviceProviderController = require('../controllers/serviceProvider-controller')
 const router = express.Router();
+const { checkUserRole } = require('../middleware/auth');
 
-router.get('/', serviceProviderController.getServiceProvider);
-router.get('/:uid', serviceProviderController.getOneServiceProvider);
-router.post('/', serviceProviderController.createServiceProvider);
-router.delete('/:uid', serviceProviderController.deleteOneServiceProvider);
-router.post('/:uid', serviceProviderController.updateOneServiceProvider)
-router.post('/verify/2FA', serviceProviderController.verifyProvider)
+router.get('/', checkUserRole('serviceProvider'), serviceProviderController.getServiceProvider);
+router.get('/:uid', checkUserRole('serviceProvider'), serviceProviderController.getOneServiceProvider);
+router.post('/', serviceProviderController.createServiceProvider); // No role check for service provider creation
+router.delete('/:uid', checkUserRole('serviceProvider'), serviceProviderController.deleteOneServiceProvider);
+router.post('/:uid', checkUserRole('serviceProvider'), serviceProviderController.updateOneServiceProvider);
+router.post('/verify/2FA', checkUserRole('serviceProvider'), serviceProviderController.verifyProvider);
 
 module.exports = router;
 
