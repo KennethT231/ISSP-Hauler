@@ -1,10 +1,6 @@
-// const admin = require('firebase-admin');
-// const firestore = admin.firestore();
+// Importing the Firebase admin SDK for interacting with Firebase services
 const admin = require('firebase-admin');
-admin.initializeApp({
-  credential: admin.credential.applicationDefault(), 
-  databaseURL: "https://<database-url>"  // the database URL
-});
+
 //================================ Create new post on user app =====================================//
 const createPost = async (req, res) => {
     try {
@@ -92,7 +88,8 @@ const createPost = async (req, res) => {
             }],
             createdAt: admin.firestore.FieldValue.serverTimestamp()  // Store the timestamp
         };
-        
+
+        // Added the new post to Firestore and retrieve the document reference        
         const newPostRef = await firestore.collection('posts').add(postData);
         
         res.status(201).json({ success: true, postId: newPostRef.id, post: postData });
@@ -104,6 +101,7 @@ const createPost = async (req, res) => {
 //=============================get all posts for testing ===========================================//
 const getAll = async (req, res) => {
     try {
+        // Retrieve all documents from the 'posts' collection
         const snapshot = await firestore.collection('posts').get();
         const posts = snapshot.docs.map(doc => ({
             id: doc.id,
@@ -120,8 +118,8 @@ const getAll = async (req, res) => {
 //=============================delete all posts for testing ===========================================//
 const deleteAll = async (req, res) => {
     try {
-        const batch = firestore.batch();
-        const snapshot = await firestore.collection('posts').get();
+        const batch = firestore.batch(); // Initializing a batch for deletion
+        const snapshot = await firestore.collection('posts').get(); // Getting all posts in the collection
 
         if (snapshot.empty) {
             return res.status(404).json({ message: 'No posts found to delete' });
@@ -160,6 +158,7 @@ const deleteAll = async (req, res) => {
 const getPostsByUid = async (req, res) => {
     const id = req.params.uid; // Get the user ID from the request parameters
     try {
+        // Querying Firestore for posts created by the specified user
         const postsSnapshot = await firestore.collection('posts').where('userId', '==', id).get(); // Query Firestore for posts
 
         // Check if the snapshot is empty
@@ -589,9 +588,10 @@ const addServiceProviserResponse = async (req, res) => {
         userActionButtons
     } = req.body;
 
-    const postRef = firestore.collection('posts').doc(postId);
-    const postDoc = await postRef.get();
+    const postRef = firestore.collection('posts').doc(postId);  // Firestore reference to the post document
+    const postDoc = await postRef.get();    // Retrieve the post document from Firestore
 
+    // Ensuring the post is active (Available or Negotiating)
     let activePost = postDoc.exists && ['Available', 'Negotiating'].includes(postDoc.data().status);
 
     if (activePost) {
@@ -599,7 +599,7 @@ const addServiceProviserResponse = async (req, res) => {
         const incrementValue = status === 'Declined' ? -1 : existedResponse.length > 0 ? 0 : 1;
 
         if (existedResponse.length > 0) {
-            try {
+            try {   // If the response already exists, update it with new data
                 await postRef.update({
                     'response': admin.firestore.FieldValue.arrayUnion({
                         serviceProviderId,
@@ -618,7 +618,7 @@ const addServiceProviserResponse = async (req, res) => {
                 res.status(404).json({ message: error.message });
             }
         } else {
-            try {
+            try {   // If no previous response, add a new one
                 await postRef.update({
                     'response': admin.firestore.FieldValue.arrayUnion({
                         serviceProviderId,
@@ -656,7 +656,9 @@ const addUserResponse = async (req, res) => {
         userResponsePrice,
         userActionButtons
     } = req.body
-    //only need to change number of offers for user if they are declining a service provider offer - users cannot initiate offers
+
+    // Decrement total offers if the user declines a service provider's offer
+    // only need to change number of offers for user if they are declining a service provider offer - users cannot initiate offers
     const incrementValue = status === 'Declined' ? -1 : 0
     const postRef = firestore.collection('posts').doc(postId);
     const postDoc = await postRef.get();
@@ -678,8 +680,8 @@ const addUserResponse = async (req, res) => {
                     notificationOnUser: 'flex',
                     userActionButtons
                 }),
-                status: status,
-                totalOffers: admin.firestore.FieldValue.increment(incrementValue)
+                status: status, // Updating the post status (e.g., 'Declined')
+                totalOffers: admin.firestore.FieldValue.increment(incrementValue) // Updated the totalOffers field
             });
             
             res.status(200).json({ message: 'User response added' });
@@ -791,7 +793,7 @@ res.status(200).json('Status Updated Successfully');
 const markJobPaid = async (req, res) => {
     try {
         const id = req.params.postId;
-
+        
         const postRef = firestore.collection('posts').doc(id);
         await postRef.update({
             status: "Paid"
